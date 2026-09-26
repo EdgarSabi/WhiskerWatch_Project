@@ -1,0 +1,159 @@
+{"_e":"root:init","_t":1790334233141,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790334233158,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790334233176,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790334237784,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790334245105,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790334247899,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790334255212,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"root:init","_t":1790337027726,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790337027745,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790337027770,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790337033926,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790337041514,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790337044288,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790337051288,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"root:init","_t":1790337331243,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790337331276,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790337331312,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790337337790,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790337345518,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790337348995,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790337356804,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"root:init","_t":1790337895739,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790337895756,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790337895777,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790337901388,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790337910243,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790337915041,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790337924032,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790338047017,"id":"3","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790338047018,"id":"3","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790338047031,"id":"3","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790338055524,"id":"3","progress":0.010000000000000002,"total":1,"current":1}
+{"_e":"metro:bundling:progress","_t":1790338055626,"id":"3","progress":0.010000000000000002,"total":3,"current":1}
+{"_e":"metro:bundling:progress","_t":1790338055699,"id":"3","progress":0.04000000000000001,"total":3,"current":2}
+{"_e":"metro:bundling:progress","_t":1790338055801,"id":"3","progress":0.14792899408284024,"total":13,"current":5}
+{"_e":"metro:bundling:progress","_t":1790338055909,"id":"3","progress":0.14792899408284024,"total":15,"current":5}
+{"_e":"metro:bundling:progress","_t":1790338057253,"id":"3","progress":0.16000000000000003,"total":15,"current":6}
+{"_e":"metro:bundling:progress","_t":1790338057455,"id":"3","progress":0.16000000000000003,"total":16,"current":6}
+{"_e":"metro:bundling:progress","_t":1790338057555,"id":"3","progress":0.16000000000000003,"total":114,"current":7}
+{"_e":"metro:bundling:progress","_t":1790338057783,"id":"3","progress":0.16000000000000003,"total":114,"current":8}
+{"_e":"metro:bundling:progress","_t":1790338057887,"id":"3","progress":0.16000000000000003,"total":115,"current":8}
+{"_e":"metro:bundling:progress","_t":1790338058315,"id":"3","progress":0.16000000000000003,"total":115,"current":9}
+{"_e":"metro:bundling:progress","_t":1790338058421,"id":"3","progress":0.16000000000000003,"total":117,"current":13}
+{"_e":"metro:bundling:progress","_t":1790338058531,"id":"3","progress":0.16000000000000003,"total":120,"current":19}
+{"_e":"metro:bundling:progress","_t":1790338058631,"id":"3","progress":0.16000000000000003,"total":139,"current":24}
+{"_e":"metro:bundling:progress","_t":1790338058733,"id":"3","progress":0.16000000000000003,"total":147,"current":29}
+{"_e":"metro:bundling:progress","_t":1790338058854,"id":"3","progress":0.16000000000000003,"total":175,"current":35}
+{"_e":"metro:bundling:progress","_t":1790338058957,"id":"3","progress":0.16000000000000003,"total":176,"current":38}
+{"_e":"metro:bundling:progress","_t":1790338059069,"id":"3","progress":0.16000000000000003,"total":189,"current":44}
+{"_e":"metro:bundling:progress","_t":1790338059171,"id":"3","progress":0.16000000000000003,"total":204,"current":56}
+{"_e":"metro:bundling:progress","_t":1790338059277,"id":"3","progress":0.16000000000000003,"total":219,"current":68}
+{"_e":"metro:bundling:progress","_t":1790338059377,"id":"3","progress":0.16000000000000003,"total":229,"current":81}
+{"_e":"metro:bundling:progress","_t":1790338059480,"id":"3","progress":0.16000000000000003,"total":246,"current":95}
+{"_e":"metro:bundling:progress","_t":1790338059582,"id":"3","progress":0.18948096885813148,"total":255,"current":111}
+{"_e":"metro:bundling:progress","_t":1790338059690,"id":"3","progress":0.24270112456747409,"total":272,"current":134}
+{"_e":"metro:bundling:progress","_t":1790338059844,"id":"3","progress":0.24823633707500403,"total":283,"current":141}
+{"_e":"metro:bundling:progress","_t":1790338059957,"id":"3","progress":0.288543188458729,"total":296,"current":159}
+{"_e":"metro:bundling:progress","_t":1790338060063,"id":"3","progress":0.3538528344413313,"total":311,"current":185}
+{"_e":"metro:bundling:progress","_t":1790338060163,"id":"3","progress":0.3555418386636318,"total":322,"current":192}
+{"_e":"metro:bundling:progress","_t":1790338060265,"id":"3","progress":0.3555418386636318,"total":334,"current":199}
+{"_e":"metro:bundling:progress","_t":1790338060375,"id":"3","progress":0.3555418386636318,"total":354,"current":211}
+{"_e":"metro:bundling:progress","_t":1790338060475,"id":"3","progress":0.3981812462466756,"total":374,"current":236}
+{"_e":"metro:bundling:progress","_t":1790338060575,"id":"3","progress":0.3982155922019566,"total":393,"current":248}
+{"_e":"metro:bundling:progress","_t":1790338060676,"id":"3","progress":0.3982155922019566,"total":405,"current":255}
+{"_e":"metro:bundling:progress","_t":1790338060777,"id":"3","progress":0.41572687824486,"total":411,"current":265}
+{"_e":"metro:bundling:progress","_t":1790338060879,"id":"3","progress":0.41850475056714803,"total":422,"current":273}
+{"_e":"metro:bundling:progress","_t":1790338060986,"id":"3","progress":0.4185117345800406,"total":439,"current":284}
+{"_e":"metro:bundling:progress","_t":1790338061101,"id":"3","progress":0.4394647140512561,"total":445,"current":295}
+{"_e":"metro:bundling:progress","_t":1790338061206,"id":"3","progress":0.4743651594228323,"total":453,"current":312}
+{"_e":"metro:bundling:progress","_t":1790338061309,"id":"3","progress":0.49954273183017395,"total":457,"current":323}
+{"_e":"metro:bundling:progress","_t":1790338061412,"id":"3","progress":0.5137136436478845,"total":466,"current":334}
+{"_e":"metro:bundling:progress","_t":1790338061514,"id":"3","progress":0.5768306361160072,"total":474,"current":360}
+{"_e":"metro:bundling:progress","_t":1790338061615,"id":"3","progress":0.604578991273378,"total":481,"current":374}
+{"_e":"metro:bundling:progress","_t":1790338061716,"id":"3","progress":0.6545374817113535,"total":487,"current":394}
+{"_e":"metro:bundling:progress","_t":1790338061823,"id":"3","progress":0.7001249479383591,"total":490,"current":410}
+{"_e":"metro:bundling:progress","_t":1790338061926,"id":"3","progress":0.7405596736559737,"total":502,"current":432}
+{"_e":"metro:bundling:progress","_t":1790338062027,"id":"3","progress":0.7842901547953891,"total":507,"current":449}
+{"_e":"metro:bundling:progress","_t":1790338062132,"id":"3","progress":0.8124389705524732,"total":517,"current":466}
+{"_e":"metro:bundling:progress","_t":1790338062234,"id":"3","progress":0.834544066934253,"total":532,"current":486}
+{"_e":"metro:bundling:progress","_t":1790338062334,"id":"3","progress":0.834544066934253,"total":555,"current":498}
+{"_e":"metro:bundling:progress","_t":1790338062436,"id":"3","progress":0.834544066934253,"total":568,"current":507}
+{"_e":"metro:bundling:progress","_t":1790338062535,"id":"3","progress":0.834544066934253,"total":569,"current":510}
+{"_e":"metro:bundling:progress","_t":1790338062641,"id":"3","progress":0.834544066934253,"total":574,"current":520}
+{"_e":"metro:bundling:progress","_t":1790338062742,"id":"3","progress":0.834544066934253,"total":577,"current":526}
+{"_e":"metro:bundling:progress","_t":1790338062843,"id":"3","progress":0.834544066934253,"total":591,"current":538}
+{"_e":"metro:bundling:progress","_t":1790338062950,"id":"3","progress":0.834544066934253,"total":612,"current":551}
+{"_e":"metro:bundling:progress","_t":1790338063053,"id":"3","progress":0.834544066934253,"total":625,"current":564}
+{"_e":"metro:bundling:progress","_t":1790338063167,"id":"3","progress":0.834544066934253,"total":637,"current":570}
+{"_e":"metro:bundling:progress","_t":1790338063270,"id":"3","progress":0.834544066934253,"total":640,"current":583}
+{"_e":"metro:bundling:progress","_t":1790338063370,"id":"3","progress":0.8412153261319584,"total":652,"current":598}
+{"_e":"metro:bundling:progress","_t":1790338063471,"id":"3","progress":0.8616374337159839,"total":655,"current":608}
+{"_e":"metro:bundling:progress","_t":1790338063570,"id":"3","progress":0.8616374337159839,"total":670,"current":621}
+{"_e":"metro:bundling:progress","_t":1790338063672,"id":"3","progress":0.8904190404071535,"total":674,"current":636}
+{"_e":"metro:bundling:progress","_t":1790338063782,"id":"3","progress":0.9189926886581473,"total":677,"current":649}
+{"_e":"metro:bundling:progress","_t":1790338063890,"id":"3","progress":0.9506965872507607,"total":681,"current":664}
+{"_e":"metro:bundling:progress","_t":1790338063990,"id":"3","progress":0.9506965872507607,"total":692,"current":673}
+{"_e":"metro:bundling:progress","_t":1790338064095,"id":"3","progress":0.9885058425865176,"total":694,"current":690}
+{"_e":"metro:bundling:progress","_t":1790338064196,"id":"3","progress":0.9942446162662258,"total":694,"current":692}
+{"_e":"metro:bundling:progress","_t":1790338064730,"id":"3","progress":0.9971202318763547,"total":694,"current":693}
+{"_e":"metro:bundling:progress","_t":1790338064839,"id":"3","progress":0.9971326179630265,"total":697,"current":696}
+{"_e":"metro:bundling:progress","_t":1790338065372,"id":"3","progress":0.999,"total":697,"current":697}
+{"_e":"metro:bundling:progress","_t":1790338065473,"id":"3","progress":0.999,"total":706,"current":703}
+{"_e":"metro:bundling:progress","_t":1790338065576,"id":"3","progress":0.999,"total":708,"current":708}
+{"_e":"metro:bundling:done","_t":1790338066152,"id":"3","total":708,"ms":19134.1374}
+{"_e":"root:init","_t":1790338185023,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790338185025,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790338185031,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790338187772,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790338189628,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790338190050,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790338194440,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790338229398,"id":"2","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790338229398,"id":"2","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790338229406,"id":"2","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790338229505,"id":"2","progress":0.009194970913867517,"total":146,"current":14}
+{"_e":"metro:bundling:progress","_t":1790338229605,"id":"2","progress":0.08009967960128159,"total":212,"current":60}
+{"_e":"metro:bundling:progress","_t":1790338229706,"id":"2","progress":0.2917576855453141,"total":274,"current":148}
+{"_e":"metro:bundling:progress","_t":1790338229806,"id":"2","progress":0.38979871784104586,"total":378,"current":236}
+{"_e":"metro:bundling:progress","_t":1790338229906,"id":"2","progress":0.4307550110373106,"total":451,"current":296}
+{"_e":"metro:bundling:progress","_t":1790338230007,"id":"2","progress":0.7233588409345986,"total":495,"current":421}
+{"_e":"metro:bundling:progress","_t":1790338230107,"id":"2","progress":0.7918787010717137,"total":563,"current":501}
+{"_e":"metro:bundling:progress","_t":1790338230206,"id":"2","progress":0.8125371950009919,"total":639,"current":576}
+{"_e":"metro:bundling:progress","_t":1790338230313,"id":"2","progress":0.9427874477851201,"total":689,"current":669}
+{"_e":"metro:bundling:progress","_t":1790338230413,"id":"2","progress":0.999,"total":708,"current":708}
+{"_e":"metro:bundling:done","_t":1790338230480,"id":"2","total":708,"ms":1081.6438}
+{"_e":"root:init","_t":1790410810504,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790410810523,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790410810543,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790410815421,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790410823197,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790410825593,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790410833583,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790411074136,"id":"3","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790411074137,"id":"3","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790411081697,"id":"3","total":1,"ms":7560.4438}
+{"_e":"metro:client_log","_t":1790411099143,"level":"error","data":["Text strings must be rendered within a <Text> component."]}
+{"_e":"metro:bundling:failed","_t":1790411179548,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (7:22)\n\n   5 |   return (\n   6 |     <View style={styles.container}>\n>  7 |       <textHello World!\n     |                       ^\n   8 |     </View>\n   9 |   );\n  10 | }","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411179752,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (7:22)\n\n   5 |   return (\n   6 |     <View style={styles.container}>\n>  7 |       <textHello World!\n     |                       ^\n   8 |     </View>\n   9 |   );\n  10 | }","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:client_log","_t":1790411180909,"level":"error","data":["[Invariant Violation: View config getter callback for component `text` must be a function (received `undefined`). Make sure to start component names with a capital letter.]"]}
+{"_e":"metro:client_log","_t":1790411189680,"level":"error","data":["[Invariant Violation: View config getter callback for component `text` must be a function (received `undefined`). Make sure to start component names with a capital letter.]"]}
+{"_e":"metro:client_log","_t":1790411191390,"level":"error","data":["Text strings must be rendered within a <Text> component."]}
+{"_e":"metro:client_log","_t":1790411191396,"level":"error","data":["Text strings must be rendered within a <Text> component."]}
+{"_e":"metro:client_log","_t":1790411191402,"level":"error","data":["[Invariant Violation: View config getter callback for component `text` must be a function (received `undefined`). Make sure to start component names with a capital letter.]"]}
+{"_e":"metro:bundling:failed","_t":1790411227752,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (8:6)\n\n   6 |     <View style={styles.container}>\n   7 |       <Text\n>  8 |       <Text>Hello World!</Text>\n     |       ^\n   9 |     </View>\n  10 |   );\n  11 | }","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411259192,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (8:6)\n\n   6 |     <View style={styles.container}>\n   7 |       <View\n>  8 |       <Text>Another piece of text</Text>\n     |       ^\n   9 |       <Text>Hello World!</Text>\n  10 |     </View>\n  11 |   );","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411323113,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (14:4)\n\n  12 |       <Text>Hello World!</Text>\n  13 |       <But\n> 14 |     </View>\n     |     ^\n  15 |   );\n  16 | }\n  17 |","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411325917,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (14:4)\n\n  12 |       <Text>Hello World!</Text>\n  13 |       <Button\n> 14 |     </View>\n     |     ^\n  15 |   );\n  16 | }\n  17 |","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411385472,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (12:17)\n\n  10 |         <Text>Another piece of text</Text>\n  11 |       </View>\n> 12 |       <Text style=>Hello World!</Text>\n     |                  ^\n  13 |       <Button title=\"Click me!\" onPress={() => alert(\"You clicked me!\")} />\n  14 |     </View>\n  15 |   );","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411388733,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: JSX attributes must only be assigned a non-empty expression. (12:18)\n\n  10 |         <Text>Another piece of text</Text>\n  11 |       </View>\n> 12 |       <Text style={}>Hello World!</Text>\n     |                   ^\n  13 |       <Button title=\"Click me!\" onPress={() => alert(\"You clicked me!\")} />\n  14 |     </View>\n  15 |   );","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:client_log","_t":1790411404590,"level":"error","data":["[ReferenceError: Property 'margin' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790411413594,"level":"error","data":["[ReferenceError: Property 'mar' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790411417949,"level":"error","data":["[ReferenceError: Property 'margin' doesn't exist]"]}
+{"_e":"metro:bundling:failed","_t":1790411422154,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (12:27)\n\n  10 |         <Text>Another piece of text</Text>\n  11 |       </View>\n> 12 |       <Text style={{margin:}}>Hello World!</Text>\n     |                            ^\n  13 |       <Button title=\"Click me!\" onPress={() => alert(\"You clicked me!\")} />\n  14 |     </View>\n  15 |   );","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411450121,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (12:40)\n\n  10 |         <Text>Another piece of text</Text>\n  11 |       </View>\n> 12 |       <Text style={{margin: 16, border: }}>Hello World!</Text>\n     |                                         ^\n  13 |       <Button title=\"Click me!\" onPress={() => alert(\"You clicked me!\")} />\n  14 |     </View>\n  15 |   );","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411512858,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (12:77)\n\n  10 |         <Text>Another piece of text</Text>\n  11 |       </View>\n> 12 |       <Text style={{margin: 16, borderWidth: 2, borderColor: \"red\", padding: }}>Hello World!</Text>\n     |                                                                              ^\n  13 |       <Button title=\"Click me!\" onPress={() => alert(\"You clicked me!\")} />\n  14 |     </View>\n  15 |   );","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411610996,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token (41:0)\n\n  39 |   },\n  40 |   dummyText: \n> 41 | });\n     | ^\n  42 |","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411675090,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token, expected \",\" (11:24)\n\n   9 |       <View>\n  10 |         <Text\n> 11 |           style={{styles.dummyText}} }}\n     |                         ^\n  12 |         >\n  13 |           Another piece of text\n  14 |         </Text>","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411679342,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token, expected \",\" (11:24)\n\n   9 |       <View>\n  10 |         <Text\n> 11 |           style={{styles.dummyText}}\n     |                         ^\n  12 |         >\n  13 |           Another piece of text\n  14 |         </Text>","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790411688296,"id":null,"message":"SyntaxError: C:\\Users\\School\\React\\whiskerWatch\\App.js: Unexpected token, expected \",\" (11:24)\n\n   9 |       <View>\n  10 |         <Text\n> 11 |           style={{styles. }}\n     |                         ^\n  12 |         >\n  13 |           Another piece of text\n  14 |         </Text>","importStack":null,"filename":"App.js","targetModuleName":null,"originModulePath":null}
