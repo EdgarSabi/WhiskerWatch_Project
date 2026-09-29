@@ -1211,3 +1211,380 @@
 {"_e":"devserver:start","_t":1790675894216,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
 {"_e":"metro:config","_t":1790675899581,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
 {"_e":"expo:dev-tools-plugin:load","_t":1790675902015,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790675911628,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790676283799,"id":"1","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790676283800,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790676283809,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790676283909,"id":"1","progress":0.03101143150982951,"total":159,"current":28}
+{"_e":"metro:bundling:progress","_t":1790676284011,"id":"1","progress":0.10096951698838325,"total":214,"current":68}
+{"_e":"metro:bundling:progress","_t":1790676284111,"id":"1","progress":0.18233523362992166,"total":274,"current":117}
+{"_e":"metro:bundling:progress","_t":1790676284211,"id":"1","progress":0.34510777810454313,"total":303,"current":178}
+{"_e":"metro:bundling:progress","_t":1790676284311,"id":"1","progress":0.40306929296379074,"total":367,"current":233}
+{"_e":"metro:bundling:progress","_t":1790676284453,"id":"1","progress":0.4362709278944365,"total":433,"current":286}
+{"_e":"metro:bundling:progress","_t":1790676284553,"id":"1","progress":0.5122347426376137,"total":503,"current":360}
+{"_e":"metro:bundling:progress","_t":1790676284678,"id":"1","progress":0.668857051298208,"total":527,"current":431}
+{"_e":"metro:bundling:progress","_t":1790676284847,"id":"1","progress":0.7354957261980976,"total":611,"current":524}
+{"_e":"metro:bundling:progress","_t":1790676284974,"id":"1","progress":0.8435118335904199,"total":662,"current":608}
+{"_e":"metro:bundling:progress","_t":1790676285095,"id":"1","progress":0.9913482742490561,"total":692,"current":689}
+{"_e":"metro:bundling:progress","_t":1790676285199,"id":"1","progress":0.9971691450858285,"total":706,"current":705}
+{"_e":"metro:bundling:progress","_t":1790676290664,"id":"1","progress":0.999,"total":706,"current":706}
+{"_e":"metro:bundling:progress","_t":1790676290791,"id":"1","progress":0.999,"total":708,"current":708}
+{"_e":"metro:bundling:done","_t":1790676290942,"id":"1","total":708,"ms":7142.6136}
+{"_e":"metro:client_log","_t":1790676301078,"level":"log","data":["DELETE"]}
+{"_e":"metro:client_log","_t":1790676301566,"level":"log","data":["DELETE"]}
+{"_e":"metro:client_log","_t":1790676302000,"level":"log","data":["DELETE"]}
+{"_e":"metro:client_log","_t":1790676599637,"level":"error","data":["[ReferenceError: Property 'id' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790676648697,"level":"error","data":["[ReferenceError: Property 'id' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790676738767,"level":"error","data":["[ReferenceError: Property 'id' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790676815968,"level":"error","data":["Each child in a list should have a unique \"key\" prop.\n\nCheck the render method of `ScrollView`. It was passed a child from VirtualizedList. See https://react.dev/link/warning-keys for more information."]}
+{"_e":"metro:bundling:started","_t":1790677047003,"id":"a","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790677047003,"id":"a","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790677047035,"id":"a","total":1,"ms":32.2004}
+{"_e":"root:init","_t":1790678885952,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790678885953,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790678885957,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790678886498,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\src\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790678887024,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790678887482,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790678894682,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790678895864,"id":"2","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790678911684,"id":"2","total":1413,"ms":15819.958}
+{"_e":"metro:client_log","_t":1790678912147,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790678912148,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790678912894,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679043671,"id":"6","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679043700,"id":"6","total":1,"ms":29.1228}
+{"_e":"metro:client_log","_t":1790679043911,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679043911,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679044023,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679060525,"id":"a","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679060557,"id":"a","total":1,"ms":31.8426}
+{"_e":"metro:client_log","_t":1790679060783,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679060783,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679060904,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679101544,"id":"e","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679101570,"id":"e","total":1,"ms":26.0228}
+{"_e":"metro:client_log","_t":1790679101777,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679101777,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679101892,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679110086,"id":"j","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679110112,"id":"j","total":1,"ms":25.5342}
+{"_e":"metro:client_log","_t":1790679110334,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679110334,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679110450,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679124813,"id":"n","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679124839,"id":"n","total":1,"ms":25.7544}
+{"_e":"metro:client_log","_t":1790679125048,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679125049,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679125166,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679134674,"id":"s","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679134696,"id":"s","total":1,"ms":21.8131}
+{"_e":"metro:client_log","_t":1790679134921,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679134922,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679135035,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679143902,"id":"x","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679143929,"id":"x","total":1,"ms":27.4229}
+{"_e":"metro:client_log","_t":1790679144151,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679144151,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679144265,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679152601,"id":"12","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679152627,"id":"12","total":1,"ms":25.7892}
+{"_e":"metro:client_log","_t":1790679152838,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679152839,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679152955,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679212478,"id":"16","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679212506,"id":"16","total":1,"ms":28.3562}
+{"_e":"metro:client_log","_t":1790679212973,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679212973,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679212977,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679229333,"id":"1a","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679229359,"id":"1a","total":1,"ms":26.1818}
+{"_e":"metro:client_log","_t":1790679229584,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679229584,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679229694,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679299124,"id":"1d","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679299150,"id":"1d","total":1,"ms":26.5395}
+{"_e":"metro:client_log","_t":1790679299347,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679299347,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679299463,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679310969,"id":"1h","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679311001,"id":"1h","total":1,"ms":31.5327}
+{"_e":"metro:client_log","_t":1790679311200,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679311200,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679311313,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"metro:bundling:started","_t":1790679374628,"id":"1m","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:done","_t":1790679374656,"id":"1m","total":1,"ms":27.2062}
+{"_e":"metro:client_log","_t":1790679374866,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790679374867,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790679374983,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"root:init","_t":1790682514028,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790682514029,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790682514032,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790682514506,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\src\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790682515041,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790682515424,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790682521198,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790682653568,"id":"3","platform":"android","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:progress","_t":1790682653569,"id":"3","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790682653577,"id":"3","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790682656227,"id":"3","progress":0.010000000000000002,"total":1,"current":1}
+{"_e":"metro:bundling:progress","_t":1790682656326,"id":"3","progress":0.09,"total":6,"current":3}
+{"_e":"metro:bundling:progress","_t":1790682656431,"id":"3","progress":0.16000000000000003,"total":10,"current":4}
+{"_e":"metro:bundling:progress","_t":1790682657501,"id":"3","progress":0.25,"total":10,"current":5}
+{"_e":"metro:bundling:progress","_t":1790682657600,"id":"3","progress":0.25,"total":33,"current":15}
+{"_e":"metro:bundling:progress","_t":1790682657712,"id":"3","progress":0.25,"total":53,"current":22}
+{"_e":"metro:bundling:progress","_t":1790682657812,"id":"3","progress":0.25,"total":55,"current":24}
+{"_e":"metro:bundling:progress","_t":1790682657919,"id":"3","progress":0.25,"total":72,"current":30}
+{"_e":"metro:bundling:progress","_t":1790682658021,"id":"3","progress":0.25,"total":202,"current":37}
+{"_e":"metro:bundling:progress","_t":1790682658121,"id":"3","progress":0.25,"total":220,"current":45}
+{"_e":"metro:bundling:progress","_t":1790682658221,"id":"3","progress":0.25,"total":231,"current":56}
+{"_e":"metro:bundling:progress","_t":1790682658322,"id":"3","progress":0.25,"total":242,"current":66}
+{"_e":"metro:bundling:progress","_t":1790682658422,"id":"3","progress":0.25,"total":248,"current":73}
+{"_e":"metro:bundling:progress","_t":1790682658523,"id":"3","progress":0.25,"total":266,"current":76}
+{"_e":"metro:bundling:progress","_t":1790682658614,"id":"3","progress":0.25,"total":266,"current":77}
+{"_e":"metro:bundling:progress","_t":1790682658716,"id":"3","progress":0.25,"total":278,"current":98}
+{"_e":"metro:bundling:progress","_t":1790682658817,"id":"3","progress":0.25,"total":289,"current":110}
+{"_e":"metro:bundling:progress","_t":1790682658923,"id":"3","progress":0.25,"total":305,"current":124}
+{"_e":"metro:bundling:progress","_t":1790682659023,"id":"3","progress":0.25,"total":317,"current":135}
+{"_e":"metro:bundling:progress","_t":1790682659123,"id":"3","progress":0.25,"total":321,"current":145}
+{"_e":"metro:bundling:progress","_t":1790682659225,"id":"3","progress":0.25,"total":325,"current":149}
+{"_e":"metro:bundling:progress","_t":1790682659333,"id":"3","progress":0.25,"total":334,"current":160}
+{"_e":"metro:bundling:progress","_t":1790682659435,"id":"3","progress":0.25,"total":351,"current":170}
+{"_e":"metro:bundling:progress","_t":1790682659544,"id":"3","progress":0.25,"total":372,"current":182}
+{"_e":"metro:bundling:progress","_t":1790682659644,"id":"3","progress":0.26312115761496957,"total":386,"current":198}
+{"_e":"metro:bundling:progress","_t":1790682659756,"id":"3","progress":0.2870842859320225,"total":405,"current":217}
+{"_e":"metro:bundling:progress","_t":1790682659865,"id":"3","progress":0.29843964334705075,"total":432,"current":236}
+{"_e":"metro:bundling:progress","_t":1790682659982,"id":"3","progress":0.29843964334705075,"total":471,"current":253}
+{"_e":"metro:bundling:progress","_t":1790682660084,"id":"3","progress":0.29843964334705075,"total":545,"current":269}
+{"_e":"metro:bundling:progress","_t":1790682660187,"id":"3","progress":0.29843964334705075,"total":571,"current":299}
+{"_e":"metro:bundling:progress","_t":1790682660287,"id":"3","progress":0.29843964334705075,"total":617,"current":326}
+{"_e":"metro:bundling:progress","_t":1790682660387,"id":"3","progress":0.29843964334705075,"total":626,"current":339}
+{"_e":"metro:bundling:progress","_t":1790682660489,"id":"3","progress":0.29843964334705075,"total":647,"current":352}
+{"_e":"metro:bundling:progress","_t":1790682660592,"id":"3","progress":0.3042289207504676,"total":669,"current":369}
+{"_e":"metro:bundling:progress","_t":1790682660693,"id":"3","progress":0.3213829511930024,"total":695,"current":394}
+{"_e":"metro:bundling:progress","_t":1790682660793,"id":"3","progress":0.3213829511930024,"total":724,"current":410}
+{"_e":"metro:bundling:progress","_t":1790682660894,"id":"3","progress":0.32192624290727323,"total":742,"current":421}
+{"_e":"metro:bundling:progress","_t":1790682660994,"id":"3","progress":0.34592970914127424,"total":760,"current":447}
+{"_e":"metro:bundling:progress","_t":1790682661096,"id":"3","progress":0.34593360785234345,"total":794,"current":467}
+{"_e":"metro:bundling:progress","_t":1790682661213,"id":"3","progress":0.3567360564085319,"total":807,"current":482}
+{"_e":"metro:bundling:progress","_t":1790682661313,"id":"3","progress":0.3567360564085319,"total":835,"current":497}
+{"_e":"metro:bundling:progress","_t":1790682661413,"id":"3","progress":0.3583118428883158,"total":852,"current":510}
+{"_e":"metro:bundling:progress","_t":1790682661517,"id":"3","progress":0.36902786269543186,"total":856,"current":520}
+{"_e":"metro:bundling:progress","_t":1790682661620,"id":"3","progress":0.37638724943452945,"total":859,"current":527}
+{"_e":"metro:bundling:progress","_t":1790682661728,"id":"3","progress":0.3837673139141154,"total":862,"current":534}
+{"_e":"metro:bundling:progress","_t":1790682661829,"id":"3","progress":0.3929605702829138,"total":871,"current":546}
+{"_e":"metro:bundling:progress","_t":1790682661945,"id":"3","progress":0.3942004962365255,"total":876,"current":550}
+{"_e":"metro:bundling:progress","_t":1790682662045,"id":"3","progress":0.4057417107181397,"total":887,"current":565}
+{"_e":"metro:bundling:progress","_t":1790682662152,"id":"3","progress":0.41665082046062124,"total":897,"current":579}
+{"_e":"metro:bundling:progress","_t":1790682662252,"id":"3","progress":0.4312547445515073,"total":903,"current":593}
+{"_e":"metro:bundling:progress","_t":1790682662356,"id":"3","progress":0.4444444444444444,"total":909,"current":606}
+{"_e":"metro:bundling:progress","_t":1790682662457,"id":"3","progress":0.45621729763004,"total":912,"current":616}
+{"_e":"metro:bundling:progress","_t":1790682662564,"id":"3","progress":0.46346380332947823,"total":921,"current":627}
+{"_e":"metro:bundling:progress","_t":1790682662665,"id":"3","progress":0.47237636473596534,"total":921,"current":633}
+{"_e":"metro:bundling:progress","_t":1790682662769,"id":"3","progress":0.47237636473596534,"total":963,"current":640}
+{"_e":"metro:bundling:progress","_t":1790682662870,"id":"3","progress":0.47237636473596534,"total":969,"current":645}
+{"_e":"metro:bundling:progress","_t":1790682662977,"id":"3","progress":0.47237636473596534,"total":970,"current":651}
+{"_e":"metro:bundling:progress","_t":1790682663086,"id":"3","progress":0.47237636473596534,"total":976,"current":667}
+{"_e":"metro:bundling:progress","_t":1790682663189,"id":"3","progress":0.47283058148768353,"total":986,"current":678}
+{"_e":"metro:bundling:progress","_t":1790682663294,"id":"3","progress":0.4877580812928462,"total":998,"current":697}
+{"_e":"metro:bundling:progress","_t":1790682663396,"id":"3","progress":0.49137351018838904,"total":1020,"current":715}
+{"_e":"metro:bundling:progress","_t":1790682663497,"id":"3","progress":0.49979703616684557,"total":1034,"current":731}
+{"_e":"metro:bundling:progress","_t":1790682663597,"id":"3","progress":0.5174139802516927,"total":1051,"current":756}
+{"_e":"metro:bundling:progress","_t":1790682663698,"id":"3","progress":0.5416848167718696,"total":1053,"current":775}
+{"_e":"metro:bundling:progress","_t":1790682663800,"id":"3","progress":0.5537805536157818,"total":1071,"current":797}
+{"_e":"metro:bundling:progress","_t":1790682663900,"id":"3","progress":0.5754567736473526,"total":1077,"current":817}
+{"_e":"metro:bundling:progress","_t":1790682664001,"id":"3","progress":0.5827058935251603,"total":1086,"current":829}
+{"_e":"metro:bundling:progress","_t":1790682664102,"id":"3","progress":0.5924762225401902,"total":1090,"current":839}
+{"_e":"metro:bundling:progress","_t":1790682664204,"id":"3","progress":0.6087429054462021,"total":1092,"current":852}
+{"_e":"metro:bundling:progress","_t":1790682664304,"id":"3","progress":0.6208402822107623,"total":1094,"current":862}
+{"_e":"metro:bundling:progress","_t":1790682664404,"id":"3","progress":0.6296077504725898,"total":1104,"current":876}
+{"_e":"metro:bundling:progress","_t":1790682664505,"id":"3","progress":0.6434735350063528,"total":1107,"current":888}
+{"_e":"metro:bundling:progress","_t":1790682664607,"id":"3","progress":0.6529217155612245,"total":1120,"current":905}
+{"_e":"metro:bundling:progress","_t":1790682664708,"id":"3","progress":0.6586224197530864,"total":1125,"current":913}
+{"_e":"metro:bundling:progress","_t":1790682664809,"id":"3","progress":0.6683677992470037,"total":1129,"current":923}
+{"_e":"metro:bundling:progress","_t":1790682664910,"id":"3","progress":0.6683677992470037,"total":1146,"current":933}
+{"_e":"metro:bundling:progress","_t":1790682665014,"id":"3","progress":0.6735709183677333,"total":1149,"current":943}
+{"_e":"metro:bundling:progress","_t":1790682665116,"id":"3","progress":0.6951661325687298,"total":1155,"current":963}
+{"_e":"metro:bundling:progress","_t":1790682665216,"id":"3","progress":0.6951661325687298,"total":1182,"current":976}
+{"_e":"metro:bundling:progress","_t":1790682665317,"id":"3","progress":0.6951661325687298,"total":1190,"current":989}
+{"_e":"metro:bundling:progress","_t":1790682665418,"id":"3","progress":0.6951661325687298,"total":1207,"current":1004}
+{"_e":"metro:bundling:progress","_t":1790682665526,"id":"3","progress":0.7066547291174147,"total":1211,"current":1018}
+{"_e":"metro:bundling:progress","_t":1790682665627,"id":"3","progress":0.7203470682189087,"total":1223,"current":1038}
+{"_e":"metro:bundling:progress","_t":1790682665727,"id":"3","progress":0.7329030339083878,"total":1230,"current":1053}
+{"_e":"metro:bundling:progress","_t":1790682665827,"id":"3","progress":0.7329030339083878,"total":1252,"current":1071}
+{"_e":"metro:bundling:progress","_t":1790682665937,"id":"3","progress":0.7485474375849386,"total":1261,"current":1091}
+{"_e":"metro:bundling:progress","_t":1790682666040,"id":"3","progress":0.782005269225263,"total":1262,"current":1116}
+{"_e":"metro:bundling:progress","_t":1790682666143,"id":"3","progress":0.7996622415029319,"total":1267,"current":1133}
+{"_e":"metro:bundling:progress","_t":1790682666242,"id":"3","progress":0.8196817562121228,"total":1268,"current":1148}
+{"_e":"metro:bundling:progress","_t":1790682666344,"id":"3","progress":0.8292985524906399,"total":1276,"current":1162}
+{"_e":"metro:bundling:progress","_t":1790682666447,"id":"3","progress":0.8443344910083456,"total":1282,"current":1178}
+{"_e":"metro:bundling:progress","_t":1790682666551,"id":"3","progress":0.8539420560983174,"total":1291,"current":1193}
+{"_e":"metro:bundling:progress","_t":1790682666659,"id":"3","progress":0.8620408284023668,"total":1300,"current":1207}
+{"_e":"metro:bundling:progress","_t":1790682666859,"id":"3","progress":0.8620408284023668,"total":1312,"current":1217}
+{"_e":"metro:bundling:progress","_t":1790682666959,"id":"3","progress":0.8620408284023668,"total":1353,"current":1238}
+{"_e":"metro:bundling:progress","_t":1790682667066,"id":"3","progress":0.8620408284023668,"total":1362,"current":1259}
+{"_e":"metro:bundling:progress","_t":1790682667172,"id":"3","progress":0.8620408284023668,"total":1393,"current":1271}
+{"_e":"metro:bundling:progress","_t":1790682667282,"id":"3","progress":0.8620408284023668,"total":1397,"current":1293}
+{"_e":"metro:bundling:progress","_t":1790682667385,"id":"3","progress":0.8620408284023668,"total":1406,"current":1303}
+{"_e":"metro:bundling:progress","_t":1790682667489,"id":"3","progress":0.8620408284023668,"total":1458,"current":1309}
+{"_e":"metro:bundling:progress","_t":1790682667525,"id":"3","progress":0.8620408284023668,"total":1458,"current":1310}
+{"_e":"metro:bundling:progress","_t":1790682667625,"id":"3","progress":0.8620408284023668,"total":1467,"current":1328}
+{"_e":"metro:bundling:progress","_t":1790682667739,"id":"3","progress":0.8620408284023668,"total":1469,"current":1343}
+{"_e":"metro:bundling:progress","_t":1790682667840,"id":"3","progress":0.8620408284023668,"total":1498,"current":1366}
+{"_e":"metro:bundling:progress","_t":1790682667941,"id":"3","progress":0.8620408284023668,"total":1520,"current":1375}
+{"_e":"metro:bundling:progress","_t":1790682668041,"id":"3","progress":0.8620408284023668,"total":1543,"current":1380}
+{"_e":"metro:bundling:progress","_t":1790682668142,"id":"3","progress":0.8620408284023668,"total":1552,"current":1396}
+{"_e":"metro:bundling:progress","_t":1790682668242,"id":"3","progress":0.8620408284023668,"total":1556,"current":1414}
+{"_e":"metro:bundling:progress","_t":1790682668345,"id":"3","progress":0.8620408284023668,"total":1556,"current":1416}
+{"_e":"metro:bundling:progress","_t":1790682668447,"id":"3","progress":0.8620408284023668,"total":1567,"current":1438}
+{"_e":"metro:bundling:progress","_t":1790682668554,"id":"3","progress":0.8627506381494714,"total":1574,"current":1462}
+{"_e":"metro:bundling:progress","_t":1790682668655,"id":"3","progress":0.8693987008165713,"total":1598,"current":1490}
+{"_e":"metro:bundling:progress","_t":1790682668772,"id":"3","progress":0.8693987008165713,"total":1637,"current":1502}
+{"_e":"metro:bundling:progress","_t":1790682668875,"id":"3","progress":0.8693987008165713,"total":1651,"current":1522}
+{"_e":"metro:bundling:progress","_t":1790682668976,"id":"3","progress":0.8693987008165713,"total":1681,"current":1539}
+{"_e":"metro:bundling:progress","_t":1790682669082,"id":"3","progress":0.8693987008165713,"total":1689,"current":1567}
+{"_e":"metro:bundling:progress","_t":1790682669182,"id":"3","progress":0.8749173226769915,"total":1702,"current":1592}
+{"_e":"metro:bundling:progress","_t":1790682669284,"id":"3","progress":0.8749173226769915,"total":1721,"current":1609}
+{"_e":"metro:bundling:progress","_t":1790682669383,"id":"3","progress":0.8844695780012696,"total":1730,"current":1627}
+{"_e":"metro:bundling:progress","_t":1790682669484,"id":"3","progress":0.8844695780012696,"total":1751,"current":1635}
+{"_e":"metro:bundling:progress","_t":1790682669599,"id":"3","progress":0.8844695780012696,"total":1761,"current":1644}
+{"_e":"metro:bundling:progress","_t":1790682669700,"id":"3","progress":0.8844695780012696,"total":1763,"current":1655}
+{"_e":"metro:bundling:progress","_t":1790682669802,"id":"3","progress":0.8919157870759279,"total":1763,"current":1665}
+{"_e":"metro:bundling:progress","_t":1790682669903,"id":"3","progress":0.8951905970249022,"total":1764,"current":1669}
+{"_e":"metro:bundling:progress","_t":1790682670015,"id":"3","progress":0.8973939282074328,"total":1765,"current":1672}
+{"_e":"metro:bundling:progress","_t":1790682670119,"id":"3","progress":0.9038461106340634,"total":1765,"current":1678}
+{"_e":"metro:bundling:progress","_t":1790682670219,"id":"3","progress":0.9213830636151809,"total":1770,"current":1699}
+{"_e":"metro:bundling:progress","_t":1790682670320,"id":"3","progress":0.9258088576247522,"total":1772,"current":1705}
+{"_e":"metro:bundling:progress","_t":1790682670420,"id":"3","progress":0.9315503093043808,"total":1780,"current":1718}
+{"_e":"metro:bundling:progress","_t":1790682670522,"id":"3","progress":0.9415623437191255,"total":1787,"current":1734}
+{"_e":"metro:bundling:progress","_t":1790682670624,"id":"3","progress":0.9462671652863782,"total":1799,"current":1750}
+{"_e":"metro:bundling:progress","_t":1790682670725,"id":"3","progress":0.9530761915419025,"total":1811,"current":1768}
+{"_e":"metro:bundling:progress","_t":1790682670831,"id":"3","progress":0.9530761915419025,"total":1836,"current":1787}
+{"_e":"metro:bundling:progress","_t":1790682670932,"id":"3","progress":0.9644520912098299,"total":1840,"current":1807}
+{"_e":"metro:bundling:progress","_t":1790682671040,"id":"3","progress":0.9870621308464576,"total":1849,"current":1837}
+{"_e":"metro:bundling:progress","_t":1790682671141,"id":"3","progress":0.9957173496735743,"total":1866,"current":1862}
+{"_e":"metro:bundling:progress","_t":1790682671243,"id":"3","progress":0.999,"total":1866,"current":1866}
+{"_e":"metro:bundling:done","_t":1790682671593,"id":"3","total":1866,"ms":18024.8722}
+{"_e":"metro:bundling:started","_t":1790683034740,"id":"7","platform":"web","environment":null,"entry":"node_modules\\expo-router\\entry.js"}
+{"_e":"metro:bundling:progress","_t":1790683034740,"id":"7","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790683034743,"id":"7","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790683034843,"id":"7","progress":0.06325074402094015,"total":167,"current":42}
+{"_e":"metro:bundling:progress","_t":1790683034948,"id":"7","progress":0.16000000000000003,"total":255,"current":102}
+{"_e":"metro:bundling:progress","_t":1790683035048,"id":"7","progress":0.22943294965044844,"total":357,"current":171}
+{"_e":"metro:bundling:progress","_t":1790683035148,"id":"7","progress":0.3780769838495756,"total":457,"current":281}
+{"_e":"metro:bundling:progress","_t":1790683035249,"id":"7","progress":0.5275609445403943,"total":581,"current":422}
+{"_e":"metro:bundling:progress","_t":1790683035351,"id":"7","progress":0.7298707518864515,"total":659,"current":563}
+{"_e":"metro:bundling:progress","_t":1790683035451,"id":"7","progress":0.8073586321593009,"total":749,"current":673}
+{"_e":"metro:bundling:progress","_t":1790683035551,"id":"7","progress":0.8073586321593009,"total":879,"current":775}
+{"_e":"metro:bundling:progress","_t":1790683035651,"id":"7","progress":0.8391967864916507,"total":989,"current":906}
+{"_e":"metro:bundling:progress","_t":1790683035751,"id":"7","progress":0.8864301177054802,"total":1077,"current":1014}
+{"_e":"metro:bundling:progress","_t":1790683035851,"id":"7","progress":0.8864301177054802,"total":1249,"current":1151}
+{"_e":"metro:bundling:progress","_t":1790683035951,"id":"7","progress":0.9581123128563056,"total":1370,"current":1341}
+{"_e":"metro:bundling:done","_t":1790683036039,"id":"7","total":1370,"ms":1298.9334}
+{"_e":"metro:client_log","_t":1790683036530,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790683036532,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:client_log","_t":1790683036532,"level":"warn","data":["[Reanimated] Reduced motion setting is enabled on this device. This warning is visible only in the development mode. Some animations will be disabled by default. You can override the behavior for individual animations, see https://docs.swmansion.com/react-native-reanimated/docs/guides/troubleshooting#reduced-motion-setting-is-enabled-on-this-device."]}
+{"_e":"root:init","_t":1790684155051,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790684155052,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790684155056,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790684155440,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790684155916,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790684156233,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790684162222,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790684203846,"id":"2","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790684203846,"id":"2","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790684203850,"id":"2","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790684204611,"id":"2","progress":0.010000000000000002,"total":1,"current":1}
+{"_e":"metro:bundling:progress","_t":1790684204712,"id":"2","progress":0.0791015625,"total":192,"current":54}
+{"_e":"metro:bundling:progress","_t":1790684204812,"id":"2","progress":0.37262411080582636,"total":326,"current":199}
+{"_e":"metro:bundling:progress","_t":1790684204912,"id":"2","progress":0.4724840462488103,"total":499,"current":343}
+{"_e":"metro:bundling:progress","_t":1790684205012,"id":"2","progress":0.7953955837698137,"total":638,"current":569}
+{"_e":"metro:bundling:progress","_t":1790684205117,"id":"2","progress":0.9914102044219025,"total":697,"current":694}
+{"_e":"metro:bundling:progress","_t":1790684205229,"id":"2","progress":0.9971811148621094,"total":709,"current":708}
+{"_e":"metro:bundling:progress","_t":1790684205723,"id":"2","progress":0.999,"total":709,"current":709}
+{"_e":"metro:bundling:done","_t":1790684205764,"id":"2","total":709,"ms":1918.6751}
+{"_e":"metro:bundling:started","_t":1790684366516,"id":"4","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790684366516,"id":"4","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790684366537,"id":"4","total":1,"ms":20.9854}
+{"_e":"metro:bundling:started","_t":1790684582235,"id":"5","platform":"web","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790684582235,"id":"5","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790684582237,"id":"5","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790684582337,"id":"5","progress":0.6639231824417009,"total":108,"current":88}
+{"_e":"metro:bundling:progress","_t":1790684582439,"id":"5","progress":0.8053911900065747,"total":195,"current":175}
+{"_e":"metro:bundling:progress","_t":1790684582539,"id":"5","progress":0.992292899628807,"total":259,"current":258}
+{"_e":"metro:bundling:done","_t":1790684582556,"id":"5","total":259,"ms":320.5151}
+{"_e":"metro:client_log","_t":1790684582811,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790684582811,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:bundling:started","_t":1790684685166,"id":"7","platform":"web","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790684685166,"id":"7","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790684685175,"id":"7","total":1,"ms":8.5398}
+{"_e":"metro:client_log","_t":1790684685363,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790684685363,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:bundling:started","_t":1790684843154,"id":"9","platform":"web","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790684843154,"id":"9","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790684843163,"id":"9","total":1,"ms":9.0421}
+{"_e":"metro:client_log","_t":1790684843390,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790684843390,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:bundling:started","_t":1790684864366,"id":"b","platform":"web","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790684864367,"id":"b","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790684864378,"id":"b","total":1,"ms":11.8275}
+{"_e":"metro:client_log","_t":1790684864549,"level":"info","data":["%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools","font-weight:bold"]}
+{"_e":"metro:client_log","_t":1790684864549,"level":"log","data":["Running application \"main\" with appParams:\n","{\"hydrate\": undefined, \"rootTag\": \"#root\"}","\nDevelopment-level warnings: ON.\nPerformance optimizations: OFF."]}
+{"_e":"metro:bundling:failed","_t":1790685090139,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685090149,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:client_log","_t":1790685090152,"level":"error","data":["[InternalError: Metro has encountered an error: As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.: C:\\Users\\School\\ChatGPT\\KittyApp\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\metro\\withMetroMultiPlatform.js (608:31)\n\n  606 |                             ].join('\\n'));\n  607 |                         }\n> 608 |                         throw new Error('As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.');\n      |                               ^\n  609 |                     }\n  610 |                     if (moduleName === '@react-navigation/core') {\n  611 |                         // We already checked if expo-router resolves]"]}
+{"_e":"metro:bundling:failed","_t":1790685090327,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685090335,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:client_log","_t":1790685090336,"level":"error","data":["[InternalError: Metro has encountered an error: As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.: C:\\Users\\School\\ChatGPT\\KittyApp\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\metro\\withMetroMultiPlatform.js (608:31)\n\n  606 |                             ].join('\\n'));\n  607 |                         }\n> 608 |                         throw new Error('As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.');\n      |                               ^\n  609 |                     }\n  610 |                     if (moduleName === '@react-navigation/core') {\n  611 |                         // We already checked if expo-router resolves]"]}
+{"_e":"metro:bundling:failed","_t":1790685116733,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685116761,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:client_log","_t":1790685116762,"level":"error","data":["[InternalError: Metro has encountered an error: As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.: C:\\Users\\School\\ChatGPT\\KittyApp\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\metro\\withMetroMultiPlatform.js (608:31)\n\n  606 |                             ].join('\\n'));\n  607 |                         }\n> 608 |                         throw new Error('As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.');\n      |                               ^\n  609 |                     }\n  610 |                     if (moduleName === '@react-navigation/core') {\n  611 |                         // We already checked if expo-router resolves]"]}
+{"_e":"metro:bundling:failed","_t":1790685131933,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685131940,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:client_log","_t":1790685131941,"level":"error","data":["[InternalError: Metro has encountered an error: As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.: C:\\Users\\School\\ChatGPT\\KittyApp\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\metro\\withMetroMultiPlatform.js (608:31)\n\n  606 |                             ].join('\\n'));\n  607 |                         }\n> 608 |                         throw new Error('As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.');\n      |                               ^\n  609 |                     }\n  610 |                     if (moduleName === '@react-navigation/core') {\n  611 |                         // We already checked if expo-router resolves]"]}
+{"_e":"metro:bundling:failed","_t":1790685143170,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685143177,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:client_log","_t":1790685143178,"level":"error","data":["[InternalError: Metro has encountered an error: As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.: C:\\Users\\School\\ChatGPT\\KittyApp\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\metro\\withMetroMultiPlatform.js (608:31)\n\n  606 |                             ].join('\\n'));\n  607 |                         }\n> 608 |                         throw new Error('As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.');\n      |                               ^\n  609 |                     }\n  610 |                     if (moduleName === '@react-navigation/core') {\n  611 |                         // We already checked if expo-router resolves]"]}
+{"_e":"metro:bundling:failed","_t":1790685153061,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685153069,"id":null,"message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:client_log","_t":1790685153070,"level":"error","data":["[InternalError: Metro has encountered an error: As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.: C:\\Users\\School\\ChatGPT\\KittyApp\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\metro\\withMetroMultiPlatform.js (608:31)\n\n  606 |                             ].join('\\n'));\n  607 |                         }\n> 608 |                         throw new Error('As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.');\n      |                               ^\n  609 |                     }\n  610 |                     if (moduleName === '@react-navigation/core') {\n  611 |                         // We already checked if expo-router resolves]"]}
+{"_e":"metro:bundling:started","_t":1790685173912,"id":"e","platform":"web","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790685173912,"id":"e","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685173913,"id":"e","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1790685173920,"id":"e","message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685197693,"id":"e","message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685201268,"id":"e","message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685203113,"id":"e","message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685204110,"id":"e","message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685205716,"id":"e","message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1790685208605,"id":"e","message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1790685257555,"id":"g","platform":"web","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790685257555,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685257556,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685257699,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1790685257711,"id":"e","message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:progress","_t":1790685257711,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685261702,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685263250,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685263365,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685263465,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685263565,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685268927,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685286875,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790685293394,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1790685293409,"id":"e","message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:progress","_t":1790685293409,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1790685293460,"id":"g","message":"As of SDK 56, expo-router is no longer compatible with react-navigation. For more information, see https://docs.expo.dev/router/migrate/sdk-55-to-56/. You can disable this check by setting the environment variable EXPO_ROUTER_DISABLE_RN_NAVIGATION_CHECK=1.","importStack":"\u001b[1mImport stack:\u001b[22m\n\n\u001b[90m \u001b[39mApp.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"@react-navigation/native\"\u001b[39m\n\n\u001b[90m \u001b[39mindex.js\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./App\"\u001b[39m\n\n\u001b[90m \u001b[39m\n\u001b[90m |\u001b[39m \u001b[36mimport\u001b[39m \u001b[32m\"./index\"\u001b[39m\n","filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"root:init","_t":1790685440801,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790685440802,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790685440806,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790685441174,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790685441831,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790685442251,"plugins":[]}
+{"_e":"metro:instantiate","_t":1790685449155,"atlas":false,"workers":8,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790685520082,"id":"2","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790685520083,"id":"2","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790685520126,"id":"2","total":1,"ms":43.0259}
+{"_e":"metro:bundling:started","_t":1790685532491,"id":"3","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1790685532491,"id":"3","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790685532522,"id":"3","total":1,"ms":31.2161}

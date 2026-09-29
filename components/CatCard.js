@@ -1,52 +1,66 @@
-import { View, Text, StyleSheet } from "react-native";
+import { Pressable, View, Text, StyleSheet } from "react-native";
+import Colors from "../constants/colors";
 
-export default function CatCard({ name, lastObservation, initial }) {
+const avatarColors = [Colors.avatarPink, Colors.avatarGreen, Colors.avatarGold];
+
+function CatCard({ name, lastObservation, initial, index, onPress }) {
+  const avatarColor = avatarColors[index % avatarColors.length];
+
   return (
-    <View style={styles.catCard}>
-      <View style={styles.catAvatar}>
-        <Text style={styles.initial}>{initial}</Text>
+    <Pressable
+      onPress={onPress}
+      android_ripple={{ color: Colors.border }}
+      style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+    >
+      <View style={[styles.avatar, { backgroundColor: avatarColor }]}>
+        <Text style={styles.avatarText}>{initial}</Text>
       </View>
 
-      <View>
+      <View style={styles.textContainer}>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.observation}>{lastObservation}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
+export default CatCard;
+
 const styles = StyleSheet.create({
-  catCard: {
+  card: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: Colors.card,
     padding: 16,
     marginBottom: 12,
     borderRadius: 18,
   },
-
-  catAvatar: {
+  cardPressed: {
+    opacity: 0.7,
+  },
+  avatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: "#E6EFE4",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
   },
-
-  initial: {
+  avatarText: {
     fontSize: 20,
     fontWeight: "bold",
+    color: Colors.text,
   },
-
+  textContainer: {
+    flex: 1,
+  },
   name: {
     fontSize: 18,
     fontWeight: "bold",
+    color: Colors.text,
   },
-
   observation: {
-    color: "#777",
+    color: Colors.textLight,
     marginTop: 4,
   },
 });
