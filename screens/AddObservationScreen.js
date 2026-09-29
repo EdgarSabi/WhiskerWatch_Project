@@ -12,10 +12,17 @@ const OBSERVATION_TYPES = [
   { id: "7", label: "Algemene notitie" },
 ];
 
-function AddObservationScreen({ route }) {
+function AddObservationScreen({ route, navigation }) {
   const cat = route.params?.cat;
 
   function typePressHandler(type) {
+    // Alleen "Ontlasting" heeft al een eigen scherm. De rest laat voorlopig
+    // gewoon een Alert zien, zodat je weet dat de knop werkt.
+    if (type === "Ontlasting") {
+      navigation.navigate("PoopObservation", { cat: cat });
+      return;
+    }
+
     Alert.alert(type, "Testmodus - Later observatie toevoegen");
   }
 

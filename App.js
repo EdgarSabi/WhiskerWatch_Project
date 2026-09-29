@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
 import CatProfileScreen from "./screens/CatProfileScreen";
 import AddObservationScreen from "./screens/AddObservationScreen";
+import PoopObservationScreen from "./screens/PoopObservationScreen";
 import TimelineScreen from "./screens/TimelineScreen";
 import Colors from "./constants/colors";
 
@@ -27,6 +28,11 @@ export default function App() {
           name="AddObservation"
           component={AddObservationScreen}
           options={{ title: "Observatie toevoegen" }}
+        />
+        <Stack.Screen
+          name="PoopObservation"
+          component={PoopObservationScreen}
+          options={{ title: "Ontlasting loggen" }}
         />
         <Stack.Screen name="Timeline" component={TimelineScreen} options={{ title: "Tijdlijn" }} />
       </Stack.Navigator>
