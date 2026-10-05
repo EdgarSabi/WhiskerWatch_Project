@@ -5,15 +5,36 @@
 // - route: bevat route.params, de data die is meegegeven bij het navigeren
 //   hiernaartoe (in dit geval: { cat: ... }, zie HomeScreen.js)
 //
-// Fase 3: nog geen echte observatielijst of database, alleen de basisgegevens
-// van de kat die je vanuit HomeScreen hebt meegekregen.
+// Fase 5: het profiel toont ook hoeveel opgeslagen observaties DEZE kat heeft.
+// We laden alle observaties en tellen alleen die met hetzelfde catId.
 
+import { useState, useCallback } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import Colors from "../constants/colors";
+import { loadObservations } from "../storage/observationStorage";
 
 function CatProfileScreen({ route, navigation }) {
   // De kat die is meegegeven via navigation.navigate("CatProfile", { cat: item })
   const { cat } = route.params;
+
+  const [observationCount, setObservationCount] = useState(0);
+
+  // Draait elke keer dat dit scherm in beeld komt, dus de teller klopt ook
+  // nadat je een observatie hebt toegevoegd en weer terug bent.
+  useFocusEffect(
+    useCallback(() => {
+      async function countObservations() {
+        const savedObservations = await loadObservations();
+        const catObservations = savedObservations.filter(
+          (observation) => observation.catId === cat.id
+        );
+        setObservationCount(catObservations.length);
+      }
+
+      countObservations();
+    }, [cat.id])
+  );
 
   return (
     <View style={styles.screen}>
@@ -23,6 +44,7 @@ function CatProfileScreen({ route, navigation }) {
 
       <Text style={styles.name}>{cat.name}</Text>
       <Text style={styles.observation}>{cat.lastObservation}</Text>
+      <Text style={styles.count}>Opgeslagen observaties: {observationCount}</Text>
 
       <Pressable
         style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}
@@ -74,6 +96,11 @@ const styles = StyleSheet.create({
   },
   observation: {
     color: Colors.textLight,
+    marginTop: 8,
+  },
+  count: {
+    color: Colors.text,
+    fontWeight: "600",
     marginTop: 8,
     marginBottom: 32,
   },

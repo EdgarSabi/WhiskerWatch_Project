@@ -1,3 +1,4 @@
+//hier nog later een mooiere modal van maken
 import { useState } from "react";
 import { Modal, View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import Colors from "../constants/colors";

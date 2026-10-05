@@ -1,29 +1,15 @@
-//VOEG NOG NIKS TOE MAAR LAAT EVEN EEN ALERT ZIEN DAT HET WERKT
-import { View, Text, FlatList, Pressable, StyleSheet, Alert } from "react-native";
+import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
-
-const OBSERVATION_TYPES = [
-  { id: "1", label: "Ontlasting" },
-  { id: "2", label: "Braken" },
-  { id: "3", label: "Eten & drinken" },
-  { id: "4", label: "Gedrag" },
-  { id: "5", label: "Medicatie" },
-  { id: "6", label: "Gewicht" },
-  { id: "7", label: "Algemene notitie" },
-];
+import { OBSERVATION_TYPES } from "../constants/observationTypes";
 
 function AddObservationScreen({ route, navigation }) {
   const cat = route.params?.cat;
+  const insets = useSafeAreaInsets();
+
 
   function typePressHandler(type) {
-    // Alleen "Ontlasting" heeft al een eigen scherm. De rest laat voorlopig
-    // gewoon een Alert zien, zodat je weet dat de knop werkt.
-    if (type === "Ontlasting") {
-      navigation.navigate("PoopObservation", { cat: cat });
-      return;
-    }
-
-    Alert.alert(type, "Testmodus - Later observatie toevoegen");
+    navigation.navigate(type.screen, { cat: cat });
   }
 
   return (
@@ -35,10 +21,13 @@ function AddObservationScreen({ route, navigation }) {
       <FlatList
         data={OBSERVATION_TYPES}
         keyExtractor={(type) => type.id}
+        // De FlatList scrollt al zelf; deze extra ruimte onderaan zorgt dat het
+        // laatste type boven de Android-navigatiebalk kan komen.
+        contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
         renderItem={({ item }) => (
           <Pressable
             style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
-            onPress={() => typePressHandler(item.label)}
+            onPress={() => typePressHandler(item)}
           >
             <Text style={styles.cardText}>{item.label}</Text>
           </Pressable>

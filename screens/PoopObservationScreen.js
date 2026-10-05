@@ -1,97 +1,154 @@
-// PoopObservationScreen is het formulier om een ontlasting-observatie vast
-// te leggen. Dit is de EERSTE volledig werkende observatieflow — de andere
-// types (Braken, Gedrag, ...) krijgen later hun eigen scherm, op dezelfde
-// manier opgebouwd.
-//
-// Fase 4: nog geen database. Opslaan zet het observatie-object voorlopig
-// alleen in useState (in memory), en laat daarna een Alert zien.
-
-import { useState } from "react";
-import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, Alert } from "react-native";
+import { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ScrollView,
+  Image,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
+import { loadObservations, saveObservations } from "../storage/observationStorage";
+import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
 
-const CAT_OPTIONS = ["Mia", "Elsa", "Hoop", "Lara", "Billy", "Kat onbekend"];
 const CONSISTENCY_OPTIONS = ["Normaal", "Zacht", "Diarree", "Hard", "Onbekend"];
 
 function PoopObservationScreen({ route, navigation }) {
-  // Als je vanuit CatProfileScreen komt, staat er al een kat klaar.
-  const preselectedCat = route.params?.cat?.name ?? null;
+  // Alleen gevuld als je vanuit de tijdlijn op "Bewerken" tikt. Bij een
+  // nieuwe observatie is dit null.
+  const observationToEdit = route.params?.observation ?? null;
 
-  // We gebruiken hier bewust VEEL losse useState-hooks in plaats van één
-  // groot object. Dat is voor een formulier als dit makkelijker te lezen:
-  // elk veld heeft zijn eigen simpele setter (setDate, setConsistency, ...),
-  // in plaats van dat je steeds een groot object moet spreaden om één
-  // eigenschap aan te passen.
+  const insets = useSafeAreaInsets();
+
+  let preselectedCat = route.params?.cat ?? null;
+  if (observationToEdit) {
+    preselectedCat = { id: observationToEdit.catId, name: observationToEdit.catName };
+  }
+
+  // De katten voor de keuzeknoppen komen uit de opslag. Aan het begin is de
+  // lijst leeg; zodra het laden klaar is, vult useEffect hem.
+  const [cats, setCats] = useState([]);
+
+  useEffect(() => {
+    async function loadSavedCats() {
+      const savedCats = await loadCats();
+      setCats(savedCats);
+    }
+
+    loadSavedCats();
+  }, []);
+
   const [selectedCat, setSelectedCat] = useState(preselectedCat);
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [consistency, setConsistency] = useState(null);
+  // "?? ''" betekent: als er niets is om te bewerken, begin dan met leeg.
+  const [date, setDate] = useState(observationToEdit?.date ?? "");
+  const [time, setTime] = useState(observationToEdit?.time ?? "");
+  const [consistency, setConsistency] = useState(observationToEdit?.consistency ?? null);
 
   // Optionele velden
-  const [color, setColor] = useState("");
-  const [mucusSeen, setMucusSeen] = useState(null); // "Nee" | "Ja" | null
-  const [bloodSeen, setBloodSeen] = useState(null);
-  const [outsideLitterBox, setOutsideLitterBox] = useState(null);
-  const [note, setNote] = useState("");
+  const [color, setColor] = useState(observationToEdit?.color ?? "");
+  const [mucusSeen, setMucusSeen] = useState(observationToEdit?.mucusSeen ?? null); // "Nee" | "Ja" | null
+  const [bloodSeen, setBloodSeen] = useState(observationToEdit?.bloodSeen ?? null);
+  const [outsideLitterBox, setOutsideLitterBox] = useState(observationToEdit?.outsideLitterBox ?? null);
+  const [note, setNote] = useState(observationToEdit?.note ?? "");
 
-  // Alle observaties die je tijdens deze sessie hebt opgeslagen. Dit leeft
-  // alleen in het geheugen van dit scherm — er is nog geen database en nog
-  // geen plek waar HomeScreen of TimelineScreen dit kunnen uitlezen. Dat
-  // komt pas als we lokale opslag toevoegen.
-  const [savedObservations, setSavedObservations] = useState([]);
+  const [photoUri, setPhotoUri] = useState(observationToEdit?.photoUri ?? null);
 
-  function saveHandler() {
-    // Kat en consistentie zijn verplicht, de rest is optioneel.
+  async function pickPhotoHandler() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+    });
+
+    if (!result.canceled) {
+      setPhotoUri(result.assets[0].uri);
+    }
+  }
+
+  async function saveHandler() {
     if (!selectedCat || !consistency) {
       Alert.alert("Niet compleet", "Kies in elk geval een kat en een consistentie.");
       return;
     }
 
-    // Dit is het observatie-object: een simpel, plat object met alle
-    // ingevulde waarden. Geen aparte "modellen" of classes, gewoon een
-    // object letterlijk opgebouwd uit de useState-waarden hierboven.
-    const newObservation = {
-      id: Math.random().toString(),
-      catName: selectedCat,
-      type: "Ontlasting",
-      consistency: consistency,
-      date: date,
-      time: time,
-      color: color,
-      mucusSeen: mucusSeen,
-      bloodSeen: bloodSeen,
-      outsideLitterBox: outsideLitterBox,
-      note: note,
-    };
+    const currentObservations = await loadObservations();
 
-    setSavedObservations((current) => [...current, newObservation]);
+    if (observationToEdit) {
+
+      const changedObservations = currentObservations.map((observation) => {
+        if (observation.id === observationToEdit.id) {
+          return {
+            ...observation,
+            catId: selectedCat.id,
+            catName: selectedCat.name,
+            consistency: consistency,
+            date: date,
+            time: time,
+            color: color,
+            mucusSeen: mucusSeen,
+            bloodSeen: bloodSeen,
+            outsideLitterBox: outsideLitterBox,
+            note: note,
+            photoUri: photoUri,
+          };
+        }
+        return observation;
+      });
+
+      await saveObservations(changedObservations);
+    } else {
+
+      const newObservation = {
+        id: Math.random().toString(),
+        catId: selectedCat.id,
+        catName: selectedCat.name,
+        type: "Ontlasting",
+        consistency: consistency,
+        date: date,
+        time: time,
+        color: color,
+        mucusSeen: mucusSeen,
+        bloodSeen: bloodSeen,
+        outsideLitterBox: outsideLitterBox,
+        note: note,
+        photoUri: photoUri,
+        createdAt: new Date().toLocaleString("nl-NL"),
+      };
+
+      await saveObservations([...currentObservations, newObservation]);
+    }
 
     Alert.alert(
       "Observatie opgeslagen",
-      `Ontlasting voor ${selectedCat}: ${consistency}.`,
+      `Ontlasting voor ${selectedCat.name}: ${consistency}.`,
       [{ text: "OK", onPress: () => navigation.goBack() }]
     );
   }
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, { paddingBottom: insets.bottom }]}>
       {/* ScrollView zorgt dat je het hele formulier kunt scrollen als het
           niet allemaal op het scherm past (bijv. bij een klein toestel of
           als het toetsenbord open staat). */}
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.label}>Kat</Text>
         <View style={styles.pillRow}>
-          {CAT_OPTIONS.map((option) => (
+          {/* Alle opgeslagen katten, plus "Kat onbekend" als laatste keuze. */}
+          {[...cats, UNKNOWN_CAT].map((option) => (
             <Pressable
-              key={option}
+              key={option.id}
               onPress={() => setSelectedCat(option)}
-              // Dit is het "selected state"-patroon: we vergelijken de
-              // waarde van deze knop met de huidige state (selectedCat).
+              // Dit is het "selected state"-patroon: we vergelijken het id van
+              // deze knop met het id van de gekozen kat (selectedCat).
               // Zijn ze gelijk, dan tellen we een extra stijl erbij op.
-              style={[styles.pill, selectedCat === option && styles.pillSelected]}
+              style={[styles.pill, selectedCat?.id === option.id && styles.pillSelected]}
             >
-              <Text style={[styles.pillText, selectedCat === option && styles.pillTextSelected]}>
-                {option}
+              <Text
+                style={[styles.pillText, selectedCat?.id === option.id && styles.pillTextSelected]}
+              >
+                {option.name}
               </Text>
             </Pressable>
           ))}
@@ -204,6 +261,29 @@ function PoopObservationScreen({ route, navigation }) {
           onChangeText={setNote}
           multiline
         />
+
+        <Text style={styles.label}>Foto</Text>
+        {/* Is er een foto? Dan tonen we een preview met knoppen om te
+            vervangen of te verwijderen. Zo niet, dan alleen de keuzeknop. */}
+        {photoUri ? (
+          <View>
+            <Image source={{ uri: photoUri }} style={styles.photoPreview} />
+            <View style={styles.pillRow}>
+              <Pressable style={styles.pill} onPress={pickPhotoHandler}>
+                <Text style={styles.pillText}>Foto vervangen</Text>
+              </Pressable>
+              <Pressable style={styles.pill} onPress={() => setPhotoUri(null)}>
+                <Text style={styles.pillText}>Foto verwijderen</Text>
+              </Pressable>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.pillRow}>
+            <Pressable style={styles.pill} onPress={pickPhotoHandler}>
+              <Text style={styles.pillText}>Foto kiezen uit galerij</Text>
+            </Pressable>
+          </View>
+        )}
       </ScrollView>
 
       <Pressable
@@ -286,6 +366,13 @@ const styles = StyleSheet.create({
   noteInput: {
     minHeight: 80,
     textAlignVertical: "top",
+  },
+  photoPreview: {
+    width: "100%",
+    height: 220,
+    borderRadius: 10,
+    marginBottom: 12,
+    backgroundColor: Colors.border,
   },
   yesNoRow: {
     marginBottom: 4,

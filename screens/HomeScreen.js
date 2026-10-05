@@ -1,19 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CatCard from "../components/CatCard";
 import AddCatModal from "../components/AddCatModal";
 import Colors from "../constants/colors";
-
-//Placeholder katjes 
-const INITIAL_CATS = [
-  { id: "1", name: "Mia", initial: "M", lastObservation: "Laatst: Eten & drinken · 2u geleden" },
-  { id: "2", name: "Elsa", initial: "E", lastObservation: "Nog geen observaties" },
-  { id: "3", name: "Hoop", initial: "H", lastObservation: "Laatst: Gedrag · 3 dagen geleden" },
-  { id: "4", name: "Lara", initial: "L", lastObservation: "Laatst: Gewicht · 5 dagen geleden" },
-];
+import { loadCats, saveCats } from "../storage/catStorage";
 
 function HomeScreen({ navigation }) {
-  const [cats, setCats] = useState(INITIAL_CATS);
+  const insets = useSafeAreaInsets();
+  const [cats, setCats] = useState([]);
+
+  // useEffect met [] draait één keer, zodra het scherm voor het eerst verschijnt.
+  // Hier laden we de opgeslagen katten (of de placeholder katjes als er nog niets is).
+  useEffect(() => {
+    async function loadSavedCats() {
+      const savedCats = await loadCats();
+      setCats(savedCats);
+    }
+
+    loadSavedCats();
+  }, []);
 
   const [isAddCatModalVisible, setIsAddCatModalVisible] = useState(false);
 
@@ -26,17 +32,20 @@ function HomeScreen({ navigation }) {
   }
 
 
-  function addCatHandler(name) {
-    setCats((currentCats) => [
-      ...currentCats,
-      {
-        id: Math.random().toString(),
-        name: name,
-        initial: name.charAt(0).toUpperCase(),
-        lastObservation: "Nog geen observaties",
-      },
-    ]);
+  async function addCatHandler(name) {
+    // Date.now() is het aantal milliseconden sinds 1970: elke nieuwe kat krijgt
+    // daarmee een eigen, unieke id.
+    const newCat = {
+      id: Date.now().toString(),
+      name: name,
+      initial: name.charAt(0).toUpperCase(),
+      lastObservation: "Nog geen observaties",
+    };
+
+    const updatedCats = [...cats, newCat];
+    setCats(updatedCats);
     closeAddCatModal();
+    await saveCats(updatedCats);
   }
 
   // navigation.navigate("CatProfile", { cat: item }) doet twee dingen:
@@ -49,7 +58,7 @@ function HomeScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, { paddingBottom: insets.bottom + 16 }]}>
       <FlatList
         data={cats}
         keyExtractor={(cat) => cat.id}

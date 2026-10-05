@@ -4,10 +4,24 @@ import HomeScreen from "./screens/HomeScreen";
 import CatProfileScreen from "./screens/CatProfileScreen";
 import AddObservationScreen from "./screens/AddObservationScreen";
 import PoopObservationScreen from "./screens/PoopObservationScreen";
+import VomitObservationScreen from "./screens/VomitObservationScreen";
+import FoodObservationScreen from "./screens/FoodObservationScreen";
+import BehaviourObservationScreen from "./screens/BehaviourObservationScreen";
+import MedicationObservationScreen from "./screens/MedicationObservationScreen";
+import WeightObservationScreen from "./screens/WeightObservationScreen";
+import NoteObservationScreen from "./screens/NoteObservationScreen";
 import TimelineScreen from "./screens/TimelineScreen";
 import Colors from "./constants/colors";
 
 const Stack = createNativeStackNavigator();
+
+// De titel van een formulier hangt af van of je een nieuwe observatie logt of
+// een bestaande bewerkt (dan is route.params.observation gevuld).
+function formTitle(typeName) {
+  return ({ route }) => ({
+    title: route.params?.observation ? `${typeName} bewerken` : `${typeName} loggen`,
+  });
+}
 
 export default function App() {
   return (
@@ -32,7 +46,37 @@ export default function App() {
         <Stack.Screen
           name="PoopObservation"
           component={PoopObservationScreen}
-          options={{ title: "Ontlasting loggen" }}
+          options={formTitle("Ontlasting")}
+        />
+        <Stack.Screen
+          name="VomitObservation"
+          component={VomitObservationScreen}
+          options={formTitle("Braken")}
+        />
+        <Stack.Screen
+          name="FoodObservation"
+          component={FoodObservationScreen}
+          options={formTitle("Eten & drinken")}
+        />
+        <Stack.Screen
+          name="BehaviourObservation"
+          component={BehaviourObservationScreen}
+          options={formTitle("Gedrag")}
+        />
+        <Stack.Screen
+          name="MedicationObservation"
+          component={MedicationObservationScreen}
+          options={formTitle("Medicatie")}
+        />
+        <Stack.Screen
+          name="WeightObservation"
+          component={WeightObservationScreen}
+          options={formTitle("Gewicht")}
+        />
+        <Stack.Screen
+          name="NoteObservation"
+          component={NoteObservationScreen}
+          options={formTitle("Algemene notitie")}
         />
         <Stack.Screen name="Timeline" component={TimelineScreen} options={{ title: "Tijdlijn" }} />
       </Stack.Navigator>
