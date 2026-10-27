@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { View, Image, StyleSheet } from "react-native";
+import { useFonts } from "expo-font";
+import { Fraunces_700Bold } from "@expo-google-fonts/fraunces/700Bold";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
@@ -14,10 +17,28 @@ import WeightObservationScreen from "./screens/WeightObservationScreen";
 import NoteObservationScreen from "./screens/NoteObservationScreen";
 import TimelineScreen from "./screens/TimelineScreen";
 import VetOverviewScreen from "./screens/VetOverviewScreen";
+import AppTitle from "./components/AppTitle";
 import Colors from "./constants/colors";
+import Fonts from "./constants/fonts";
 import { seedDemoData } from "./storage/demoData";
 
 const Stack = createNativeStackNavigator();
+
+// Het korte startscherm met Lara, zolang de app zijn lettertype laadt en de
+// demo-data klaarzet. Het ziet er hetzelfde uit als het splashscherm (zie
+// app.json), dus je merkt geen overgang.
+const startStyles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FDECE0",
+  },
+  image: {
+    width: 320,
+    height: 320,
+  },
+});
 
 // De titel van een formulier hangt af van of je een nieuwe observatie logt of
 // een bestaande bewerkt (dan is route.params.observation gevuld).
@@ -29,8 +50,10 @@ function formTitle(typeName) {
 
 export default function App() {
   // De demo-data (Lara) moet klaarstaan voordat het eerste scherm zijn katten
-  // laadt. Tot die tijd tonen we nog niets; dat duurt maar heel even.
+  // laadt, en het lettertype van de koppen moet geladen zijn. Tot die tijd tonen
+  // we het startscherm; dat duurt maar heel even.
   const [isReady, setIsReady] = useState(false);
+  const [fontsLoaded, fontError] = useFonts({ Fraunces_700Bold });
 
   useEffect(() => {
     async function prepare() {
@@ -45,8 +68,18 @@ export default function App() {
     prepare();
   }, []);
 
-  if (!isReady) {
-    return null;
+  // Lukt het laden van het lettertype niet (fontError), dan gaan we toch door; de
+  // koppen hebben dan gewoon het standaardlettertype.
+  if (!isReady || !(fontsLoaded || fontError)) {
+    return (
+      <View style={startStyles.screen}>
+        <Image
+          source={require("./assets/splash-lara.png")}
+          style={startStyles.image}
+          resizeMode="contain"
+        />
+      </View>
+    );
   }
 
   return (
@@ -54,10 +87,17 @@ export default function App() {
       <Stack.Navigator
         screenOptions={{
           headerStyle: { backgroundColor: Colors.background },
+          headerShadowVisible: false,
           headerTintColor: Colors.text,
+          headerTitleStyle: { fontFamily: Fonts.heading, fontSize: 22, color: Colors.text },
+          contentStyle: { backgroundColor: Colors.background },
         }}
       >
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: "WhiskerWatch" }} />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: "WhiskerWatch", headerTitle: () => <AppTitle /> }}
+        />
         <Stack.Screen
           name="CatProfile"
           component={CatProfileScreen}

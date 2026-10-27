@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
+import FormLabel from "../components/FormLabel";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
 import DateTimeFields from "../components/DateTimeFields";
@@ -11,6 +12,7 @@ function WeightObservationScreen({ route, navigation }) {
   const observationToEdit = route.params?.observation ?? null;
 
   const insets = useSafeAreaInsets();
+  const [isSaving, setIsSaving] = useState(false);
 
   let preselectedCat = route.params?.cat ?? null;
   if (observationToEdit) {
@@ -47,6 +49,12 @@ function WeightObservationScreen({ route, navigation }) {
       Alert.alert("Ongeldig gewicht", "Vul het gewicht in kilo's in, bijvoorbeeld 4,2.");
       return;
     }
+
+    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    if (isSaving) {
+      return;
+    }
+    setIsSaving(true);
 
     const currentObservations = await loadObservations();
 
@@ -89,13 +97,17 @@ function WeightObservationScreen({ route, navigation }) {
   return (
     <View style={[styles.screen, { paddingBottom: insets.bottom }]}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <Text style={styles.label}>Kat</Text>
+        <FormLabel text="Kat" tag="required" />
         <View style={styles.pillRow}>
           {[...cats, UNKNOWN_CAT].map((option) => (
             <Pressable
               key={option.id}
               onPress={() => setSelectedCat(option)}
-              style={[styles.pill, selectedCat?.id === option.id && styles.pillSelected]}
+              style={[
+                styles.pill,
+                option.id === UNKNOWN_CAT.id && styles.pillDashed,
+                selectedCat?.id === option.id && styles.pillSelected,
+              ]}
             >
               <Text
                 style={[styles.pillText, selectedCat?.id === option.id && styles.pillTextSelected]}
@@ -106,9 +118,9 @@ function WeightObservationScreen({ route, navigation }) {
           ))}
         </View>
 
-        <DateTimeFields value={observedAt} onChange={setObservedAt} isNew={!observationToEdit} />
+        <DateTimeFields value={observedAt} onValueChange={setObservedAt} isNew={!observationToEdit} />
 
-        <Text style={styles.label}>Gewicht (kg)</Text>
+        <FormLabel text="Gewicht (kg)" tag="required" />
         <TextInput
           style={styles.input}
           placeholder="bijv. 4,2"
@@ -139,13 +151,6 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 24,
   },
-  label: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: Colors.textLight,
-    marginBottom: 8,
-    textTransform: "uppercase",
-  },
   pillRow: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -159,6 +164,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
     borderWidth: 1,
     borderColor: Colors.border,
+  },
+  pillDashed: {
+    borderStyle: "dashed",
   },
   pillSelected: {
     backgroundColor: Colors.primary,
@@ -175,10 +183,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
     backgroundColor: Colors.card,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
     fontSize: 16,
+    color: Colors.text,
     marginBottom: 20,
   },
   saveButton: {

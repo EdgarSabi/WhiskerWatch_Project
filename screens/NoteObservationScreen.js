@@ -10,12 +10,21 @@ import {
   Pressable,
   ScrollView,
   Image,
+  KeyboardAvoidingView,
   StyleSheet,
   Alert,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  OBSERVATION_PHOTO_OPTIONS,
+  pickPhotoFromGallery,
+  takePhoto,
+  savePhotoChange,
+} from "../helpers/photoHelpers";
 import Colors from "../constants/colors";
+import FormLabel from "../components/FormLabel";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
 import DateTimeFields from "../components/DateTimeFields";
@@ -26,6 +35,8 @@ function NoteObservationScreen({ route, navigation }) {
   const observationToEdit = route.params?.observation ?? null;
 
   const insets = useSafeAreaInsets();
+  const [isSaving, setIsSaving] = useState(false);
+  const headerHeight = useHeaderHeight();
 
   let preselectedCat = route.params?.cat ?? null;
   if (observationToEdit) {
@@ -50,15 +61,19 @@ function NoteObservationScreen({ route, navigation }) {
   // Optioneel veld
   const [photoUri, setPhotoUri] = useState(observationToEdit?.photoUri ?? null);
 
-  async function pickPhotoHandler() {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
+  // Een foto maken of uit de galerij kiezen, met bijsnijden erachter. Het adres
+  // is nog tijdelijk: bij het opslaan bewaren we de foto duurzaam.
+  async function takePhotoHandler() {
+    const newPhotoUri = await takePhoto(OBSERVATION_PHOTO_OPTIONS);
+    if (newPhotoUri) {
+      setPhotoUri(newPhotoUri);
+    }
+  }
 
-    if (!result.canceled) {
-      setPhotoUri(result.assets[0].uri);
+  async function pickPhotoHandler() {
+    const newPhotoUri = await pickPhotoFromGallery(OBSERVATION_PHOTO_OPTIONS);
+    if (newPhotoUri) {
+      setPhotoUri(newPhotoUri);
     }
   }
 
@@ -68,6 +83,15 @@ function NoteObservationScreen({ route, navigation }) {
       Alert.alert("Niet compleet", "Kies in elk geval een kat en schrijf een notitie.");
       return;
     }
+
+    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    if (isSaving) {
+      return;
+    }
+    setIsSaving(true);
+
+    // Is de foto vervangen of verwijderd, dan ruimt dit ook het oude bestand op.
+    const savedPhotoUri = await savePhotoChange(photoUri, observationToEdit?.photoUri ?? null);
 
     const currentObservations = await loadObservations();
 
@@ -80,7 +104,7 @@ function NoteObservationScreen({ route, navigation }) {
             catName: selectedCat.name,
             observedAt: observedAt.toISOString(),
             note: note.trim(),
-            photoUri: photoUri,
+            photoUri: savedPhotoUri,
           };
         }
         return observation;
@@ -95,7 +119,7 @@ function NoteObservationScreen({ route, navigation }) {
         type: "Algemene notitie",
         observedAt: observedAt.toISOString(),
         note: note.trim(),
-        photoUri: photoUri,
+        photoUri: savedPhotoUri,
         createdAt: new Date().toLocaleString("nl-NL"),
       };
 
@@ -108,15 +132,25 @@ function NoteObservationScreen({ route, navigation }) {
   }
 
   return (
-    <View style={[styles.screen, { paddingBottom: insets.bottom }]}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.label}>Kat</Text>
+    // KeyboardAvoidingView schuift de inhoud omhoog als het toetsenbord opent, zodat
+    // het tekstveld en de Opslaan-knop zichtbaar blijven (zoals in CatFormScreen).
+    <KeyboardAvoidingView
+      style={[styles.screen, { paddingBottom: insets.bottom }]}
+      behavior="padding"
+      keyboardVerticalOffset={headerHeight}
+    >
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <FormLabel text="Kat" tag="required" />
         <View style={styles.pillRow}>
           {[...cats, UNKNOWN_CAT].map((option) => (
             <Pressable
               key={option.id}
               onPress={() => setSelectedCat(option)}
-              style={[styles.pill, selectedCat?.id === option.id && styles.pillSelected]}
+              style={[
+                styles.pill,
+                option.id === UNKNOWN_CAT.id && styles.pillDashed,
+                selectedCat?.id === option.id && styles.pillSelected,
+              ]}
             >
               <Text
                 style={[styles.pillText, selectedCat?.id === option.id && styles.pillTextSelected]}
@@ -127,9 +161,9 @@ function NoteObservationScreen({ route, navigation }) {
           ))}
         </View>
 
-        <DateTimeFields value={observedAt} onChange={setObservedAt} isNew={!observationToEdit} />
+        <DateTimeFields value={observedAt} onValueChange={setObservedAt} isNew={!observationToEdit} />
 
-        <Text style={styles.label}>Notitie</Text>
+        <FormLabel text="Notitie" tag="required" />
         <TextInput
           style={[styles.input, styles.noteInput]}
           placeholder="Schrijf hier je notitie"
@@ -138,28 +172,26 @@ function NoteObservationScreen({ route, navigation }) {
           multiline
         />
 
-        <Text style={styles.sectionTitle}>Optioneel</Text>
+        <Text style={styles.sectionTitle}>Optionele details</Text>
 
-        <Text style={styles.label}>Foto</Text>
-        {photoUri ? (
-          <View>
-            <Image source={{ uri: photoUri }} style={styles.photoPreview} />
-            <View style={styles.pillRow}>
-              <Pressable style={styles.pill} onPress={pickPhotoHandler}>
-                <Text style={styles.pillText}>Foto vervangen</Text>
-              </Pressable>
-              <Pressable style={styles.pill} onPress={() => setPhotoUri(null)}>
-                <Text style={styles.pillText}>Foto verwijderen</Text>
-              </Pressable>
-            </View>
-          </View>
-        ) : (
-          <View style={styles.pillRow}>
-            <Pressable style={styles.pill} onPress={pickPhotoHandler}>
-              <Text style={styles.pillText}>Foto kiezen uit galerij</Text>
+        <FormLabel text="Foto" tag="optional" />
+        {photoUri ? <Image source={{ uri: photoUri }} style={styles.photoPreview} /> : null}
+        <View style={styles.pillRow}>
+          <Pressable style={styles.pill} onPress={takePhotoHandler}>
+            <MaterialCommunityIcons name="camera-outline" size={16} color={Colors.text} />
+            <Text style={styles.pillText}>Foto maken</Text>
+          </Pressable>
+          <Pressable style={styles.pill} onPress={pickPhotoHandler}>
+            <MaterialCommunityIcons name="image-outline" size={16} color={Colors.text} />
+            <Text style={styles.pillText}>Uit galerij kiezen</Text>
+          </Pressable>
+          {photoUri ? (
+            <Pressable style={styles.pill} onPress={() => setPhotoUri(null)}>
+              <MaterialCommunityIcons name="trash-can-outline" size={16} color={Colors.text} />
+              <Text style={styles.pillText}>Foto verwijderen</Text>
             </Pressable>
-          </View>
-        )}
+          ) : null}
+        </View>
       </ScrollView>
 
       <Pressable
@@ -168,7 +200,7 @@ function NoteObservationScreen({ route, navigation }) {
       >
         <Text style={styles.saveButtonText}>Opslaan</Text>
       </Pressable>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -183,26 +215,16 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 24,
   },
-  label: {
+  sectionTitle: {
     fontSize: 13,
     fontWeight: "700",
     color: Colors.textLight,
-    marginBottom: 8,
     textTransform: "uppercase",
-  },
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: Colors.text,
-    marginTop: 8,
-    marginBottom: 12,
-  },
-  row: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  rowItem: {
-    flex: 1,
+    borderTopWidth: 1,
+    borderTopColor: Colors.border,
+    paddingTop: 16,
+    marginTop: 4,
+    marginBottom: 14,
   },
   pillRow: {
     flexDirection: "row",
@@ -211,12 +233,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   pill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 20,
     backgroundColor: Colors.card,
     borderWidth: 1,
     borderColor: Colors.border,
+  },
+  pillDashed: {
+    borderStyle: "dashed",
   },
   pillSelected: {
     backgroundColor: Colors.primary,
@@ -233,10 +261,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
     backgroundColor: Colors.card,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
     fontSize: 16,
+    color: Colors.text,
     marginBottom: 20,
   },
   noteInput: {

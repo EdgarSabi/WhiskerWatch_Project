@@ -4,6 +4,7 @@
 
 import { Modal, View, Text, Pressable, StyleSheet } from "react-native";
 import Colors from "../constants/colors";
+import Fonts from "../constants/fonts";
 
 function ConfirmModal({ visible, title, message, confirmText, onConfirm, onCancel }) {
   return (
@@ -60,8 +61,8 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: Fonts.heading,
+    fontSize: 22,
     color: Colors.text,
     marginBottom: 8,
   },

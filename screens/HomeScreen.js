@@ -1,15 +1,16 @@
 import { useState, useCallback } from "react";
 import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CatCard from "../components/CatCard";
+import TabBar from "../components/TabBar";
 import Colors from "../constants/colors";
 import { loadCats } from "../storage/catStorage";
 import { loadObservations } from "../storage/observationStorage";
-import { getLastObservationText } from "../helpers/observationHelpers";
+import { OBSERVATION_TYPES } from "../constants/observationTypes";
+import { getLastObservation } from "../helpers/observationHelpers";
 
 function HomeScreen({ navigation }) {
-  const insets = useSafeAreaInsets();
   const [cats, setCats] = useState([]);
   const [observations, setObservations] = useState([]);
 
@@ -38,58 +39,66 @@ function HomeScreen({ navigation }) {
     navigation.navigate("CatProfile", { cat: cat });
   }
 
+  // De laatste observatie openen in het bewerkscherm dat daarbij hoort (hetzelfde
+  // als "Bewerken" in de tijdlijn).
+  function lastObservationPressHandler(observation) {
+    const observationType = OBSERVATION_TYPES.find((type) => type.label === observation.type);
+    navigation.navigate(observationType.screen, { observation: observation });
+  }
+
   return (
-    <View style={[styles.screen, { paddingBottom: insets.bottom + 16 }]}>
+    <View style={styles.screen}>
       <FlatList
         data={cats}
         keyExtractor={(cat) => cat.id}
-        renderItem={({ item, index }) => (
-          <CatCard
-            name={item.name}
-            initial={item.initial}
-            photoUri={item.photoUri}
-            lastObservation={getLastObservationText(
-              observations.filter((observation) => observation.catId === item.id)
-            )}
-            index={index}
-            onPress={() => catPressHandler(item)}
-          />
-        )}
+        renderItem={({ item, index }) => {
+          const catObservations = observations.filter(
+            (observation) => observation.catId === item.id
+          );
+          const lastObservation = getLastObservation(catObservations);
+
+          return (
+            <CatCard
+              name={item.name}
+              initial={item.initial}
+              photoUri={item.photoUri}
+              lastObservation={lastObservation}
+              onLastObservationPress={() => lastObservationPressHandler(lastObservation)}
+              index={index}
+              onPress={() => catPressHandler(item)}
+            />
+          );
+        }}
+        // Zijn er geen katten (bijv. allemaal verwijderd), dan niet een leeg scherm.
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>Nog geen katten. Voeg er een toe met de knop hieronder.</Text>
+        }
+        // katjes toevoegen: onder de laatste kaart, als stippellijn-knop
+        ListFooterComponent={
+          <Pressable
+            style={({ pressed }) => [styles.addCatButton, pressed && styles.buttonPressed]}
+            onPress={() => navigation.navigate("CatForm")}
+          >
+            <MaterialCommunityIcons name="plus" size={20} color={Colors.textLight} />
+            <Text style={styles.addCatButtonText}>Kat toevoegen</Text>
+          </Pressable>
+        }
         contentContainerStyle={styles.list}
       />
 
-      {/* katjes toevoegen */}
-      <Pressable
-        style={({ pressed }) => [styles.addCatButton, pressed && styles.buttonPressed]}
-        onPress={() => navigation.navigate("CatForm")}
-      >
-        <Text style={styles.addCatButtonText}>+ Kat toevoegen</Text>
-      </Pressable>
-
-      {/* observaties toevoegen */}
-      <Pressable
-        style={({ pressed }) => [styles.addObservationButton, pressed && styles.buttonPressed]}
-        onPress={() => navigation.navigate("AddObservation")}
-      >
-        <Text style={styles.addObservationButtonText}>+ Observatie toevoegen</Text>
-      </Pressable>
-
-      {/* tijdlijn en dierenartsoverzicht, naast elkaar */}
-      <View style={styles.linkRow}>
+      {/* observaties toevoegen: de duidelijke hoofdknop, vast onderaan */}
+      <View style={styles.actions}>
         <Pressable
-          style={({ pressed }) => [styles.timelineLink, pressed && styles.timelineLinkPressed]}
-          onPress={() => navigation.navigate("Timeline")}
+          style={({ pressed }) => [styles.addObservationButton, pressed && styles.buttonPressed]}
+          onPress={() => navigation.navigate("AddObservation")}
         >
-          <Text style={styles.timelineLinkText}>Tijdlijn bekijken</Text>
-        </Pressable>
-
-        <Pressable
-          style={({ pressed }) => [styles.timelineLink, pressed && styles.timelineLinkPressed]}
-          onPress={() => navigation.navigate("VetOverview")}
-        >
-          <Text style={styles.timelineLinkText}>Dierenartsoverzicht</Text>
+          <MaterialCommunityIcons name="plus" size={22} color="#FFFFFF" />
+          <Text style={styles.addObservationButtonText}>Observatie toevoegen</Text>
         </Pressable>
       </View>
+
+      {/* Home, Tijdlijn en Overzicht (het dierenartsoverzicht) */}
+      <TabBar active="Home" navigation={navigation} />
     </View>
   );
 }
@@ -100,30 +109,46 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingTop: 16,
-    paddingHorizontal: 16,
   },
   list: {
+    paddingTop: 8,
+    paddingHorizontal: 16,
     paddingBottom: 12,
   },
+  emptyText: {
+    color: Colors.textLight,
+    marginTop: 8,
+    marginBottom: 12,
+  },
   addCatButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
     borderWidth: 1,
     borderColor: Colors.border,
     borderStyle: "dashed",
-    borderRadius: 14,
-    paddingVertical: 14,
-    alignItems: "center",
-    marginBottom: 12,
+    borderRadius: 20,
+    paddingVertical: 16,
   },
   addCatButtonText: {
     color: Colors.textLight,
     fontWeight: "600",
+    fontSize: 15,
+  },
+  actions: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 14,
   },
   addObservationButton: {
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
-    paddingVertical: 16,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    backgroundColor: Colors.primary,
+    borderRadius: 16,
+    paddingVertical: 16,
   },
   addObservationButtonText: {
     color: "#FFFFFF",
@@ -132,20 +157,5 @@ const styles = StyleSheet.create({
   },
   buttonPressed: {
     opacity: 0.8,
-  },
-  linkRow: {
-    flexDirection: "row",
-  },
-  timelineLink: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: 16,
-  },
-  timelineLinkPressed: {
-    opacity: 0.6,
-  },
-  timelineLinkText: {
-    color: Colors.primary,
-    fontWeight: "600",
   },
 });

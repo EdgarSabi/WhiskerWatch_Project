@@ -5,20 +5,32 @@
 // - route: bevat route.params, de data die is meegegeven bij het navigeren
 //   hiernaartoe (in dit geval: { cat: ... }, zie HomeScreen.js)
 //
-// Het profiel toont de ingevulde gegevens van de kat (leeg = niet getoond), hoeveel
-// opgeslagen observaties DEZE kat heeft (we tellen alleen die met hetzelfde
-// catId), en knoppen om te bewerken of te verwijderen.
+// Het profiel toont de ingevulde gegevens van de kat (leeg = niet getoond), zijn
+// recente observaties, hoeveel opgeslagen observaties DEZE kat heeft (we tellen
+// alleen die met hetzelfde catId), en knoppen om te bewerken of te verwijderen.
 
 import { useState, useCallback } from "react";
 import { View, Text, Image, Pressable, ScrollView, StyleSheet } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
+import Fonts from "../constants/fonts";
 import ConfirmModal from "../components/ConfirmModal";
-import { getPhotoSource } from "../helpers/photoHelpers";
+import TypeBadge from "../components/TypeBadge";
+import { getPhotoSource, deletePhotoFile } from "../helpers/photoHelpers";
 import { loadObservations } from "../storage/observationStorage";
 import { loadCats, saveCats } from "../storage/catStorage";
-import { getLastObservationText } from "../helpers/observationHelpers";
+import { OBSERVATION_TYPES } from "../constants/observationTypes";
+import {
+  getRecentObservations,
+  getRelativeText,
+  getSummary,
+} from "../helpers/observationHelpers";
+import { formatBirthDate, getAgeText, getLatestWeight } from "../helpers/catHelpers";
+
+// Hoeveel recente observaties we onder het profiel tonen.
+const RECENT_COUNT = 3;
 
 function CatProfileScreen({ route, navigation }) {
   const insets = useSafeAreaInsets();
@@ -27,7 +39,8 @@ function CatProfileScreen({ route, navigation }) {
   // We bewaren hem in state, zodat we hem opnieuw kunnen laden na het bewerken.
   const [cat, setCat] = useState(route.params.cat);
   const [observationCount, setObservationCount] = useState(0);
-  const [lastObservationText, setLastObservationText] = useState("");
+  const [recentObservations, setRecentObservations] = useState([]);
+  const [latestWeight, setLatestWeight] = useState(null);
 
   // Staat de bevestigingsvraag voor het verwijderen open?
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -38,32 +51,44 @@ function CatProfileScreen({ route, navigation }) {
     useCallback(() => {
       async function loadProfile() {
         const savedCats = await loadCats();
-        const savedCat = savedCats.find((item) => item.id === route.params.cat.id);
-        if (savedCat) {
-          setCat(savedCat);
-        }
+        const savedCat =
+          savedCats.find((item) => item.id === route.params.cat.id) ?? route.params.cat;
+        setCat(savedCat);
 
         const savedObservations = await loadObservations();
         const catObservations = savedObservations.filter(
           (observation) => observation.catId === route.params.cat.id
         );
         setObservationCount(catObservations.length);
-        setLastObservationText(getLastObservationText(catObservations));
+        setRecentObservations(getRecentObservations(catObservations, RECENT_COUNT));
+
+        // Het gewicht komt uit de nieuwste Gewicht-observatie. Zijn die er niet,
+        // dan het gewicht dat bij de kat zelf is ingevuld.
+        setLatestWeight(getLatestWeight(savedCat, catObservations));
       }
 
       loadProfile();
-    }, [route.params.cat.id])
+    }, [route.params.cat])
   );
+
+  // Een recente observatie openen in het bewerkscherm dat daarbij hoort (hetzelfde
+  // als "Bewerken" in de tijdlijn).
+  function openObservationHandler(observation) {
+    const observationType = OBSERVATION_TYPES.find((type) => type.label === observation.type);
+    navigation.navigate(observationType.screen, { observation: observation });
+  }
 
   // "Kat verwijderen" opent eerst de bevestigingsvraag (ConfirmModal onderaan).
   // Pas bij "Verwijderen" verdwijnt de kat uit de lijst met katten. Zijn
-  // observaties blijven bewaard (met de naam van toen) in de tijdlijn.
+  // observaties blijven bewaard (met de naam van toen) in de tijdlijn. Het
+  // fotobestand van de kat ruimen we wel op.
   async function confirmDeleteHandler() {
     setIsDeleteModalOpen(false);
 
     const savedCats = await loadCats();
     const remainingCats = savedCats.filter((item) => item.id !== cat.id);
     await saveCats(remainingCats);
+    deletePhotoFile(cat.photoUri);
 
     // Terug naar het dashboard (het eerste scherm van de stapel).
     navigation.popToTop();
@@ -83,67 +108,99 @@ function CatProfileScreen({ route, navigation }) {
       </View>
 
       <Text style={styles.name}>{cat.name}</Text>
-      <Text style={styles.observation}>{lastObservationText}</Text>
-      <Text style={styles.count}>Opgeslagen observaties: {observationCount}</Text>
 
-      {/* Alleen de velden die zijn ingevuld worden getoond. Boolean(...) maakt er
-          echt true of false van; een lege tekst ("") mag in React Native niet
-          buiten een <Text> staan. */}
-      {Boolean(cat.birthInfo || cat.weightKg || cat.medicalNote) && (
-        <View style={styles.infoCard}>
-          {cat.birthInfo ? (
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Geboortedatum of leeftijd</Text>
-              <Text style={styles.infoValue}>{cat.birthInfo}</Text>
-            </View>
-          ) : null}
+      {/* Kleine pillen voor leeftijd en gewicht. De leeftijd wordt niet opgeslagen,
+          maar steeds uit de geboortedatum berekend. Een pil zonder waarde tonen
+          we niet. */}
+      <View style={styles.pillRow}>
+        {cat.birthDate ? (
+          <View style={styles.pill}>
+            <Text style={styles.pillText}>{getAgeText(cat.birthDate)}</Text>
+          </View>
+        ) : null}
 
-          {cat.weightKg ? (
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Gewicht</Text>
-              <Text style={styles.infoValue}>{String(cat.weightKg).replace(".", ",")} kg</Text>
-            </View>
-          ) : null}
+        {latestWeight ? (
+          <View style={styles.pill}>
+            <Text style={styles.pillText}>{String(latestWeight).replace(".", ",")} kg</Text>
+          </View>
+        ) : null}
+      </View>
 
-          {cat.medicalNote ? (
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Medische notitie</Text>
-              <Text style={styles.infoValue}>{cat.medicalNote}</Text>
-            </View>
-          ) : null}
+      {cat.birthDate ? (
+        <Text style={styles.birthText}>Geboren {formatBirthDate(cat.birthDate)}</Text>
+      ) : null}
+
+      {/* De medische notitie in een zachte kaart (alleen als die is ingevuld). */}
+      {cat.medicalNote ? (
+        <View style={styles.noteCard}>
+          <MaterialCommunityIcons
+            name="file-document-outline"
+            size={20}
+            color={Colors.inkGold}
+            style={styles.noteIcon}
+          />
+          <View style={styles.noteTextContainer}>
+            <Text style={styles.noteTitle}>Medische notitie</Text>
+            <Text style={styles.noteText}>{cat.medicalNote}</Text>
+          </View>
         </View>
-      )}
+      ) : null}
 
       <Pressable
         style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}
         onPress={() => navigation.navigate("AddObservation", { cat: cat })}
       >
-        <Text style={styles.primaryButtonText}>+ Observatie toevoegen</Text>
+        <MaterialCommunityIcons name="plus" size={22} color="#FFFFFF" />
+        <Text style={styles.primaryButtonText}>Observatie toevoegen</Text>
       </Pressable>
 
-      {/* De tijdlijn opent al gefilterd op deze kat (via het catId). */}
-      <Pressable
-        style={({ pressed }) => [styles.secondaryButton, pressed && styles.buttonPressed]}
-        onPress={() => navigation.navigate("Timeline", { catId: cat.id })}
-      >
-        <Text style={styles.secondaryButtonText}>Tijdlijn bekijken</Text>
-      </Pressable>
+      <View style={styles.secondaryRow}>
+        {/* De tijdlijn opent al gefilterd op deze kat (via het catId). */}
+        <Pressable
+          style={({ pressed }) => [styles.secondaryButton, pressed && styles.buttonPressed]}
+          onPress={() => navigation.navigate("Timeline", { catId: cat.id })}
+        >
+          <Text style={styles.secondaryButtonText}>Tijdlijn bekijken</Text>
+        </Pressable>
 
-      <Pressable
-        style={({ pressed }) => [styles.secondaryButton, pressed && styles.buttonPressed]}
-        onPress={() => navigation.navigate("CatForm", { cat: cat })}
-      >
-        <Text style={styles.secondaryButtonText}>Profiel bewerken</Text>
-      </Pressable>
+        <Pressable
+          style={({ pressed }) => [styles.secondaryButton, pressed && styles.buttonPressed]}
+          onPress={() => navigation.navigate("CatForm", { cat: cat })}
+        >
+          <Text style={styles.secondaryButtonText}>Profiel bewerken</Text>
+        </Pressable>
+      </View>
 
-      {/* navigation.goBack() haalt dit scherm van de stapel af en toont
-          weer het scherm dat eronder lag (hier: Home). */}
-      <Pressable
-        style={({ pressed }) => [styles.secondaryButton, pressed && styles.buttonPressed]}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={styles.secondaryButtonText}>Terug</Text>
-      </Pressable>
+      {/* Recente observaties: tik op een observatie om hem te openen. Zonder
+          observaties staat er gewone tekst. */}
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Recente observaties</Text>
+        <Text style={styles.sectionCount}>Opgeslagen: {observationCount}</Text>
+      </View>
+
+      {recentObservations.length === 0 ? (
+        <Text style={styles.emptyText}>Nog geen observaties</Text>
+      ) : (
+        recentObservations.map((observation) => (
+          <Pressable
+            key={observation.id}
+            style={({ pressed }) => [styles.recentCard, pressed && styles.buttonPressed]}
+            onPress={() => openObservationHandler(observation)}
+          >
+            <TypeBadge type={observation.type} photoUri={observation.photoUri} />
+
+            <View style={styles.recentTexts}>
+              <View style={styles.recentTop}>
+                <Text style={styles.recentType}>{observation.type}</Text>
+                <Text style={styles.recentWhen}>{getRelativeText(observation)}</Text>
+              </View>
+              <Text style={styles.recentSummary} numberOfLines={2}>
+                {getSummary(observation)}
+              </Text>
+            </View>
+          </Pressable>
+        ))
+      )}
 
       {/* Bewust klein en rustig: geen grote rode knop. */}
       <Pressable
@@ -174,93 +231,176 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: "center",
-    paddingTop: 32,
+    paddingTop: 12,
     paddingHorizontal: 16,
   },
   avatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    backgroundColor: Colors.avatarGreen,
+    width: 108,
+    height: 108,
+    borderRadius: 54,
+    backgroundColor: Colors.avatarPink,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   avatarImage: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: 108,
+    height: 108,
+    borderRadius: 54,
   },
   avatarText: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: Colors.text,
+    fontFamily: Fonts.heading,
+    fontSize: 44,
+    color: Colors.primary,
   },
   name: {
-    fontSize: 24,
+    fontFamily: Fonts.heading,
+    fontSize: 30,
+    color: Colors.text,
+  },
+  pillRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 8,
+    marginTop: 8,
+  },
+  pill: {
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: 16,
+    paddingVertical: 4,
+    paddingHorizontal: 14,
+  },
+  pillText: {
+    fontSize: 13,
     fontWeight: "bold",
     color: Colors.text,
   },
-  observation: {
-    color: Colors.textLight,
-    marginTop: 8,
-  },
-  count: {
-    color: Colors.text,
-    fontWeight: "600",
-    marginTop: 8,
-    marginBottom: 24,
-  },
-  infoCard: {
-    backgroundColor: Colors.card,
-    borderRadius: 14,
-    padding: 16,
-    alignSelf: "stretch",
-    marginBottom: 24,
-  },
-  infoRow: {
-    marginBottom: 10,
-  },
-  infoLabel: {
+  birthText: {
     fontSize: 13,
-    fontWeight: "700",
     color: Colors.textLight,
-    textTransform: "uppercase",
+    marginTop: 8,
+  },
+  noteCard: {
+    flexDirection: "row",
+    alignSelf: "stretch",
+    backgroundColor: Colors.avatarGold,
+    borderRadius: 16,
+    padding: 14,
+    marginTop: 20,
+  },
+  noteIcon: {
+    marginRight: 10,
+    marginTop: 1,
+  },
+  noteTextContainer: {
+    flex: 1,
+  },
+  noteTitle: {
+    fontSize: 13,
+    fontWeight: "bold",
+    color: Colors.inkGold,
     marginBottom: 2,
   },
-  infoValue: {
-    fontSize: 16,
+  noteText: {
+    fontSize: 15,
     color: Colors.text,
   },
   primaryButton: {
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
     alignSelf: "stretch",
-    marginBottom: 12,
+    backgroundColor: Colors.primary,
+    borderRadius: 16,
+    paddingVertical: 16,
+    marginTop: 20,
   },
   primaryButtonText: {
     color: "#FFFFFF",
     fontWeight: "bold",
     fontSize: 16,
   },
+  secondaryRow: {
+    flexDirection: "row",
+    alignSelf: "stretch",
+    gap: 12,
+    marginTop: 12,
+  },
   secondaryButton: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: Colors.card,
     borderWidth: 1,
     borderColor: Colors.border,
-    borderRadius: 14,
+    borderRadius: 16,
     paddingVertical: 14,
-    alignItems: "center",
-    alignSelf: "stretch",
-    marginBottom: 12,
   },
   secondaryButtonText: {
+    color: Colors.text,
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    alignSelf: "stretch",
+    marginTop: 28,
+    marginBottom: 10,
+  },
+  sectionTitle: {
+    fontSize: 13,
+    fontWeight: "700",
     color: Colors.textLight,
-    fontWeight: "600",
+    textTransform: "uppercase",
+  },
+  sectionCount: {
+    fontSize: 12,
+    color: Colors.textLight,
+  },
+  emptyText: {
+    alignSelf: "flex-start",
+    color: Colors.textLight,
+  },
+  recentCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "stretch",
+    backgroundColor: Colors.card,
+    borderRadius: 16,
+    padding: 12,
+    marginBottom: 10,
+  },
+  recentTexts: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  recentTop: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  recentType: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: Colors.text,
+  },
+  recentWhen: {
+    fontSize: 12,
+    color: Colors.textLight,
+  },
+  recentSummary: {
+    fontSize: 14,
+    color: Colors.textLight,
+    marginTop: 2,
   },
   deleteButton: {
     paddingVertical: 14,
+    marginTop: 16,
     alignItems: "center",
     alignSelf: "stretch",
   },

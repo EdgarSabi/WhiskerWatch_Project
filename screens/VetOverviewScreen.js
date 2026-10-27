@@ -6,8 +6,9 @@
 import { useState, useCallback } from "react";
 import { View, Text, ScrollView, Pressable, Image, StyleSheet } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
+import Fonts from "../constants/fonts";
+import TabBar from "../components/TabBar";
 import { loadObservations } from "../storage/observationStorage";
 import { loadCats } from "../storage/catStorage";
 import { OBSERVATION_TYPES } from "../constants/observationTypes";
@@ -24,8 +25,7 @@ const VET_PERIODS = ["7days", "30days", "all"].map((id) =>
   PERIOD_OPTIONS.find((option) => option.id === id)
 );
 
-function VetOverviewScreen() {
-  const insets = useSafeAreaInsets();
+function VetOverviewScreen({ navigation }) {
   const [observations, setObservations] = useState([]);
   const [cats, setCats] = useState([]);
 
@@ -65,88 +65,106 @@ function VetOverviewScreen() {
   const total = overviewObservations.length;
 
   return (
-    <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 16 }]}>
-      <Text style={styles.label}>Kat</Text>
-      <View style={styles.chipRow}>
-        {cats.map((cat) => (
-          <Pressable
-            key={cat.id}
-            onPress={() => setSelectedCatId(cat.id)}
-            style={[styles.chip, selectedCatId === cat.id && styles.chipSelected]}
-          >
-            <Text style={[styles.chipText, selectedCatId === cat.id && styles.chipTextSelected]}>
-              {cat.name}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-
-      <Text style={styles.label}>Periode</Text>
-      <View style={styles.chipRow}>
-        {VET_PERIODS.map((option) => (
-          <Pressable
-            key={option.id}
-            onPress={() => setSelectedPeriod(option.id)}
-            style={[styles.chip, selectedPeriod === option.id && styles.chipSelected]}
-          >
-            <Text style={[styles.chipText, selectedPeriod === option.id && styles.chipTextSelected]}>
-              {option.label}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-
-      {!selectedCat && <Text style={styles.hint}>Kies een kat om het overzicht te zien.</Text>}
-
-      {selectedCat && (
-        <View>
-          <View style={styles.summaryCard}>
-            <Text style={styles.catName}>{selectedCat.name}</Text>
-            <Text style={styles.summaryLine}>Periode: {periodLabel}</Text>
-            <Text style={styles.summaryLine}>
-              Totaal: {total} {total === 1 ? "observatie" : "observaties"}
-            </Text>
-
-            <View style={styles.countList}>
-              {typeCounts.map((item) => (
-                <View key={item.label} style={styles.countRow}>
-                  <Text style={[styles.countLabel, item.count === 0 && styles.countZero]}>
-                    {item.label}
-                  </Text>
-                  <Text style={[styles.countNumber, item.count === 0 && styles.countZero]}>
-                    {item.count}
-                  </Text>
-                </View>
-              ))}
-            </View>
-          </View>
-
-          {total === 0 && (
-            <Text style={styles.hint}>
-              Geen observaties voor {selectedCat.name} in deze periode.
-            </Text>
-          )}
-
-          {chronological.map((observation) => (
-            <View key={observation.id} style={styles.card}>
-              <Text style={styles.cardWhen}>{getWhen(observation)}</Text>
-              <Text style={styles.cardType}>{observation.type}</Text>
-              <Text style={styles.cardDetail}>{getSummary(observation)}</Text>
-
-              {observation.photoUri && (
-                <Image source={{ uri: observation.photoUri }} style={styles.thumbnail} />
-              )}
-            </View>
+    <View style={styles.screen}>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+        <Text style={styles.label}>Kat</Text>
+        <View style={styles.chipRow}>
+          {cats.map((cat) => (
+            <Pressable
+              key={cat.id}
+              onPress={() => setSelectedCatId(cat.id)}
+              style={[styles.chip, selectedCatId === cat.id && styles.chipSelected]}
+            >
+              <Text style={[styles.chipText, selectedCatId === cat.id && styles.chipTextSelected]}>
+                {cat.name}
+              </Text>
+            </Pressable>
           ))}
         </View>
-      )}
-    </ScrollView>
+
+        <Text style={styles.label}>Periode</Text>
+        <View style={styles.chipRow}>
+          {VET_PERIODS.map((option) => (
+            <Pressable
+              key={option.id}
+              onPress={() => setSelectedPeriod(option.id)}
+              style={[styles.chip, selectedPeriod === option.id && styles.chipSelected]}
+            >
+              <Text style={[styles.chipText, selectedPeriod === option.id && styles.chipTextSelected]}>
+                {option.label}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+
+        {!selectedCat && (
+          <Text style={styles.hint}>
+            {cats.length === 0
+              ? "Er zijn nog geen katten."
+              : "Kies een kat om het overzicht te zien."}
+          </Text>
+        )}
+
+        {selectedCat && (
+          <View>
+            <View style={styles.summaryCard}>
+              <Text style={styles.catName}>{selectedCat.name}</Text>
+              <Text style={styles.summaryLine}>Periode: {periodLabel}</Text>
+              <Text style={styles.summaryLine}>
+                Totaal: {total} {total === 1 ? "observatie" : "observaties"}
+              </Text>
+
+              <View style={styles.countList}>
+                {typeCounts.map((item) => (
+                  <View key={item.label} style={styles.countRow}>
+                    <Text style={[styles.countLabel, item.count === 0 && styles.countZero]}>
+                      {item.label}
+                    </Text>
+                    <Text style={[styles.countNumber, item.count === 0 && styles.countZero]}>
+                      {item.count}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            {total === 0 && (
+              <Text style={styles.hint}>
+                Geen observaties voor {selectedCat.name} in deze periode.
+              </Text>
+            )}
+
+            {chronological.map((observation) => (
+              <View key={observation.id} style={styles.card}>
+                <Text style={styles.cardWhen}>{getWhen(observation)}</Text>
+                <Text style={styles.cardType}>{observation.type}</Text>
+                <Text style={styles.cardDetail}>{getSummary(observation)}</Text>
+
+                {observation.photoUri && (
+                  <Image source={{ uri: observation.photoUri }} style={styles.thumbnail} />
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+      </ScrollView>
+
+      {/* Home, Tijdlijn en Overzicht (het dierenartsoverzicht) */}
+      <TabBar active="VetOverview" navigation={navigation} />
+    </View>
   );
 }
 
 export default VetOverviewScreen;
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  scroll: {
+    flex: 1,
+  },
   content: {
     padding: 16,
     backgroundColor: Colors.background,
@@ -196,8 +214,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   catName: {
+    fontFamily: Fonts.heading,
     fontSize: 26,
-    fontWeight: "bold",
     color: Colors.text,
     marginBottom: 4,
   },

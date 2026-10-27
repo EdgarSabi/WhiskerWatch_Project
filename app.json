@@ -11,15 +11,23 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#FBF6F1",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundColor": "#FDECE0",
+        "foregroundImage": "./assets/android-icon-foreground.png"
       },
       "package": "com.anonymous.whiskerWatch"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FDECE0",
+          "image": "./assets/splash-lara.png",
+          "imageWidth": 320
+        }
+      ]
+    ]
   }
 }

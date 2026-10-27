@@ -1,8 +1,19 @@
 //wellicht hier nog wat opties toevoegen voor soorten gedrag dat vreemd is? 
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
+import FormLabel from "../components/FormLabel";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
 import DateTimeFields from "../components/DateTimeFields";
@@ -12,6 +23,8 @@ function BehaviourObservationScreen({ route, navigation }) {
   const observationToEdit = route.params?.observation ?? null;
 
   const insets = useSafeAreaInsets();
+  const [isSaving, setIsSaving] = useState(false);
+  const headerHeight = useHeaderHeight();
 
   let preselectedCat = route.params?.cat ?? null;
   if (observationToEdit) {
@@ -39,6 +52,12 @@ function BehaviourObservationScreen({ route, navigation }) {
       Alert.alert("Niet compleet", "Kies in elk geval een kat en beschrijf wat je zag.");
       return;
     }
+
+    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    if (isSaving) {
+      return;
+    }
+    setIsSaving(true);
 
     const currentObservations = await loadObservations();
 
@@ -77,15 +96,25 @@ function BehaviourObservationScreen({ route, navigation }) {
   }
 
   return (
-    <View style={[styles.screen, { paddingBottom: insets.bottom }]}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.label}>Kat</Text>
+    // KeyboardAvoidingView schuift de inhoud omhoog als het toetsenbord opent, zodat
+    // het tekstveld en de Opslaan-knop zichtbaar blijven (zoals in CatFormScreen).
+    <KeyboardAvoidingView
+      style={[styles.screen, { paddingBottom: insets.bottom }]}
+      behavior="padding"
+      keyboardVerticalOffset={headerHeight}
+    >
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <FormLabel text="Kat" tag="required" />
         <View style={styles.pillRow}>
           {[...cats, UNKNOWN_CAT].map((option) => (
             <Pressable
               key={option.id}
               onPress={() => setSelectedCat(option)}
-              style={[styles.pill, selectedCat?.id === option.id && styles.pillSelected]}
+              style={[
+                styles.pill,
+                option.id === UNKNOWN_CAT.id && styles.pillDashed,
+                selectedCat?.id === option.id && styles.pillSelected,
+              ]}
             >
               <Text
                 style={[styles.pillText, selectedCat?.id === option.id && styles.pillTextSelected]}
@@ -96,9 +125,9 @@ function BehaviourObservationScreen({ route, navigation }) {
           ))}
         </View>
 
-        <DateTimeFields value={observedAt} onChange={setObservedAt} isNew={!observationToEdit} />
+        <DateTimeFields value={observedAt} onValueChange={setObservedAt} isNew={!observationToEdit} />
 
-        <Text style={styles.label}>Wat zag je?</Text>
+        <FormLabel text="Wat zag je?" tag="required" />
         <TextInput
           style={[styles.input, styles.noteInput]}
           placeholder="Bijvoorbeeld: verstopt zich meer dan normaal"
@@ -114,7 +143,7 @@ function BehaviourObservationScreen({ route, navigation }) {
       >
         <Text style={styles.saveButtonText}>Opslaan</Text>
       </Pressable>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -129,20 +158,6 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 24,
   },
-  label: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: Colors.textLight,
-    marginBottom: 8,
-    textTransform: "uppercase",
-  },
-  row: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  rowItem: {
-    flex: 1,
-  },
   pillRow: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -156,6 +171,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
     borderWidth: 1,
     borderColor: Colors.border,
+  },
+  pillDashed: {
+    borderStyle: "dashed",
   },
   pillSelected: {
     backgroundColor: Colors.primary,
@@ -172,10 +190,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
     backgroundColor: Colors.card,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
     fontSize: 16,
+    color: Colors.text,
     marginBottom: 20,
   },
   noteInput: {

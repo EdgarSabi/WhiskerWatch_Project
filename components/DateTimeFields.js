@@ -3,10 +3,10 @@
 // "Andere tijd". De andere keuzes openen de native kiezer van Android.
 //
 // Het formulier bewaart het moment als één Date (value). Wij geven een gewijzigde
-// Date terug via onChange. Het formulier slaat hem op als observedAt.
+// Date terug via onValueChange. Het formulier slaat hem op als observedAt.
 
 import { useState } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import Colors from "../constants/colors";
 import { formatDate, formatTime } from "../helpers/observationHelpers";
@@ -20,7 +20,7 @@ function isSameDay(a, b) {
 }
 
 // isNew: true bij een nieuwe observatie (dan staat "Nu" aan), false bij bewerken.
-function DateTimeFields({ value, onChange, isNew }) {
+function DateTimeFields({ value, onValueChange, isNew }) {
   const [useNow, setUseNow] = useState(isNew);
   const isToday = isSameDay(value, new Date());
 
@@ -29,29 +29,39 @@ function DateTimeFields({ value, onChange, isNew }) {
   function setDatePart(newDate) {
     const changed = new Date(value);
     changed.setFullYear(newDate.getFullYear(), newDate.getMonth(), newDate.getDate());
-    onChange(changed);
+
+    // Een observatie kan niet in de toekomst liggen. Kiezen we vandaag terwijl de
+    // tijd nog later is dan nu (bijv. 20:00 terwijl het 10:00 is), dan wordt
+    // het tijdstip "nu".
+    if (changed.getTime() > Date.now()) {
+      setUseNow(true);
+      onValueChange(new Date());
+      return;
+    }
+
+    onValueChange(changed);
   }
 
   function setTimePart(newTime, seconds) {
     const changed = new Date(value);
     changed.setHours(newTime.getHours(), newTime.getMinutes(), seconds, 0);
-    onChange(changed);
+    onValueChange(changed);
   }
 
   function todayHandler() {
     setDatePart(new Date());
   }
 
+  // De callbacks heten onValueChange (bij kiezen). Bij annuleren hoeft er niets
+  // te gebeuren, dus onDismiss en onNeutralButtonPress gebruiken we niet.
   function otherDateHandler() {
     // De datum van een observatie kan niet in de toekomst liggen.
     DateTimePickerAndroid.open({
       value: value,
       mode: "date",
       maximumDate: new Date(),
-      onChange: (event, selectedDate) => {
-        if (event.type === "set") {
-          setDatePart(selectedDate);
-        }
+      onValueChange: (event, selectedDate) => {
+        setDatePart(selectedDate);
       },
     });
   }
@@ -67,11 +77,19 @@ function DateTimeFields({ value, onChange, isNew }) {
       value: value,
       mode: "time",
       is24Hour: true,
-      onChange: (event, selectedTime) => {
-        if (event.type === "set") {
-          setUseNow(false);
-          setTimePart(selectedTime, 0);
+      onValueChange: (event, selectedTime) => {
+        // De tijdkiezer kan geen maximum afdwingen, dus controleren we het zelf.
+        // Is de datum vandaag, dan mag de tijd niet later zijn dan nu.
+        const chosen = new Date(value);
+        chosen.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0);
+
+        if (chosen.getTime() > Date.now()) {
+          Alert.alert("Tijd in de toekomst", "Kies een tijd die niet later is dan nu.");
+          return;
         }
+
+        setUseNow(false);
+        onValueChange(chosen);
       },
     });
   }

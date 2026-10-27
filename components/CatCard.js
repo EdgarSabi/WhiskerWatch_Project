@@ -1,11 +1,30 @@
 import { Pressable, View, Text, Image, StyleSheet } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/colors";
+import Fonts from "../constants/fonts";
 import { getPhotoSource } from "../helpers/photoHelpers";
+import LastObservation from "./LastObservation";
 
-const avatarColors = [Colors.avatarPink, Colors.avatarGreen, Colors.avatarGold];
+// Elke kat krijgt om de beurt een zachte kleur voor de avatar, met een bijpassende
+// donkere kleur voor de beginletter.
+const avatarStyles = [
+  { background: Colors.avatarPink, ink: Colors.primary },
+  { background: Colors.avatarGreen, ink: Colors.inkGreen },
+  { background: Colors.avatarGold, ink: Colors.inkGold },
+];
 
-function CatCard({ name, lastObservation, initial, photoUri, index, onPress }) {
-  const avatarColor = avatarColors[index % avatarColors.length];
+// lastObservation is de laatste observatie van de kat, of null. Met een
+// observatie tonen we de aantikbare regel (LastObservation), anders gewone tekst.
+function CatCard({
+  name,
+  lastObservation,
+  onLastObservationPress,
+  initial,
+  photoUri,
+  index,
+  onPress,
+}) {
+  const avatarStyle = avatarStyles[index % avatarStyles.length];
 
   return (
     <Pressable
@@ -13,19 +32,27 @@ function CatCard({ name, lastObservation, initial, photoUri, index, onPress }) {
       android_ripple={{ color: Colors.border }}
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
-      <View style={[styles.avatar, { backgroundColor: avatarColor }]}>
+      <View style={[styles.avatar, { backgroundColor: avatarStyle.background }]}>
         {/* Heeft de kat een foto? Dan tonen we die, anders de beginletter. */}
         {photoUri ? (
           <Image source={getPhotoSource(photoUri)} style={styles.avatarImage} />
         ) : (
-          <Text style={styles.avatarText}>{initial}</Text>
+          <Text style={[styles.avatarText, { color: avatarStyle.ink }]}>{initial}</Text>
         )}
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.observation}>{lastObservation}</Text>
+        <Text style={styles.name} numberOfLines={1}>
+          {name}
+        </Text>
+        {lastObservation ? (
+          <LastObservation observation={lastObservation} onPress={onLastObservationPress} />
+        ) : (
+          <Text style={styles.noObservations}>Nog geen observaties</Text>
+        )}
       </View>
+
+      <MaterialCommunityIcons name="chevron-right" size={24} color={Colors.textLight} />
     </Pressable>
   );
 }
@@ -37,30 +64,36 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.card,
-    padding: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
     marginBottom: 12,
-    borderRadius: 18,
+    borderRadius: 20,
+    // Een heel zachte schaduw, zoals in het ontwerp.
+    shadowColor: Colors.text,
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 1,
   },
   cardPressed: {
     opacity: 0.7,
   },
   avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 12,
+    marginRight: 14,
   },
   avatarImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
   },
   avatarText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: Colors.text,
+    fontFamily: Fonts.heading,
+    fontSize: 22,
   },
   textContainer: {
     flex: 1,
@@ -70,8 +103,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: Colors.text,
   },
-  observation: {
+  noObservations: {
+    fontSize: 13,
     color: Colors.textLight,
-    marginTop: 4,
+    marginTop: 3,
   },
 });

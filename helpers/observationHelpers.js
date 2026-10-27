@@ -12,6 +12,21 @@ export const PERIOD_OPTIONS = [
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
+export const MONTHS = [
+  "januari",
+  "februari",
+  "maart",
+  "april",
+  "mei",
+  "juni",
+  "juli",
+  "augustus",
+  "september",
+  "oktober",
+  "november",
+  "december",
+];
+
 // ---------- Datum en tijd ----------
 
 // Nieuwe observaties bewaren het moment waarop het gebeurde als ÉÉN waarde:
@@ -91,7 +106,7 @@ function parseDateTime(dateText, timeText) {
 // 2. de losse date + time van oudere observaties
 // 3. het moment waarop de observatie is opgeslagen (createdAt)
 // Lukt niets, dan geven we null terug.
-export function getObservedAt(observation) {
+function getObservedAt(observation) {
   const observedAt = parseObservedAt(observation.observedAt);
   if (observedAt !== null) {
     return observedAt;
@@ -153,7 +168,7 @@ export function isInPeriod(observation, periodId) {
 
 // "vandaag", "gisteren" of "3 dagen geleden". Kunnen we de datum niet bepalen
 // (of ligt hij in de toekomst), dan tonen we gewoon datum en tijd.
-function getRelativeText(observation) {
+export function getRelativeText(observation) {
   const observedAt = getObservedAt(observation);
   if (observedAt === null) {
     return getWhen(observation);
@@ -173,11 +188,11 @@ function getRelativeText(observation) {
   return getWhen(observation);
 }
 
-// De regel onder de naam van een kat op het dashboard en het profiel. We
-// krijgen de observaties van ÉÉN kat binnen en zoeken de meest recente.
-export function getLastObservationText(catObservations) {
+// De meest recente observatie uit een lijst (van ÉÉN kat), of null als de lijst
+// leeg is.
+export function getLastObservation(catObservations) {
   if (catObservations.length === 0) {
-    return "Nog geen observaties";
+    return null;
   }
 
   let lastObservation = catObservations[0];
@@ -188,8 +203,9 @@ export function getLastObservationText(catObservations) {
     }
   }
 
-  return `Laatst: ${lastObservation.type} · ${getRelativeText(lastObservation)}`;
+  return lastObservation;
 }
+
 
 // Een getal om observaties op volgorde van gebeurtenis te zetten: hoe groter,
 // hoe recenter. Dit gebruiken de tijdlijn, het dierenartsoverzicht en de regel
@@ -212,6 +228,68 @@ export function getWhen(observation) {
     return `${observation.date ?? ""} ${observation.time ?? ""}`.trim();
   }
   return observation.createdAt;
+}
+
+// Alleen de tijd, zoals "14:30", voor op een kaart in de tijdlijn (de datum
+// staat dan in de kop van de dag). Oudere observaties tonen de tijd die erbij
+// stond, of niets als die er niet is.
+export function getTimeText(observation) {
+  const observedAt = parseObservedAt(observation.observedAt);
+  if (observedAt !== null) {
+    return formatTime(observedAt);
+  }
+
+  return observation.time ?? "";
+}
+
+// ---------- Groeperen per dag ----------
+
+// De kop boven een groep: "Vandaag", "Gisteren" of "24 oktober 2026".
+function getDayTitle(observation) {
+  const observedAt = getObservedAt(observation);
+  if (observedAt === null) {
+    return "Datum onbekend";
+  }
+
+  const daysAgo = getDaysAgo(observedAt);
+  if (daysAgo === 0) {
+    return "Vandaag";
+  }
+  if (daysAgo === 1) {
+    return "Gisteren";
+  }
+
+  return `${observedAt.getDate()} ${MONTHS[observedAt.getMonth()]} ${observedAt.getFullYear()}`;
+}
+
+// Deelt een al gesorteerde lijst op in groepen per dag, in de vorm die
+// SectionList nodig heeft: [{ title: "Vandaag", data: [...] }, ...]. Doordat de
+// lijst al op moment is gesorteerd, staan observaties van dezelfde dag achter
+// elkaar en hoeven we alleen te kijken of de kop gelijk is aan die van de vorige.
+export function groupByDay(sortedObservations) {
+  const sections = [];
+
+  for (const observation of sortedObservations) {
+    const title = getDayTitle(observation);
+    const lastSection = sections[sections.length - 1];
+
+    if (lastSection && lastSection.title === title) {
+      lastSection.data.push(observation);
+    } else {
+      sections.push({ title: title, data: [observation] });
+    }
+  }
+
+  return sections;
+}
+
+// De meest recente observaties uit een lijst (van ÉÉN kat), nieuwste eerst. Bij
+// hetzelfde moment staat de laatst opgeslagen bovenaan, net als in de tijdlijn.
+export function getRecentObservations(catObservations, count) {
+  return [...catObservations]
+    .reverse()
+    .sort((a, b) => getSortValue(b) - getSortValue(a))
+    .slice(0, count);
 }
 
 // ---------- Samenvatting ----------

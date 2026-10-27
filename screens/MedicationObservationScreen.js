@@ -3,9 +3,20 @@
 // bewaart alleen wat er is gegeven: geen schema's of herinneringen.
 
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
+import FormLabel from "../components/FormLabel";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
 import DateTimeFields from "../components/DateTimeFields";
@@ -16,6 +27,8 @@ function MedicationObservationScreen({ route, navigation }) {
   const observationToEdit = route.params?.observation ?? null;
 
   const insets = useSafeAreaInsets();
+  const [isSaving, setIsSaving] = useState(false);
+  const headerHeight = useHeaderHeight();
 
   let preselectedCat = route.params?.cat ?? null;
   if (observationToEdit) {
@@ -47,6 +60,12 @@ function MedicationObservationScreen({ route, navigation }) {
       Alert.alert("Niet compleet", "Kies in elk geval een kat en vul de naam van de medicatie in.");
       return;
     }
+
+    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    if (isSaving) {
+      return;
+    }
+    setIsSaving(true);
 
     const currentObservations = await loadObservations();
 
@@ -91,15 +110,25 @@ function MedicationObservationScreen({ route, navigation }) {
   }
 
   return (
-    <View style={[styles.screen, { paddingBottom: insets.bottom }]}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.label}>Kat</Text>
+    // KeyboardAvoidingView schuift de inhoud omhoog als het toetsenbord opent, zodat
+    // het tekstveld en de Opslaan-knop zichtbaar blijven (zoals in CatFormScreen).
+    <KeyboardAvoidingView
+      style={[styles.screen, { paddingBottom: insets.bottom }]}
+      behavior="padding"
+      keyboardVerticalOffset={headerHeight}
+    >
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <FormLabel text="Kat" tag="required" />
         <View style={styles.pillRow}>
           {[...cats, UNKNOWN_CAT].map((option) => (
             <Pressable
               key={option.id}
               onPress={() => setSelectedCat(option)}
-              style={[styles.pill, selectedCat?.id === option.id && styles.pillSelected]}
+              style={[
+                styles.pill,
+                option.id === UNKNOWN_CAT.id && styles.pillDashed,
+                selectedCat?.id === option.id && styles.pillSelected,
+              ]}
             >
               <Text
                 style={[styles.pillText, selectedCat?.id === option.id && styles.pillTextSelected]}
@@ -110,9 +139,9 @@ function MedicationObservationScreen({ route, navigation }) {
           ))}
         </View>
 
-        <DateTimeFields value={observedAt} onChange={setObservedAt} isNew={!observationToEdit} />
+        <DateTimeFields value={observedAt} onValueChange={setObservedAt} isNew={!observationToEdit} />
 
-        <Text style={styles.label}>Naam medicatie</Text>
+        <FormLabel text="Naam medicatie" tag="required" />
         <TextInput
           style={styles.input}
           placeholder="Naam van de medicatie"
@@ -120,9 +149,9 @@ function MedicationObservationScreen({ route, navigation }) {
           onChangeText={setMedicationName}
         />
 
-        <Text style={styles.sectionTitle}>Optioneel</Text>
+        <Text style={styles.sectionTitle}>Optionele details</Text>
 
-        <Text style={styles.label}>Dosering</Text>
+        <FormLabel text="Dosering" tag="optional" />
         <TextInput
           style={styles.input}
           placeholder="bijv. 1 tablet of 0,5 ml"
@@ -130,7 +159,7 @@ function MedicationObservationScreen({ route, navigation }) {
           onChangeText={setDosage}
         />
 
-        <Text style={styles.label}>Notitie</Text>
+        <FormLabel text="Notitie" tag="optional" />
         <TextInput
           style={[styles.input, styles.noteInput]}
           placeholder="Extra opmerking (optioneel)"
@@ -146,7 +175,7 @@ function MedicationObservationScreen({ route, navigation }) {
       >
         <Text style={styles.saveButtonText}>Opslaan</Text>
       </Pressable>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -161,26 +190,16 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 24,
   },
-  label: {
+  sectionTitle: {
     fontSize: 13,
     fontWeight: "700",
     color: Colors.textLight,
-    marginBottom: 8,
     textTransform: "uppercase",
-  },
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: Colors.text,
-    marginTop: 8,
-    marginBottom: 12,
-  },
-  row: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  rowItem: {
-    flex: 1,
+    borderTopWidth: 1,
+    borderTopColor: Colors.border,
+    paddingTop: 16,
+    marginTop: 4,
+    marginBottom: 14,
   },
   pillRow: {
     flexDirection: "row",
@@ -195,6 +214,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
     borderWidth: 1,
     borderColor: Colors.border,
+  },
+  pillDashed: {
+    borderStyle: "dashed",
   },
   pillSelected: {
     backgroundColor: Colors.primary,
@@ -211,10 +233,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
     backgroundColor: Colors.card,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
     fontSize: 16,
+    color: Colors.text,
     marginBottom: 20,
   },
   noteInput: {

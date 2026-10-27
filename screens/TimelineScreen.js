@@ -5,26 +5,29 @@
 // (`filteredObservations`) die alleen laat zien wat bij de filters past.
 
 import { useState, useCallback } from "react";
-import { View, Text, FlatList, Pressable, Image, StyleSheet } from "react-native";
+import { View, Text, SectionList, Pressable, StyleSheet } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import ConfirmModal from "../components/ConfirmModal";
+import TabBar from "../components/TabBar";
+import TypeBadge from "../components/TypeBadge";
+import { deletePhotoFile } from "../helpers/photoHelpers";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
 import { OBSERVATION_TYPES } from "../constants/observationTypes";
 import {
   PERIOD_OPTIONS,
-  getWhen,
+  getTimeText,
   getSummary,
   isInPeriod,
   getSortValue,
+  groupByDay,
 } from "../helpers/observationHelpers";
 
 const ALL_TYPES = "Alle types";
 
 function TimelineScreen({ route, navigation }) {
-  const insets = useSafeAreaInsets();
   const [observations, setObservations] = useState([]);
   const [cats, setCats] = useState([]);
 
@@ -66,6 +69,9 @@ function TimelineScreen({ route, navigation }) {
     const remainingObservations = observations.filter((item) => item.id !== observation.id);
     setObservations(remainingObservations);
     await saveObservations(remainingObservations);
+
+    // Het fotobestand van deze observatie ruimen we ook op.
+    deletePhotoFile(observation.photoUri);
   }
 
   function clearFilters() {
@@ -107,8 +113,23 @@ function TimelineScreen({ route, navigation }) {
     activeFilterCount += 1;
   }
 
+  // Verwijderde katten staan niet meer in de lijst met katten, maar hun
+  // observaties wel nog. Per verwijderde kat (catId) maken we een filterkeuze met
+  // de naam uit die observaties. Zo kun je oude observaties terugvinden, terwijl
+  // de kat zelf niet terugkomt op het dashboard of in de formulieren.
+  const deletedCatOptions = [];
+  for (const observation of observations) {
+    const isActiveCat =
+      observation.catId === UNKNOWN_CAT.id || cats.some((cat) => cat.id === observation.catId);
+    const isListed = deletedCatOptions.some((option) => option.id === observation.catId);
+
+    if (!isActiveCat && !isListed) {
+      deletedCatOptions.push({ id: observation.catId, name: `${observation.catName} (verwijderd)` });
+    }
+  }
+
   // De keuzes per filter: "alles" eerst, daarna de echte opties.
-  const catOptions = [{ id: "all", name: "Alle katten" }, ...cats, UNKNOWN_CAT];
+  const catOptions = [{ id: "all", name: "Alle katten" }, ...cats, UNKNOWN_CAT, ...deletedCatOptions];
   const typeOptions = [ALL_TYPES, ...OBSERVATION_TYPES.map((type) => type.label)];
 
   // Korte tekst die laat zien welke filters actief zijn.
@@ -133,6 +154,11 @@ function TimelineScreen({ route, navigation }) {
           style={[styles.filterButton, activeFilterCount > 0 && styles.filterButtonActive]}
           onPress={() => setIsFilterOpen(!isFilterOpen)}
         >
+          <MaterialCommunityIcons
+            name="filter-variant"
+            size={18}
+            color={activeFilterCount > 0 ? "#FFFFFF" : Colors.text}
+          />
           <Text
             style={[styles.filterButtonText, activeFilterCount > 0 && styles.filterButtonTextActive]}
           >
@@ -218,9 +244,20 @@ function TimelineScreen({ route, navigation }) {
 
   return (
     <View style={styles.screen}>
-      <FlatList
-        data={newestFirst}
+      {/* SectionList is een FlatList met koppen: de observaties staan per dag
+          gegroepeerd (Vandaag, Gisteren, 24 oktober 2026, ...). De groepen
+          worden gemaakt van de al gefilterde en gesorteerde lijst, dus de filters
+          werken gewoon mee. */}
+      <SectionList
+        sections={groupByDay(newestFirst)}
         keyExtractor={(observation) => observation.id}
+        stickySectionHeadersEnabled={false}
+        // Een SectionList telt de kopjes mee en laadt standaard maar 10 rijen
+        // tegelijk; zo staat het scherm direct vol.
+        initialNumToRender={20}
+        renderSectionHeader={({ section }) => (
+          <Text style={styles.sectionTitle}>{section.title}</Text>
+        )}
         ListHeaderComponent={filterHeader}
         // Wordt getoond als de lijst leeg is: óf er zijn nog helemaal geen
         // observaties, óf de filters laten niets over.
@@ -231,37 +268,71 @@ function TimelineScreen({ route, navigation }) {
               : "Geen observaties gevonden voor deze filters."}
           </Text>
         }
-        contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.cardType}>
-              {item.catName} · {item.type}
-            </Text>
-            <Text style={styles.cardWhen}>{getWhen(item)}</Text>
-            <Text style={styles.cardDetail}>{getSummary(item)}</Text>
+        contentContainerStyle={styles.list}
+        renderItem={({ item }) => {
+          const summary = getSummary(item);
 
-            {/* Alleen als er een foto is, tonen we een kleine thumbnail. Oude
-                observaties hebben geen photoUri, dus daar valt dit weg. */}
-            {item.photoUri && <Image source={{ uri: item.photoUri }} style={styles.thumbnail} />}
+          return (
+            // De hele kaart is aantikbaar en opent de observatie om te bewerken.
+            <Pressable
+              style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+              onPress={() => editHandler(item)}
+            >
+              {/* Links het icoon van het type in een zachte kleur. Heeft de
+                  observatie een foto, dan staat die kleine foto op die plek. */}
+              <TypeBadge type={item.type} photoUri={item.photoUri} />
 
-            <View style={styles.buttonRow}>
-              <Pressable
-                style={({ pressed }) => [styles.editButton, pressed && styles.buttonPressed]}
-                onPress={() => editHandler(item)}
-              >
-                <Text style={styles.editButtonText}>Bewerken</Text>
-              </Pressable>
+              <View style={styles.cardTexts}>
+                {/* Het type vet, de tijd rechts. De datum staat al in de kop van de dag. */}
+                <View style={styles.cardTop}>
+                  <Text style={styles.cardType}>{item.type}</Text>
+                  <Text style={styles.cardTime}>{getTimeText(item)}</Text>
+                </View>
 
-              <Pressable
-                style={({ pressed }) => [styles.deleteButton, pressed && styles.buttonPressed]}
-                onPress={() => setObservationToDelete(item)}
-              >
-                <Text style={styles.deleteButtonText}>Verwijderen</Text>
-              </Pressable>
-            </View>
-          </View>
-        )}
+                {/* De kat en de samenvatting, met rechts twee kleine iconknoppen
+                    (bewerken en verwijderen) op dezelfde regel, zodat de kaart compact blijft. */}
+                <View style={styles.cardBottom}>
+                  <Text style={styles.cardSummary} numberOfLines={2}>
+                    {item.catName}
+                    {summary ? ` · ${summary}` : ""}
+                  </Text>
+
+                  <View style={styles.actionRow}>
+                    <Pressable
+                      hitSlop={10}
+                      accessibilityLabel="Bewerken"
+                      style={({ pressed }) => pressed && styles.buttonPressed}
+                      onPress={() => editHandler(item)}
+                    >
+                      <MaterialCommunityIcons
+                        name="pencil-outline"
+                        size={19}
+                        color={Colors.textLight}
+                      />
+                    </Pressable>
+
+                    <Pressable
+                      hitSlop={10}
+                      accessibilityLabel="Verwijderen"
+                      style={({ pressed }) => pressed && styles.buttonPressed}
+                      onPress={() => setObservationToDelete(item)}
+                    >
+                      <MaterialCommunityIcons
+                        name="trash-can-outline"
+                        size={19}
+                        color={Colors.textLight}
+                      />
+                    </Pressable>
+                  </View>
+                </View>
+              </View>
+            </Pressable>
+          );
+        }}
       />
+
+      {/* Home, Tijdlijn en Overzicht (het dierenartsoverzicht) */}
+      <TabBar active="Timeline" navigation={navigation} />
 
       <ConfirmModal
         visible={observationToDelete !== null}
@@ -281,8 +352,13 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingTop: 16,
+  },
+  // De ruimte om de lijst heen zit hier (niet op het hele scherm), zodat de
+  // tabbalk onderaan over de volle breedte kan staan.
+  list: {
+    paddingTop: 8,
     paddingHorizontal: 16,
+    paddingBottom: 16,
   },
   emptyText: {
     color: Colors.textLight,
@@ -298,6 +374,9 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   filterButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
     borderWidth: 1,
     borderColor: Colors.border,
     backgroundColor: Colors.card,
@@ -381,58 +460,59 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "bold",
   },
+  sectionTitle: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: Colors.textLight,
+    textTransform: "uppercase",
+    marginTop: 8,
+    marginBottom: 8,
+  },
   card: {
+    flexDirection: "row",
+    alignItems: "flex-start",
     backgroundColor: Colors.card,
-    borderRadius: 14,
-    padding: 16,
-    marginBottom: 12,
+    borderRadius: 16,
+    padding: 12,
+    marginBottom: 10,
+  },
+  cardPressed: {
+    opacity: 0.7,
+  },
+  cardTexts: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  cardTop: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   cardType: {
     fontSize: 16,
     fontWeight: "bold",
     color: Colors.text,
   },
-  cardWhen: {
+  cardTime: {
     color: Colors.textLight,
+    fontSize: 13,
+  },
+  cardBottom: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: 12,
     marginTop: 2,
   },
-  cardDetail: {
-    color: Colors.text,
-    marginTop: 8,
-  },
-  thumbnail: {
-    width: 64,
-    height: 64,
-    borderRadius: 8,
-    marginTop: 10,
-    backgroundColor: Colors.border,
-  },
-  buttonRow: {
-    flexDirection: "row",
-    gap: 10,
-    marginTop: 14,
-  },
-  editButton: {
-    borderWidth: 1,
-    borderColor: Colors.border,
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  editButtonText: {
-    color: Colors.primary,
-    fontWeight: "600",
-  },
-  deleteButton: {
-    borderWidth: 1,
-    borderColor: Colors.border,
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  deleteButtonText: {
+  cardSummary: {
+    flex: 1,
     color: Colors.textLight,
-    fontWeight: "600",
+    fontSize: 14,
+  },
+  actionRow: {
+    flexDirection: "row",
+    gap: 14,
+    marginTop: 1,
   },
   buttonPressed: {
     opacity: 0.7,
