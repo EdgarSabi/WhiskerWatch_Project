@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
 import CatProfileScreen from "./screens/CatProfileScreen";
+import CatFormScreen from "./screens/CatFormScreen";
 import AddObservationScreen from "./screens/AddObservationScreen";
 import PoopObservationScreen from "./screens/PoopObservationScreen";
 import VomitObservationScreen from "./screens/VomitObservationScreen";
@@ -11,6 +12,7 @@ import MedicationObservationScreen from "./screens/MedicationObservationScreen";
 import WeightObservationScreen from "./screens/WeightObservationScreen";
 import NoteObservationScreen from "./screens/NoteObservationScreen";
 import TimelineScreen from "./screens/TimelineScreen";
+import VetOverviewScreen from "./screens/VetOverviewScreen";
 import Colors from "./constants/colors";
 
 const Stack = createNativeStackNavigator();
@@ -37,6 +39,13 @@ export default function App() {
           name="CatProfile"
           component={CatProfileScreen}
           options={{ title: "Kattenprofiel" }}
+        />
+        <Stack.Screen
+          name="CatForm"
+          component={CatFormScreen}
+          options={({ route }) => ({
+            title: route.params?.cat ? "Profiel bewerken" : "Kat toevoegen",
+          })}
         />
         <Stack.Screen
           name="AddObservation"
@@ -79,6 +88,11 @@ export default function App() {
           options={formTitle("Algemene notitie")}
         />
         <Stack.Screen name="Timeline" component={TimelineScreen} options={{ title: "Tijdlijn" }} />
+        <Stack.Screen
+          name="VetOverview"
+          component={VetOverviewScreen}
+          options={{ title: "Dierenartsoverzicht" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

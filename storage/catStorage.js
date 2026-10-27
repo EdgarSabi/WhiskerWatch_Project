@@ -13,12 +13,14 @@ const STORAGE_KEY = "cats";
 export const UNKNOWN_CAT = { id: "unknown", name: "Kat onbekend" };
 
 // Placeholder katjes: die gebruiken we zolang er nog niets is opgeslagen.
+// Een kat kan daarnaast deze optionele velden hebben (zie CatFormScreen):
+// photoUri, birthInfo, weightKg en medicalNote.
 const INITIAL_CATS = [
-  { id: "1", name: "Mia", initial: "M", lastObservation: "Laatst: Eten & drinken · 2u geleden" },
-  { id: "2", name: "Elsa", initial: "E", lastObservation: "Nog geen observaties" },
-  { id: "3", name: "Hoop", initial: "H", lastObservation: "Laatst: Gedrag · 3 dagen geleden" },
-  { id: "4", name: "Lara", initial: "L", lastObservation: "Laatst: Gewicht · 5 dagen geleden" },
-  { id: "5", name: "Billy", initial: "B", lastObservation: "Nog geen observaties" },
+  { id: "1", name: "Mia", initial: "M" },
+  { id: "2", name: "Elsa", initial: "E" },
+  { id: "3", name: "Hoop", initial: "H" },
+  { id: "4", name: "Lara", initial: "L" },
+  { id: "5", name: "Billy", initial: "B" },
 ];
 
 export async function loadCats() {

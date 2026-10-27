@@ -1,9 +1,9 @@
-import { Pressable, View, Text, StyleSheet } from "react-native";
+import { Pressable, View, Text, Image, StyleSheet } from "react-native";
 import Colors from "../constants/colors";
 
 const avatarColors = [Colors.avatarPink, Colors.avatarGreen, Colors.avatarGold];
 
-function CatCard({ name, lastObservation, initial, index, onPress }) {
+function CatCard({ name, lastObservation, initial, photoUri, index, onPress }) {
   const avatarColor = avatarColors[index % avatarColors.length];
 
   return (
@@ -13,7 +13,12 @@ function CatCard({ name, lastObservation, initial, index, onPress }) {
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
       <View style={[styles.avatar, { backgroundColor: avatarColor }]}>
-        <Text style={styles.avatarText}>{initial}</Text>
+        {/* Heeft de kat een foto? Dan tonen we die, anders de beginletter. */}
+        {photoUri ? (
+          <Image source={{ uri: photoUri }} style={styles.avatarImage} />
+        ) : (
+          <Text style={styles.avatarText}>{initial}</Text>
+        )}
       </View>
 
       <View style={styles.textContainer}>
@@ -45,6 +50,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
+  },
+  avatarImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
   avatarText: {
     fontSize: 20,

@@ -1,52 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CatCard from "../components/CatCard";
-import AddCatModal from "../components/AddCatModal";
 import Colors from "../constants/colors";
-import { loadCats, saveCats } from "../storage/catStorage";
+import { loadCats } from "../storage/catStorage";
+import { loadObservations } from "../storage/observationStorage";
+import { getLastObservationText } from "../helpers/observationHelpers";
 
 function HomeScreen({ navigation }) {
   const insets = useSafeAreaInsets();
   const [cats, setCats] = useState([]);
+  const [observations, setObservations] = useState([]);
 
-  // useEffect met [] draait één keer, zodra het scherm voor het eerst verschijnt.
-  // Hier laden we de opgeslagen katten (of de placeholder katjes als er nog niets is).
-  useEffect(() => {
-    async function loadSavedCats() {
-      const savedCats = await loadCats();
-      setCats(savedCats);
-    }
+  // useFocusEffect draait elke keer dat dit scherm in beeld komt. Zo staat een
+  // nieuwe, bewerkte of verwijderde kat meteen goed in de lijst, en klopt de
+  // regel "Laatst: ..." nadat je een observatie hebt toegevoegd.
+  useFocusEffect(
+    useCallback(() => {
+      async function loadSavedData() {
+        const savedCats = await loadCats();
+        const savedObservations = await loadObservations();
+        setCats(savedCats);
+        setObservations(savedObservations);
+      }
 
-    loadSavedCats();
-  }, []);
-
-  const [isAddCatModalVisible, setIsAddCatModalVisible] = useState(false);
-
-  function openAddCatModal() {
-    setIsAddCatModalVisible(true);
-  }
-
-  function closeAddCatModal() {
-    setIsAddCatModalVisible(false);
-  }
-
-
-  async function addCatHandler(name) {
-    // Date.now() is het aantal milliseconden sinds 1970: elke nieuwe kat krijgt
-    // daarmee een eigen, unieke id.
-    const newCat = {
-      id: Date.now().toString(),
-      name: name,
-      initial: name.charAt(0).toUpperCase(),
-      lastObservation: "Nog geen observaties",
-    };
-
-    const updatedCats = [...cats, newCat];
-    setCats(updatedCats);
-    closeAddCatModal();
-    await saveCats(updatedCats);
-  }
+      loadSavedData();
+    }, [])
+  );
 
   // navigation.navigate("CatProfile", { cat: item }) doet twee dingen:
   // 1. Het legt het CatProfile-scherm boven op de stapel (dus je ziet het).
@@ -66,7 +47,10 @@ function HomeScreen({ navigation }) {
           <CatCard
             name={item.name}
             initial={item.initial}
-            lastObservation={item.lastObservation}
+            photoUri={item.photoUri}
+            lastObservation={getLastObservationText(
+              observations.filter((observation) => observation.catId === item.id)
+            )}
             index={index}
             onPress={() => catPressHandler(item)}
           />
@@ -77,7 +61,7 @@ function HomeScreen({ navigation }) {
       {/* katjes toevoegen */}
       <Pressable
         style={({ pressed }) => [styles.addCatButton, pressed && styles.buttonPressed]}
-        onPress={openAddCatModal}
+        onPress={() => navigation.navigate("CatForm")}
       >
         <Text style={styles.addCatButtonText}>+ Kat toevoegen</Text>
       </Pressable>
@@ -90,19 +74,22 @@ function HomeScreen({ navigation }) {
         <Text style={styles.addObservationButtonText}>+ Observatie toevoegen</Text>
       </Pressable>
 
-      {/* tijdlijn */}
-      <Pressable
-        style={({ pressed }) => [styles.timelineLink, pressed && styles.timelineLinkPressed]}
-        onPress={() => navigation.navigate("Timeline")}
-      >
-        <Text style={styles.timelineLinkText}>Tijdlijn bekijken</Text>
-      </Pressable>
+      {/* tijdlijn en dierenartsoverzicht, naast elkaar */}
+      <View style={styles.linkRow}>
+        <Pressable
+          style={({ pressed }) => [styles.timelineLink, pressed && styles.timelineLinkPressed]}
+          onPress={() => navigation.navigate("Timeline")}
+        >
+          <Text style={styles.timelineLinkText}>Tijdlijn bekijken</Text>
+        </Pressable>
 
-      <AddCatModal
-        visible={isAddCatModalVisible}
-        onClose={closeAddCatModal}
-        onAddCat={addCatHandler}
-      />
+        <Pressable
+          style={({ pressed }) => [styles.timelineLink, pressed && styles.timelineLinkPressed]}
+          onPress={() => navigation.navigate("VetOverview")}
+        >
+          <Text style={styles.timelineLinkText}>Dierenartsoverzicht</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -146,7 +133,11 @@ const styles = StyleSheet.create({
   buttonPressed: {
     opacity: 0.8,
   },
+  linkRow: {
+    flexDirection: "row",
+  },
   timelineLink: {
+    flex: 1,
     alignItems: "center",
     paddingVertical: 16,
   },
