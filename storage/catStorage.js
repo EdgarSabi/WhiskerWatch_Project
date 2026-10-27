@@ -14,8 +14,9 @@ const STORAGE_KEY = "cats";
 // observatieformulier. Observaties daarvoor krijgen dit vaste id.
 export const UNKNOWN_CAT = { id: "unknown", name: "Kat onbekend" };
 
-// Lara is de standaard demo-kat. Ze heeft een vast id en staat bovenaan de lijst.
-// Haar voorbeeldobservaties staan in demoData.js.
+// Lara is de demo-kat van de presentatieversie. Ze heeft een vast id. In deze
+// release-versie wordt ze NIET aangemaakt (zie demoData.js, dat niet wordt
+// uitgevoerd); de definitie blijft hier staan omdat demoData.js hem importeert.
 export const LARA_CAT = {
   id: "lara-default",
   name: "Lara",
@@ -24,16 +25,10 @@ export const LARA_CAT = {
   birthDate: "2022-04-04",
 };
 
-// Standaardkatten: die gebruiken we zolang er nog niets is opgeslagen.
-// Een kat kan daarnaast deze optionele velden hebben (zie CatFormScreen):
+// De katten waarmee een verse installatie begint: geen. Je voegt zelf katten toe
+// ("Kat toevoegen"). Een kat kan deze optionele velden hebben (zie CatFormScreen):
 // photoUri, birthDate (jaar-maand-dag), weightKg en medicalNote.
-const INITIAL_CATS = [
-  LARA_CAT,
-  { id: "1", name: "Mia", initial: "M" },
-  { id: "2", name: "Elsa", initial: "E" },
-  { id: "3", name: "Hoop", initial: "H" },
-  { id: "5", name: "Billy", initial: "B" },
-];
+const INITIAL_CATS = [];
 
 // Katten uit een eerdere versie hebben een vrije tekst als geboortedatum
 // (birthInfo). Is dat een datum die we kunnen lezen, zoals "4 april 2022", dan

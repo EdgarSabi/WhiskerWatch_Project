@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { Fraunces_700Bold } from "@expo-google-fonts/fraunces/700Bold";
@@ -20,13 +19,11 @@ import VetOverviewScreen from "./screens/VetOverviewScreen";
 import AppTitle from "./components/AppTitle";
 import Colors from "./constants/colors";
 import Fonts from "./constants/fonts";
-import { seedDemoData } from "./storage/demoData";
 
 const Stack = createNativeStackNavigator();
 
-// Het korte startscherm met Lara, zolang de app zijn lettertype laadt en de
-// demo-data klaarzet. Het ziet er hetzelfde uit als het splashscherm (zie
-// app.json), dus je merkt geen overgang.
+// Het korte startscherm met Lara, zolang de app zijn lettertype laadt. Het ziet
+// er hetzelfde uit als het splashscherm (zie app.json), dus je merkt geen overgang.
 const startStyles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -49,28 +46,16 @@ function formTitle(typeName) {
 }
 
 export default function App() {
-  // De demo-data (Lara) moet klaarstaan voordat het eerste scherm zijn katten
-  // laadt, en het lettertype van de koppen moet geladen zijn. Tot die tijd tonen
-  // we het startscherm; dat duurt maar heel even.
-  const [isReady, setIsReady] = useState(false);
+  // Het lettertype van de koppen moet geladen zijn. Tot die tijd tonen we het
+  // startscherm; dat duurt maar heel even.
+  //
+  // Release-versie: er wordt GEEN demo-data meer klaargezet (zie storage/demoData.js,
+  // dat in deze branch niet wordt uitgevoerd). De app start dus leeg.
   const [fontsLoaded, fontError] = useFonts({ Fraunces_700Bold });
-
-  useEffect(() => {
-    async function prepare() {
-      try {
-        await seedDemoData();
-      } catch (error) {
-        console.warn("Demo-data kon niet worden klaargezet", error);
-      }
-      setIsReady(true);
-    }
-
-    prepare();
-  }, []);
 
   // Lukt het laden van het lettertype niet (fontError), dan gaan we toch door; de
   // koppen hebben dan gewoon het standaardlettertype.
-  if (!isReady || !(fontsLoaded || fontError)) {
+  if (!(fontsLoaded || fontError)) {
     return (
       <View style={startStyles.screen}>
         <Image

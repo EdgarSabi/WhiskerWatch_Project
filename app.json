@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "whiskerWatch",
+    "name": "WhiskerWatch",
     "slug": "whiskerWatch",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,7 +14,7 @@
         "backgroundColor": "#FDECE0",
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
-      "package": "com.anonymous.whiskerWatch"
+      "package": "com.celestriastudio.whiskerwatch"
     },
     "web": {
       "favicon": "./assets/favicon.png"

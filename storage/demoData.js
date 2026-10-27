@@ -1,7 +1,10 @@
 // De demo-data: Lara met acht fictieve observaties, zodat de tijdlijn, de filters
 // en het dierenartsoverzicht meteen iets laten zien.
 //
-// seedDemoData draait bij het starten van de app (zie App.js), maar doet zijn
+// LET OP: in de release-versie (branch temporary-release) wordt dit bestand NIET
+// meer aangeroepen vanuit App.js. Het blijft staan voor de presentatieversie.
+//
+// seedDemoData draaide bij het starten van de app (zie App.js), maar deed zijn
 // werk maar ÉÉN keer. Daarna staat er een vlag in AsyncStorage. Daardoor:
 // - komen de observaties niet bij elke start dubbel terug;
 // - blijft Lara weg als je haar verwijdert.
