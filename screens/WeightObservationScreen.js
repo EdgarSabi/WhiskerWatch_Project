@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
+import DateTimeFields from "../components/DateTimeFields";
+import { getInitialObservedAt } from "../helpers/observationHelpers";
 
 function WeightObservationScreen({ route, navigation }) {
   const observationToEdit = route.params?.observation ?? null;
@@ -27,7 +29,7 @@ function WeightObservationScreen({ route, navigation }) {
   }, []);
 
   const [selectedCat, setSelectedCat] = useState(preselectedCat);
-  const [date, setDate] = useState(observationToEdit?.date ?? "");
+  const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
 
   const [weightText, setWeightText] = useState(
     observationToEdit ? String(observationToEdit.weightKg).replace(".", ",") : ""
@@ -56,7 +58,7 @@ function WeightObservationScreen({ route, navigation }) {
             catId: selectedCat.id,
             catName: selectedCat.name,
             weightKg: weightKg,
-            date: date,
+            observedAt: observedAt.toISOString(),
           };
         }
         return observation;
@@ -64,15 +66,13 @@ function WeightObservationScreen({ route, navigation }) {
 
       await saveObservations(changedObservations);
     } else {
-      // time blijft leeg, zodat de tijdlijn alleen de datum laat zien.
       const newObservation = {
         id: Math.random().toString(),
         catId: selectedCat.id,
         catName: selectedCat.name,
         type: "Gewicht",
         weightKg: weightKg,
-        date: date,
-        time: "",
+        observedAt: observedAt.toISOString(),
         createdAt: new Date().toLocaleString("nl-NL"),
       };
 
@@ -106,13 +106,7 @@ function WeightObservationScreen({ route, navigation }) {
           ))}
         </View>
 
-        <Text style={styles.label}>Datum</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="bijv. 29-09-2026"
-          value={date}
-          onChangeText={setDate}
-        />
+        <DateTimeFields value={observedAt} onChange={setObservedAt} isNew={!observationToEdit} />
 
         <Text style={styles.label}>Gewicht (kg)</Text>
         <TextInput

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
@@ -14,6 +15,7 @@ import NoteObservationScreen from "./screens/NoteObservationScreen";
 import TimelineScreen from "./screens/TimelineScreen";
 import VetOverviewScreen from "./screens/VetOverviewScreen";
 import Colors from "./constants/colors";
+import { seedDemoData } from "./storage/demoData";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +28,27 @@ function formTitle(typeName) {
 }
 
 export default function App() {
+  // De demo-data (Lara) moet klaarstaan voordat het eerste scherm zijn katten
+  // laadt. Tot die tijd tonen we nog niets; dat duurt maar heel even.
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await seedDemoData();
+      } catch (error) {
+        console.warn("Demo-data kon niet worden klaargezet", error);
+      }
+      setIsReady(true);
+    }
+
+    prepare();
+  }, []);
+
+  if (!isReady) {
+    return null;
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator

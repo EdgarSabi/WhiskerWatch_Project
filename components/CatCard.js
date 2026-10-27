@@ -1,5 +1,6 @@
 import { Pressable, View, Text, Image, StyleSheet } from "react-native";
 import Colors from "../constants/colors";
+import { getPhotoSource } from "../helpers/photoHelpers";
 
 const avatarColors = [Colors.avatarPink, Colors.avatarGreen, Colors.avatarGold];
 
@@ -15,7 +16,7 @@ function CatCard({ name, lastObservation, initial, photoUri, index, onPress }) {
       <View style={[styles.avatar, { backgroundColor: avatarColor }]}>
         {/* Heeft de kat een foto? Dan tonen we die, anders de beginletter. */}
         {photoUri ? (
-          <Image source={{ uri: photoUri }} style={styles.avatarImage} />
+          <Image source={getPhotoSource(photoUri)} style={styles.avatarImage} />
         ) : (
           <Text style={styles.avatarText}>{initial}</Text>
         )}

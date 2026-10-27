@@ -10,10 +10,12 @@
 // catId), en knoppen om te bewerken of te verwijderen.
 
 import { useState, useCallback } from "react";
-import { View, Text, Image, Pressable, ScrollView, StyleSheet, Alert } from "react-native";
+import { View, Text, Image, Pressable, ScrollView, StyleSheet } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
+import ConfirmModal from "../components/ConfirmModal";
+import { getPhotoSource } from "../helpers/photoHelpers";
 import { loadObservations } from "../storage/observationStorage";
 import { loadCats, saveCats } from "../storage/catStorage";
 import { getLastObservationText } from "../helpers/observationHelpers";
@@ -26,6 +28,9 @@ function CatProfileScreen({ route, navigation }) {
   const [cat, setCat] = useState(route.params.cat);
   const [observationCount, setObservationCount] = useState(0);
   const [lastObservationText, setLastObservationText] = useState("");
+
+  // Staat de bevestigingsvraag voor het verwijderen open?
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // Draait elke keer dat dit scherm in beeld komt, dus alles klopt ook nadat je
   // de kat hebt bewerkt of een observatie hebt toegevoegd en weer terug bent.
@@ -50,28 +55,18 @@ function CatProfileScreen({ route, navigation }) {
     }, [route.params.cat.id])
   );
 
-  // Eerst een Alert met bevestiging. De kat verdwijnt uit de lijst met katten,
-  // maar zijn observaties blijven bewaard (met de naam van toen) in de tijdlijn.
-  function deleteHandler() {
-    Alert.alert(
-      "Kat verwijderen?",
-      `Weet je zeker dat je ${cat.name} wilt verwijderen? De observaties van ${cat.name} blijven bewaard in de tijdlijn.`,
-      [
-        { text: "Annuleren", style: "cancel" },
-        {
-          text: "Verwijderen",
-          style: "destructive",
-          onPress: async () => {
-            const savedCats = await loadCats();
-            const remainingCats = savedCats.filter((item) => item.id !== cat.id);
-            await saveCats(remainingCats);
+  // "Kat verwijderen" opent eerst de bevestigingsvraag (ConfirmModal onderaan).
+  // Pas bij "Verwijderen" verdwijnt de kat uit de lijst met katten. Zijn
+  // observaties blijven bewaard (met de naam van toen) in de tijdlijn.
+  async function confirmDeleteHandler() {
+    setIsDeleteModalOpen(false);
 
-            // Terug naar het dashboard (het eerste scherm van de stapel).
-            navigation.popToTop();
-          },
-        },
-      ]
-    );
+    const savedCats = await loadCats();
+    const remainingCats = savedCats.filter((item) => item.id !== cat.id);
+    await saveCats(remainingCats);
+
+    // Terug naar het dashboard (het eerste scherm van de stapel).
+    navigation.popToTop();
   }
 
   return (
@@ -81,7 +76,7 @@ function CatProfileScreen({ route, navigation }) {
     >
       <View style={styles.avatar}>
         {cat.photoUri ? (
-          <Image source={{ uri: cat.photoUri }} style={styles.avatarImage} />
+          <Image source={getPhotoSource(cat.photoUri)} style={styles.avatarImage} />
         ) : (
           <Text style={styles.avatarText}>{cat.initial}</Text>
         )}
@@ -153,10 +148,19 @@ function CatProfileScreen({ route, navigation }) {
       {/* Bewust klein en rustig: geen grote rode knop. */}
       <Pressable
         style={({ pressed }) => [styles.deleteButton, pressed && styles.buttonPressed]}
-        onPress={deleteHandler}
+        onPress={() => setIsDeleteModalOpen(true)}
       >
         <Text style={styles.deleteButtonText}>Kat verwijderen</Text>
       </Pressable>
+
+      <ConfirmModal
+        visible={isDeleteModalOpen}
+        title="Kat verwijderen?"
+        message={`Weet je zeker dat je ${cat.name} wilt verwijderen? De observaties van ${cat.name} blijven bewaard in de tijdlijn.`}
+        confirmText="Verwijderen"
+        onConfirm={confirmDeleteHandler}
+        onCancel={() => setIsDeleteModalOpen(false)}
+      />
     </ScrollView>
   );
 }

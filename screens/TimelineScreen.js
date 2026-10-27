@@ -5,14 +5,21 @@
 // (`filteredObservations`) die alleen laat zien wat bij de filters past.
 
 import { useState, useCallback } from "react";
-import { View, Text, FlatList, Pressable, Image, StyleSheet, Alert } from "react-native";
+import { View, Text, FlatList, Pressable, Image, StyleSheet } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
+import ConfirmModal from "../components/ConfirmModal";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
 import { OBSERVATION_TYPES } from "../constants/observationTypes";
-import { PERIOD_OPTIONS, getWhen, getSummary, isInPeriod } from "../helpers/observationHelpers";
+import {
+  PERIOD_OPTIONS,
+  getWhen,
+  getSummary,
+  isInPeriod,
+  getSortValue,
+} from "../helpers/observationHelpers";
 
 const ALL_TYPES = "Alle types";
 
@@ -29,6 +36,9 @@ function TimelineScreen({ route, navigation }) {
 
   // Is het paneel met filterknoppen open of dicht?
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  // De observatie waarvoor de bevestigingsvraag open staat (null = geen vraag).
+  const [observationToDelete, setObservationToDelete] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -48,20 +58,14 @@ function TimelineScreen({ route, navigation }) {
     navigation.navigate(observationType.screen, { observation: observation });
   }
 
-  function deleteHandler(observation) {
-    Alert.alert("Verwijderen", "Weet je zeker dat je deze observatie wilt verwijderen?", [
-      { text: "Annuleren", style: "cancel" },
-      {
-        text: "Verwijderen",
-        style: "destructive",
-        onPress: async () => {
-          // We verwijderen uit de VOLLEDIGE lijst, niet uit de gefilterde.
-          const remainingObservations = observations.filter((item) => item.id !== observation.id);
-          setObservations(remainingObservations);
-          await saveObservations(remainingObservations);
-        },
-      },
-    ]);
+  async function confirmDeleteHandler() {
+    const observation = observationToDelete;
+    setObservationToDelete(null);
+
+    // We verwijderen uit de VOLLEDIGE lijst, niet uit de gefilterde.
+    const remainingObservations = observations.filter((item) => item.id !== observation.id);
+    setObservations(remainingObservations);
+    await saveObservations(remainingObservations);
   }
 
   function clearFilters() {
@@ -82,9 +86,14 @@ function TimelineScreen({ route, navigation }) {
     return catMatches && typeMatches && periodMatches;
   });
 
-  // Nieuwe observaties staan achteraan in de lijst. Met [...lijst] maken we een
-  // kopie en .reverse() draait die om, zodat de nieuwste bovenaan staat.
-  const newestFirst = [...filteredObservations].reverse();
+  // Sorteren op het moment waarop het gebeurde (observedAt), niet op het moment
+  // van opslaan: de recentste bovenaan. Met [...lijst] maken we een kopie.
+  // De kopie draaien we eerst om, zodat bij hetzelfde moment de laatst
+  // opgeslagen observatie bovenaan komt (sort() verandert de volgorde van
+  // gelijke waarden niet).
+  const newestFirst = [...filteredObservations]
+    .reverse()
+    .sort((a, b) => getSortValue(b) - getSortValue(a));
 
   // Hoeveel filters staan er aan? Dat tonen we in de knop: "Filters (2)".
   let activeFilterCount = 0;
@@ -245,13 +254,22 @@ function TimelineScreen({ route, navigation }) {
 
               <Pressable
                 style={({ pressed }) => [styles.deleteButton, pressed && styles.buttonPressed]}
-                onPress={() => deleteHandler(item)}
+                onPress={() => setObservationToDelete(item)}
               >
                 <Text style={styles.deleteButtonText}>Verwijderen</Text>
               </Pressable>
             </View>
           </View>
         )}
+      />
+
+      <ConfirmModal
+        visible={observationToDelete !== null}
+        title="Observatie verwijderen?"
+        message="Weet je zeker dat je deze observatie wilt verwijderen?"
+        confirmText="Verwijderen"
+        onConfirm={confirmDeleteHandler}
+        onCancel={() => setObservationToDelete(null)}
       />
     </View>
   );

@@ -8,6 +8,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
+import DateTimeFields from "../components/DateTimeFields";
+import { getInitialObservedAt } from "../helpers/observationHelpers";
 
 const INTAKE_OPTIONS = ["Normaal", "Minder", "Meer", "Niet gegeten", "Niet gedronken"];
 
@@ -34,8 +36,7 @@ function FoodObservationScreen({ route, navigation }) {
   }, []);
 
   const [selectedCat, setSelectedCat] = useState(preselectedCat);
-  const [date, setDate] = useState(observationToEdit?.date ?? "");
-  const [time, setTime] = useState(observationToEdit?.time ?? "");
+  const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
   const [intake, setIntake] = useState(observationToEdit?.intake ?? null);
 
   // Optioneel veld
@@ -58,8 +59,7 @@ function FoodObservationScreen({ route, navigation }) {
             catId: selectedCat.id,
             catName: selectedCat.name,
             intake: intake,
-            date: date,
-            time: time,
+            observedAt: observedAt.toISOString(),
             note: note,
           };
         }
@@ -74,8 +74,7 @@ function FoodObservationScreen({ route, navigation }) {
         catName: selectedCat.name,
         type: "Eten & drinken",
         intake: intake,
-        date: date,
-        time: time,
+        observedAt: observedAt.toISOString(),
         note: note,
         createdAt: new Date().toLocaleString("nl-NL"),
       };
@@ -110,26 +109,7 @@ function FoodObservationScreen({ route, navigation }) {
           ))}
         </View>
 
-        <View style={styles.row}>
-          <View style={styles.rowItem}>
-            <Text style={styles.label}>Datum</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="bijv. 29-09-2026"
-              value={date}
-              onChangeText={setDate}
-            />
-          </View>
-          <View style={styles.rowItem}>
-            <Text style={styles.label}>Tijd</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="bijv. 14:32"
-              value={time}
-              onChangeText={setTime}
-            />
-          </View>
-        </View>
+        <DateTimeFields value={observedAt} onChange={setObservedAt} isNew={!observationToEdit} />
 
         <Text style={styles.label}>Eten en drinken</Text>
         <View style={styles.pillRow}>

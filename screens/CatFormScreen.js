@@ -24,6 +24,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
+import { getPhotoSource } from "../helpers/photoHelpers";
 import { loadCats, saveCats } from "../storage/catStorage";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 
@@ -48,10 +49,15 @@ function CatFormScreen({ route, navigation }) {
   const [medicalNote, setMedicalNote] = useState(catToEdit?.medicalNote ?? "");
 
   // Zelfde aanpak als bij de observatiefoto's: de galerij openen en het adres
-  // (de URI) van de gekozen foto bewaren.
+  // (de URI) van de gekozen foto bewaren. Met allowsEditing kun je de foto
+  // eerst bijsnijden. Een vierkante, ronde crop past precies in het ronde
+  // profielplaatje, dus zet het hoofd van de kat in het midden.
   async function pickPhotoHandler() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [1, 1],
+      shape: "oval",
     });
 
     if (!result.canceled) {
@@ -145,7 +151,7 @@ function CatFormScreen({ route, navigation }) {
         <Text style={styles.label}>Foto</Text>
         {photoUri ? (
           <View>
-            <Image source={{ uri: photoUri }} style={styles.photoPreview} />
+            <Image source={getPhotoSource(photoUri)} style={styles.photoPreview} />
             <View style={styles.pillRow}>
               <Pressable style={styles.pill} onPress={pickPhotoHandler}>
                 <Text style={styles.pillText}>Foto vervangen</Text>

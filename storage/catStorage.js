@@ -5,6 +5,7 @@
 // observatie altijd bij de juiste kat hoort, ook als twee katten dezelfde naam hebben.
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LARA_PHOTO } from "../helpers/photoHelpers";
 
 const STORAGE_KEY = "cats";
 
@@ -12,14 +13,24 @@ const STORAGE_KEY = "cats";
 // observatieformulier. Observaties daarvoor krijgen dit vaste id.
 export const UNKNOWN_CAT = { id: "unknown", name: "Kat onbekend" };
 
-// Placeholder katjes: die gebruiken we zolang er nog niets is opgeslagen.
+// Lara is de standaard demo-kat. Ze heeft een vast id en staat bovenaan de lijst.
+// Haar voorbeeldobservaties staan in demoData.js.
+export const LARA_CAT = {
+  id: "lara-default",
+  name: "Lara",
+  initial: "L",
+  photoUri: LARA_PHOTO,
+  birthInfo: "4 april 2022",
+};
+
+// Standaardkatten: die gebruiken we zolang er nog niets is opgeslagen.
 // Een kat kan daarnaast deze optionele velden hebben (zie CatFormScreen):
 // photoUri, birthInfo, weightKg en medicalNote.
 const INITIAL_CATS = [
+  LARA_CAT,
   { id: "1", name: "Mia", initial: "M" },
   { id: "2", name: "Elsa", initial: "E" },
   { id: "3", name: "Hoop", initial: "H" },
-  { id: "4", name: "Lara", initial: "L" },
   { id: "5", name: "Billy", initial: "B" },
 ];
 

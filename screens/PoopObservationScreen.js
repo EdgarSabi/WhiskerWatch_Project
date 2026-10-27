@@ -14,6 +14,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
+import DateTimeFields from "../components/DateTimeFields";
+import { getInitialObservedAt } from "../helpers/observationHelpers";
 
 const CONSISTENCY_OPTIONS = ["Normaal", "Zacht", "Diarree", "Hard", "Onbekend"];
 
@@ -43,9 +45,9 @@ function PoopObservationScreen({ route, navigation }) {
   }, []);
 
   const [selectedCat, setSelectedCat] = useState(preselectedCat);
-  // "?? ''" betekent: als er niets is om te bewerken, begin dan met leeg.
-  const [date, setDate] = useState(observationToEdit?.date ?? "");
-  const [time, setTime] = useState(observationToEdit?.time ?? "");
+  // Het moment van de observatie: nu bij een nieuwe observatie, anders het
+  // bewaarde moment. De kiezers in DateTimeFields passen dit aan.
+  const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
   const [consistency, setConsistency] = useState(observationToEdit?.consistency ?? null);
 
   // Optionele velden
@@ -60,6 +62,8 @@ function PoopObservationScreen({ route, navigation }) {
   async function pickPhotoHandler() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
+      allowsEditing: true, // na het kiezen kun je de foto bijsnijden
+      aspect: [4, 3],
     });
 
     if (!result.canceled) {
@@ -84,8 +88,7 @@ function PoopObservationScreen({ route, navigation }) {
             catId: selectedCat.id,
             catName: selectedCat.name,
             consistency: consistency,
-            date: date,
-            time: time,
+            observedAt: observedAt.toISOString(),
             color: color,
             mucusSeen: mucusSeen,
             bloodSeen: bloodSeen,
@@ -106,8 +109,7 @@ function PoopObservationScreen({ route, navigation }) {
         catName: selectedCat.name,
         type: "Ontlasting",
         consistency: consistency,
-        date: date,
-        time: time,
+        observedAt: observedAt.toISOString(),
         color: color,
         mucusSeen: mucusSeen,
         bloodSeen: bloodSeen,
@@ -154,26 +156,7 @@ function PoopObservationScreen({ route, navigation }) {
           ))}
         </View>
 
-        <View style={styles.row}>
-          <View style={styles.rowItem}>
-            <Text style={styles.label}>Datum</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="bijv. 29-09-2026"
-              value={date}
-              onChangeText={setDate}
-            />
-          </View>
-          <View style={styles.rowItem}>
-            <Text style={styles.label}>Tijd</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="bijv. 14:32"
-              value={time}
-              onChangeText={setTime}
-            />
-          </View>
-        </View>
+        <DateTimeFields value={observedAt} onChange={setObservedAt} isNew={!observationToEdit} />
 
         <Text style={styles.label}>Consistentie</Text>
         <View style={styles.pillRow}>

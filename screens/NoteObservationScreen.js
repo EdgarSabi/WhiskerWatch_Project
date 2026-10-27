@@ -18,6 +18,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
+import DateTimeFields from "../components/DateTimeFields";
+import { getInitialObservedAt } from "../helpers/observationHelpers";
 
 function NoteObservationScreen({ route, navigation }) {
   // Alleen gevuld als je vanuit de tijdlijn op "Bewerken" tikt.
@@ -42,8 +44,7 @@ function NoteObservationScreen({ route, navigation }) {
   }, []);
 
   const [selectedCat, setSelectedCat] = useState(preselectedCat);
-  const [date, setDate] = useState(observationToEdit?.date ?? "");
-  const [time, setTime] = useState(observationToEdit?.time ?? "");
+  const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
   const [note, setNote] = useState(observationToEdit?.note ?? "");
 
   // Optioneel veld
@@ -52,6 +53,8 @@ function NoteObservationScreen({ route, navigation }) {
   async function pickPhotoHandler() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [4, 3],
     });
 
     if (!result.canceled) {
@@ -75,8 +78,7 @@ function NoteObservationScreen({ route, navigation }) {
             ...observation,
             catId: selectedCat.id,
             catName: selectedCat.name,
-            date: date,
-            time: time,
+            observedAt: observedAt.toISOString(),
             note: note.trim(),
             photoUri: photoUri,
           };
@@ -91,8 +93,7 @@ function NoteObservationScreen({ route, navigation }) {
         catId: selectedCat.id,
         catName: selectedCat.name,
         type: "Algemene notitie",
-        date: date,
-        time: time,
+        observedAt: observedAt.toISOString(),
         note: note.trim(),
         photoUri: photoUri,
         createdAt: new Date().toLocaleString("nl-NL"),
@@ -126,26 +127,7 @@ function NoteObservationScreen({ route, navigation }) {
           ))}
         </View>
 
-        <View style={styles.row}>
-          <View style={styles.rowItem}>
-            <Text style={styles.label}>Datum</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="bijv. 29-09-2026"
-              value={date}
-              onChangeText={setDate}
-            />
-          </View>
-          <View style={styles.rowItem}>
-            <Text style={styles.label}>Tijd</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="bijv. 14:32"
-              value={time}
-              onChangeText={setTime}
-            />
-          </View>
-        </View>
+        <DateTimeFields value={observedAt} onChange={setObservedAt} isNew={!observationToEdit} />
 
         <Text style={styles.label}>Notitie</Text>
         <TextInput

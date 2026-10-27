@@ -5,6 +5,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
+import DateTimeFields from "../components/DateTimeFields";
+import { getInitialObservedAt } from "../helpers/observationHelpers";
 
 function BehaviourObservationScreen({ route, navigation }) {
   const observationToEdit = route.params?.observation ?? null;
@@ -28,12 +30,11 @@ function BehaviourObservationScreen({ route, navigation }) {
   }, []);
 
   const [selectedCat, setSelectedCat] = useState(preselectedCat);
-  const [date, setDate] = useState(observationToEdit?.date ?? "");
-  const [time, setTime] = useState(observationToEdit?.time ?? "");
+  const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
   const [note, setNote] = useState(observationToEdit?.note ?? "");
 
   async function saveHandler() {
-    // Kat en beschrijving zijn verplicht, datum en tijd zijn optioneel.
+    // Kat en beschrijving zijn verplicht. Datum en tijd staan altijd ingevuld.
     if (!selectedCat || note.trim() === "") {
       Alert.alert("Niet compleet", "Kies in elk geval een kat en beschrijf wat je zag.");
       return;
@@ -48,8 +49,7 @@ function BehaviourObservationScreen({ route, navigation }) {
             ...observation,
             catId: selectedCat.id,
             catName: selectedCat.name,
-            date: date,
-            time: time,
+            observedAt: observedAt.toISOString(),
             note: note.trim(),
           };
         }
@@ -63,8 +63,7 @@ function BehaviourObservationScreen({ route, navigation }) {
         catId: selectedCat.id,
         catName: selectedCat.name,
         type: "Gedrag",
-        date: date,
-        time: time,
+        observedAt: observedAt.toISOString(),
         note: note.trim(),
         createdAt: new Date().toLocaleString("nl-NL"),
       };
@@ -97,26 +96,7 @@ function BehaviourObservationScreen({ route, navigation }) {
           ))}
         </View>
 
-        <View style={styles.row}>
-          <View style={styles.rowItem}>
-            <Text style={styles.label}>Datum</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="bijv. 29-09-2026"
-              value={date}
-              onChangeText={setDate}
-            />
-          </View>
-          <View style={styles.rowItem}>
-            <Text style={styles.label}>Tijd</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="bijv. 14:32"
-              value={time}
-              onChangeText={setTime}
-            />
-          </View>
-        </View>
+        <DateTimeFields value={observedAt} onChange={setObservedAt} isNew={!observationToEdit} />
 
         <Text style={styles.label}>Wat zag je?</Text>
         <TextInput
