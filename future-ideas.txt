@@ -1,0 +1,12 @@
+Dit ligt allemaal buiten de scope van coex, maar is meer voor mezelf voor extra functionaliteiten die gebruik makkelijker zouden kunnen maken. 
+En misschien ook te gebruiken voor de DA 
+
+- Backend met gegevens opslaan in accounts 
+- Families vormen: je kunt dan met meerdere accounts in een dashboard en samen observaties toevoegen 
+- Scroll lijst voor medicijnen (met eventuele hoeveelheid mg)
+- Reminders voor katten eten geven/medicijnen geven/nageltjes knippen/andere reminders (?)
+- Geslacht toevoegen in het profiel 
+- Toevoegen of ze gesteriliseerd zijn 
+- Vaccinaties: wanneer ze die hebben gehad en evt reminders wanneer het weer moet 
+- Gebit: moet daar een aparte categorie voor? 
+

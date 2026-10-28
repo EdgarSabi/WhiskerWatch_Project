@@ -1,4 +1,4 @@
-// bevestigingsvraag in de stijl van de app, het scherm bepaalt zelf met visible of hij open is
+// bevestigingsvraag: het scherm bepaalt zelf met visible of hij open is
 
 import { Modal, View, Text, Pressable, StyleSheet } from "react-native";
 import Colors from "../constants/colors";
