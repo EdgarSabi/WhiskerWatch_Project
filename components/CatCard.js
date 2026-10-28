@@ -12,7 +12,6 @@ const avatarStyles = [
   { background: Colors.avatarGold, ink: Colors.inkGold },
 ];
 
-// lastObservation is null of de laatste observatie (aantikbaar), anders gewone tekst
 function CatCard({
   name,
   lastObservation,

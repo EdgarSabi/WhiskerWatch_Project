@@ -1,5 +1,3 @@
-// bevestigingsvraag: het scherm bepaalt zelf met visible of hij open is
-
 import { Modal, View, Text, Pressable, StyleSheet } from "react-native";
 import Colors from "../constants/colors";
 import Fonts from "../constants/fonts";
