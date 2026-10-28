@@ -1,6 +1,4 @@
-// TypeBadge is het kleine vierkantje links op een observatie: het icoon van het
-// type op een zachte achtergrondkleur. Heeft de observatie een foto, dan tonen
-// we die foto (even groot) in plaats van het icoon.
+// icoon van het type op een zachte kleur, met een foto toont het die foto
 
 import { View, Image, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";

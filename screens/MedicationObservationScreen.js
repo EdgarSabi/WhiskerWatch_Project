@@ -1,6 +1,4 @@
-// MedicationObservationScreen is het formulier om vast te leggen dat een kat
-// medicatie heeft gekregen. Zelfde opbouw als PoopObservationScreen. Het
-// bewaart alleen wat er is gegeven: geen schema's of herinneringen.
+// alleen vastleggen wat er is gegeven, geen schema's of herinneringen
 
 import { useState, useEffect } from "react";
 import {
@@ -23,7 +21,7 @@ import DateTimeFields from "../components/DateTimeFields";
 import { getInitialObservedAt } from "../helpers/observationHelpers";
 
 function MedicationObservationScreen({ route, navigation }) {
-  // Alleen gevuld als je vanuit de tijdlijn op "Bewerken" tikt.
+  // alleen gevuld bij Bewerken
   const observationToEdit = route.params?.observation ?? null;
 
   const insets = useSafeAreaInsets();
@@ -50,18 +48,16 @@ function MedicationObservationScreen({ route, navigation }) {
   const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
   const [medicationName, setMedicationName] = useState(observationToEdit?.medicationName ?? "");
 
-  // Optionele velden
   const [dosage, setDosage] = useState(observationToEdit?.dosage ?? "");
   const [note, setNote] = useState(observationToEdit?.note ?? "");
 
   async function saveHandler() {
-    // Kat en naam van de medicatie zijn verplicht, de rest is optioneel.
     if (!selectedCat || medicationName.trim() === "") {
-      Alert.alert("Niet compleet", "Kies in elk geval een kat en vul de naam van de medicatie in.");
+      Alert.alert("Nog niet alles ingevuld", "Kies een kat en vul de naam van de medicatie in.");
       return;
     }
 
-    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    // niet twee keer opslaan als je twee keer tikt
     if (isSaving) {
       return;
     }
@@ -104,14 +100,13 @@ function MedicationObservationScreen({ route, navigation }) {
 
     Alert.alert(
       "Observatie opgeslagen",
-      `Medicatie voor ${selectedCat.name}: ${medicationName.trim()}.`,
+      `Medicatie van ${selectedCat.name} is opgeslagen.`,
       [{ text: "OK", onPress: () => navigation.goBack() }]
     );
   }
 
   return (
-    // KeyboardAvoidingView schuift de inhoud omhoog als het toetsenbord opent, zodat
-    // het tekstveld en de Opslaan-knop zichtbaar blijven (zoals in CatFormScreen).
+    // anders komt het toetsenbord over het tekstveld en Opslaan heen
     <KeyboardAvoidingView
       style={[styles.screen, { paddingBottom: insets.bottom }]}
       behavior="padding"
@@ -154,7 +149,7 @@ function MedicationObservationScreen({ route, navigation }) {
         <FormLabel text="Dosering" tag="optional" />
         <TextInput
           style={styles.input}
-          placeholder="bijv. 1 tablet of 0,5 ml"
+          placeholder="Bijv. 1 tablet of 0,5 ml"
           value={dosage}
           onChangeText={setDosage}
         />
@@ -162,7 +157,7 @@ function MedicationObservationScreen({ route, navigation }) {
         <FormLabel text="Notitie" tag="optional" />
         <TextInput
           style={[styles.input, styles.noteInput]}
-          placeholder="Extra opmerking (optioneel)"
+          placeholder="Schrijf een korte notitie"
           value={note}
           onChangeText={setNote}
           multiline

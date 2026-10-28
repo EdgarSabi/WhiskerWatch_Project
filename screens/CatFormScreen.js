@@ -1,12 +1,4 @@
-// CatFormScreen is het formulier voor een kat. We gebruiken HETZELFDE scherm
-// om een kat toe te voegen én om een bestaande kat te bewerken, net zoals de
-// observatieformulieren dat doen:
-// - komt er geen kat mee via route.params.cat, dan voeg je een nieuwe kat toe
-// - komt er wel een kat mee (vanuit CatProfileScreen), dan bewerk je die kat en
-//   starten de velden met de huidige waarden
-//
-// Alleen de naam is verplicht. Foto, geboortedatum, gewicht en medische notitie
-// mogen leeg blijven.
+// naam van katten is verplicht. rest niet 
 
 import { useState } from "react";
 import {
@@ -38,31 +30,24 @@ import { loadCats, saveCats } from "../storage/catStorage";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 
 function CatFormScreen({ route, navigation }) {
-  // Alleen gevuld als je vanuit het profiel op "Profiel bewerken" tikt.
+  // alleen gevuld bij Profiel bewerken
   const catToEdit = route.params?.cat ?? null;
 
   const insets = useSafeAreaInsets();
   const [isSaving, setIsSaving] = useState(false);
 
-  // Hoe hoog de balk bovenaan is. KeyboardAvoidingView heeft dat nodig om
-  // netjes uit te rekenen hoeveel ruimte het toetsenbord inneemt.
+  // KeyboardAvoidingView heeft dit nodig, anders schuift het formulier te ver omhoog
   const headerHeight = useHeaderHeight();
 
   const [name, setName] = useState(catToEdit?.name ?? "");
   const [photoUri, setPhotoUri] = useState(catToEdit?.photoUri ?? null);
-  // De geboortedatum als tekst "2022-04-04", of null als die niet is ingevuld.
   const [birthDate, setBirthDate] = useState(catToEdit?.birthDate ?? null);
-  // Het gewicht staat in het veld als tekst (bijv. "4,2"). Het opgeslagen getal
-  // (4.2) zetten we terug om naar tekst met een komma.
   const [weightText, setWeightText] = useState(
     catToEdit?.weightKg ? String(catToEdit.weightKg).replace(".", ",") : ""
   );
   const [medicalNote, setMedicalNote] = useState(catToEdit?.medicalNote ?? "");
 
-  // Een foto maken of uit de galerij kiezen. Na het kiezen kun je hem eerst
-  // bijsnijden: een vierkante, ronde crop past precies in het ronde profielplaatje,
-  // dus zet het hoofd van de kat in het midden. Het adres dat we hier krijgen
-  // is nog tijdelijk. Bij het opslaan (saveHandler) wordt de foto duurzaam bewaard.
+  //foto kan worden gemaakt of gekozen 
   async function takePhotoHandler() {
     const newPhotoUri = await takePhoto(CAT_PHOTO_OPTIONS);
     if (newPhotoUri) {
@@ -77,8 +62,7 @@ function CatFormScreen({ route, navigation }) {
     }
   }
 
-  // Dezelfde datumkiezer als bij de observaties. Een geboortedatum kan niet in
-  // de toekomst liggen.
+  // geboortedatum kan niet in de toekomst 
   function pickBirthDateHandler() {
     DateTimePickerAndroid.open({
       value: parseBirthDate(birthDate) ?? new Date(),
@@ -91,37 +75,32 @@ function CatFormScreen({ route, navigation }) {
   }
 
   async function saveHandler() {
-    // trim() haalt spaties voor en na de naam weg.
     const trimmedName = name.trim();
 
     if (trimmedName === "") {
-      Alert.alert("Niet compleet", "Vul de naam van de kat in.");
+      Alert.alert("Nog niet alles ingevuld", "Vul de naam van de kat in.");
       return;
     }
 
-    // Het gewicht is optioneel. Is het ingevuld, dan moet het een getal groter
-    // dan 0 zijn. Een komma (4,2) zetten we eerst om naar een punt (4.2).
     let weightKg = null;
     if (weightText.trim() !== "") {
       weightKg = Number(weightText.replace(",", "."));
 
       if (isNaN(weightKg) || weightKg <= 0) {
-        Alert.alert("Ongeldig gewicht", "Vul het gewicht in kilo's in, bijvoorbeeld 4,2.");
+        Alert.alert("Vul een geldig gewicht in", "Gebruik cijfers, bijvoorbeeld 4,2.");
         return;
       }
     }
 
-    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    // niet twee keer opslaan als je twee keer tikt
     if (isSaving) {
       return;
     }
     setIsSaving(true);
 
-    // De foto duurzaam bewaren. Is de foto vervangen of verwijderd, dan wordt het
-    // oude bestand hier ook opgeruimd.
+    // pas hier gaat de foto naar de vaste map, en een oude foto wordt opgeruimd
     const savedPhotoUri = await savePhotoChange(photoUri, catToEdit?.photoUri ?? null);
 
-    // De gegevens van de kat. Lege optionele velden blijven gewoon leeg.
     const catData = {
       name: trimmedName,
       initial: trimmedName.charAt(0).toUpperCase(),
@@ -134,8 +113,6 @@ function CatFormScreen({ route, navigation }) {
     const savedCats = await loadCats();
 
     if (catToEdit) {
-      // Bewerken: de kat met hetzelfde id krijgt de nieuwe gegevens. Het id
-      // verandert niet, dus de koppeling met de observaties (catId) blijft werken.
       const changedCats = savedCats.map((cat) => {
         if (cat.id === catToEdit.id) {
           return { ...cat, ...catData };
@@ -144,8 +121,6 @@ function CatFormScreen({ route, navigation }) {
       });
       await saveCats(changedCats);
 
-      // In de observaties staat ook de NAAM van de kat (catName), voor weergave
-      // in de tijdlijn. Die werken we bij zodat daar niet de oude naam blijft staan.
       const savedObservations = await loadObservations();
       const changedObservations = savedObservations.map((observation) => {
         if (observation.catId === catToEdit.id) {
@@ -155,8 +130,6 @@ function CatFormScreen({ route, navigation }) {
       });
       await saveObservations(changedObservations);
     } else {
-      // Nieuw: Date.now() is het aantal milliseconden sinds 1970, dus elke
-      // nieuwe kat krijgt een eigen, unieke id.
       const newCat = { id: Date.now().toString(), ...catData };
       await saveCats([...savedCats, newCat]);
     }
@@ -165,16 +138,12 @@ function CatFormScreen({ route, navigation }) {
   }
 
   return (
-    // KeyboardAvoidingView schuift de inhoud omhoog als het toetsenbord opent,
-    // zodat het veld waar je in typt en de Opslaan-knop zichtbaar blijven.
     <KeyboardAvoidingView
       style={styles.screen}
       behavior="padding"
       keyboardVerticalOffset={headerHeight}
     >
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        {/* De foto staat bovenaan, zoals in het ontwerp: een ronde plek met een
-            camera erin zolang er nog geen foto is. */}
         <View style={styles.photoArea}>
           {photoUri ? (
             <Image source={getPhotoSource(photoUri)} style={styles.photoCircle} />
@@ -194,7 +163,7 @@ function CatFormScreen({ route, navigation }) {
             </Pressable>
             <Pressable style={styles.pill} onPress={pickPhotoHandler}>
               <MaterialCommunityIcons name="image-outline" size={16} color={Colors.text} />
-              <Text style={styles.pillText}>Uit galerij kiezen</Text>
+              <Text style={styles.pillText}>Kies een foto</Text>
             </Pressable>
             {photoUri ? (
               <Pressable style={styles.pill} onPress={() => setPhotoUri(null)}>
@@ -231,7 +200,7 @@ function CatFormScreen({ route, navigation }) {
         <View style={styles.inputRow}>
           <TextInput
             style={styles.inputInRow}
-            placeholder="bijv. 4,2"
+            placeholder="Bijv. 4,2"
             value={weightText}
             onChangeText={setWeightText}
             keyboardType="decimal-pad"
@@ -242,14 +211,13 @@ function CatFormScreen({ route, navigation }) {
         <FormLabel text="Medische notitie" tag="optional" />
         <TextInput
           style={[styles.input, styles.noteInput]}
-          placeholder="bijv. allergie of vaste medicatie (optioneel)"
+          placeholder="Bijv. allergie of vaste medicatie"
           value={medicalNote}
           onChangeText={setMedicalNote}
           multiline
         />
       </ScrollView>
 
-      {/* De Opslaan-knop blijft onderaan staan, boven de Android-navigatiebalk. */}
       <View style={{ paddingBottom: insets.bottom }}>
         <Pressable
           style={({ pressed }) => [styles.saveButton, pressed && styles.saveButtonPressed]}
@@ -340,7 +308,6 @@ const styles = StyleSheet.create({
     color: Colors.text,
     marginBottom: 20,
   },
-  // Het gewichtsveld met "kg" erachter: ziet eruit als een gewoon invoerveld.
   inputRow: {
     flexDirection: "row",
     alignItems: "center",

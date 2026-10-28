@@ -1,13 +1,8 @@
 import Colors from "./colors";
 
-// Alle observatietypen op één plek, net als de kleuren in colors.js.
-// - label: de naam die je ziet en die als "type" bij de observatie wordt bewaard
-// - screen: de naam van het formulier-scherm in App.js
-// - icon: de naam van het icoon (MaterialCommunityIcons)
-// - tint: de zachte achtergrondkleur van het icoon in de tijdlijn en op het profiel
-// - ink: de kleur van het icoon zelf
-// AddObservationScreen gebruikt dit om naar het juiste formulier te gaan, en
-// TimelineScreen gebruikt het om bij "Bewerken" het juiste formulier te openen.
+// alle observatietypen op één plek
+// label wordt ook als type bij de observatie bewaard, dus niet zomaar aanpassen
+// screen = naam van het formulier in App.js, icon/tint/ink = icoon en kleuren
 export const OBSERVATION_TYPES = [
   {
     id: "1",
@@ -67,8 +62,7 @@ export const OBSERVATION_TYPES = [
   },
 ];
 
-// Het type bij een label. Is het type onbekend (zou niet moeten), dan een
-// neutrale vervanger, zodat een scherm nooit crasht op een ontbrekend icoon.
+// onbekend type? Dan een neutrale vervanger, zodat niets crasht op een ontbrekend icoon
 export function getObservationType(typeLabel) {
   const type = OBSERVATION_TYPES.find((item) => item.label === typeLabel);
 

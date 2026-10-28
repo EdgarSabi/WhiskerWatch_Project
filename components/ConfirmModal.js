@@ -1,6 +1,4 @@
-// ConfirmModal is een eenvoudige bevestigingsvraag in de stijl van de app, voor
-// belangrijke acties zoals verwijderen. Het scherm dat hem gebruikt bepaalt
-// zelf met een true/false-state of hij zichtbaar is (visible).
+// bevestigingsvraag in de stijl van de app, het scherm bepaalt zelf met visible of hij open is
 
 import { Modal, View, Text, Pressable, StyleSheet } from "react-native";
 import Colors from "../constants/colors";
@@ -8,10 +6,8 @@ import Fonts from "../constants/fonts";
 
 function ConfirmModal({ visible, title, message, confirmText, onConfirm, onCancel }) {
   return (
-    // transparent: de rest van het scherm blijft zichtbaar achter de donkere laag.
-    // onRequestClose: de Android-terugknop sluit de vraag (= annuleren).
-    // De translucent-opties laten de donkere laag ook onder de statusbalk en
-    // navigatiebalk doorlopen. De kaart staat in het midden, dus nooit eronder.
+    // onRequestClose: Android-terugknop = annuleren
+    // translucent: donkere laag ook onder de status- en navigatiebalk, de kaart staat in het midden
     <Modal
       visible={visible}
       transparent

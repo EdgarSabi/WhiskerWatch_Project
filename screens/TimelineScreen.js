@@ -1,9 +1,3 @@
-// Fase 8: de tijdlijn kan nu gefilterd worden op kat, type en periode.
-//
-// De filters veranderen NIETS aan de opgeslagen observaties. We bewaren de
-// volledige lijst in `observations` en maken met .filter() een tweede lijst
-// (`filteredObservations`) die alleen laat zien wat bij de filters past.
-
 import { useState, useCallback } from "react";
 import { View, Text, SectionList, Pressable, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -31,16 +25,13 @@ function TimelineScreen({ route, navigation }) {
   const [observations, setObservations] = useState([]);
   const [cats, setCats] = useState([]);
 
-  // De drie filters. "all" (of "Alle types") betekent: dit filter staat uit.
-  // Kom je vanuit een kattenprofiel, dan staat het kat-filter al op die kat.
+  // "all" / "Alle types" = filter staat uit. Vanuit een kattenprofiel staat de kat al ingesteld
   const [selectedCat, setSelectedCat] = useState(route.params?.catId ?? "all"); // het id van een kat, of "all"
   const [selectedType, setSelectedType] = useState(ALL_TYPES);
   const [selectedPeriod, setSelectedPeriod] = useState("all");
 
-  // Is het paneel met filterknoppen open of dicht?
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // De observatie waarvoor de bevestigingsvraag open staat (null = geen vraag).
   const [observationToDelete, setObservationToDelete] = useState(null);
 
   useFocusEffect(
@@ -65,12 +56,11 @@ function TimelineScreen({ route, navigation }) {
     const observation = observationToDelete;
     setObservationToDelete(null);
 
-    // We verwijderen uit de VOLLEDIGE lijst, niet uit de gefilterde.
+    // uit de volledige lijst verwijderen, niet uit de gefilterde
     const remainingObservations = observations.filter((item) => item.id !== observation.id);
     setObservations(remainingObservations);
     await saveObservations(remainingObservations);
 
-    // Het fotobestand van deze observatie ruimen we ook op.
     deletePhotoFile(observation.photoUri);
   }
 
@@ -80,10 +70,6 @@ function TimelineScreen({ route, navigation }) {
     setSelectedPeriod("all");
   }
 
-  // ---------- Filteren ----------
-
-  // .filter() geeft een NIEUWE lijst terug met alleen de observaties waarvoor
-  // alle drie de controles kloppen. De originele lijst blijft zoals hij was.
   const filteredObservations = observations.filter((observation) => {
     const catMatches = selectedCat === "all" || observation.catId === selectedCat;
     const typeMatches = selectedType === ALL_TYPES || observation.type === selectedType;
@@ -92,16 +78,12 @@ function TimelineScreen({ route, navigation }) {
     return catMatches && typeMatches && periodMatches;
   });
 
-  // Sorteren op het moment waarop het gebeurde (observedAt), niet op het moment
-  // van opslaan: de recentste bovenaan. Met [...lijst] maken we een kopie.
-  // De kopie draaien we eerst om, zodat bij hetzelfde moment de laatst
-  // opgeslagen observatie bovenaan komt (sort() verandert de volgorde van
-  // gelijke waarden niet).
+  // sorteren op wanneer het gebeurde, niet op wanneer het is opgeslagen
+  // eerst omdraaien zodat bij hetzelfde moment de laatst opgeslagen bovenaan komt
   const newestFirst = [...filteredObservations]
     .reverse()
     .sort((a, b) => getSortValue(b) - getSortValue(a));
 
-  // Hoeveel filters staan er aan? Dat tonen we in de knop: "Filters (2)".
   let activeFilterCount = 0;
   if (selectedCat !== "all") {
     activeFilterCount += 1;
@@ -113,10 +95,8 @@ function TimelineScreen({ route, navigation }) {
     activeFilterCount += 1;
   }
 
-  // Verwijderde katten staan niet meer in de lijst met katten, maar hun
-  // observaties wel nog. Per verwijderde kat (catId) maken we een filterkeuze met
-  // de naam uit die observaties. Zo kun je oude observaties terugvinden, terwijl
-  // de kat zelf niet terugkomt op het dashboard of in de formulieren.
+  // verwijderde katten zijn weg uit de kattenlijst maar hun observaties blijven,
+  // dus maken we er een filterkeuze van (op catId) zodat je ze kunt terugvinden
   const deletedCatOptions = [];
   for (const observation of observations) {
     const isActiveCat =
@@ -128,11 +108,9 @@ function TimelineScreen({ route, navigation }) {
     }
   }
 
-  // De keuzes per filter: "alles" eerst, daarna de echte opties.
   const catOptions = [{ id: "all", name: "Alle katten" }, ...cats, UNKNOWN_CAT, ...deletedCatOptions];
   const typeOptions = [ALL_TYPES, ...OBSERVATION_TYPES.map((type) => type.label)];
 
-  // Korte tekst die laat zien welke filters actief zijn.
   const activeCat = catOptions.find((option) => option.id === selectedCat);
   const activePeriod = PERIOD_OPTIONS.find((option) => option.id === selectedPeriod);
   const activeFilterTexts = [];
@@ -146,7 +124,6 @@ function TimelineScreen({ route, navigation }) {
     activeFilterTexts.push(activePeriod.label);
   }
 
-  // Bovenaan de lijst: de filterknop en (als die open is) het filterpaneel.
   const filterHeader = (
     <View style={styles.filterArea}>
       <View style={styles.filterBar}>
@@ -244,28 +221,21 @@ function TimelineScreen({ route, navigation }) {
 
   return (
     <View style={styles.screen}>
-      {/* SectionList is een FlatList met koppen: de observaties staan per dag
-          gegroepeerd (Vandaag, Gisteren, 24 oktober 2026, ...). De groepen
-          worden gemaakt van de al gefilterde en gesorteerde lijst, dus de filters
-          werken gewoon mee. */}
       <SectionList
         sections={groupByDay(newestFirst)}
         keyExtractor={(observation) => observation.id}
         stickySectionHeadersEnabled={false}
-        // Een SectionList telt de kopjes mee en laadt standaard maar 10 rijen
-        // tegelijk; zo staat het scherm direct vol.
+        // kopjes tellen mee, anders blijft de lijst even half leeg
         initialNumToRender={20}
         renderSectionHeader={({ section }) => (
           <Text style={styles.sectionTitle}>{section.title}</Text>
         )}
         ListHeaderComponent={filterHeader}
-        // Wordt getoond als de lijst leeg is: óf er zijn nog helemaal geen
-        // observaties, óf de filters laten niets over.
         ListEmptyComponent={
           <Text style={styles.emptyText}>
             {observations.length === 0
               ? "Nog geen observaties."
-              : "Geen observaties gevonden voor deze filters."}
+              : "Geen observaties gevonden."}
           </Text>
         }
         contentContainerStyle={styles.list}
@@ -273,24 +243,19 @@ function TimelineScreen({ route, navigation }) {
           const summary = getSummary(item);
 
           return (
-            // De hele kaart is aantikbaar en opent de observatie om te bewerken.
             <Pressable
               style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
               onPress={() => editHandler(item)}
             >
-              {/* Links het icoon van het type in een zachte kleur. Heeft de
-                  observatie een foto, dan staat die kleine foto op die plek. */}
+              {/* met foto staat die op de plek van het icoon */}
               <TypeBadge type={item.type} photoUri={item.photoUri} />
 
               <View style={styles.cardTexts}>
-                {/* Het type vet, de tijd rechts. De datum staat al in de kop van de dag. */}
                 <View style={styles.cardTop}>
                   <Text style={styles.cardType}>{item.type}</Text>
                   <Text style={styles.cardTime}>{getTimeText(item)}</Text>
                 </View>
 
-                {/* De kat en de samenvatting, met rechts twee kleine iconknoppen
-                    (bewerken en verwijderen) op dezelfde regel, zodat de kaart compact blijft. */}
                 <View style={styles.cardBottom}>
                   <Text style={styles.cardSummary} numberOfLines={2}>
                     {item.catName}
@@ -331,7 +296,6 @@ function TimelineScreen({ route, navigation }) {
         }}
       />
 
-      {/* Home, Tijdlijn en Overzicht (het dierenartsoverzicht) */}
       <TabBar active="Timeline" navigation={navigation} />
 
       <ConfirmModal
@@ -353,8 +317,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  // De ruimte om de lijst heen zit hier (niet op het hele scherm), zodat de
-  // tabbalk onderaan over de volle breedte kan staan.
+  // padding hier en niet op het hele scherm, anders loopt de tabbalk niet over de volle breedte
   list: {
     paddingTop: 8,
     paddingHorizontal: 16,

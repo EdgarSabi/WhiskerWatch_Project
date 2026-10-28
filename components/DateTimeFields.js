@@ -1,9 +1,5 @@
-// DateTimeFields is de datum- en tijdkeuze voor alle observatieformulieren.
-// Je typt niets meer: je kiest "Vandaag" of "Andere datum", en "Nu" of
-// "Andere tijd". De andere keuzes openen de native kiezer van Android.
-//
-// Het formulier bewaart het moment als één Date (value). Wij geven een gewijzigde
-// Date terug via onValueChange. Het formulier slaat hem op als observedAt.
+// datum en tijd kiezen zonder typen, de "Andere ..." knoppen openen de Android-kiezer
+// value is één Date, we geven een aangepaste Date terug via onValueChange
 
 import { useState } from "react";
 import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
@@ -19,20 +15,17 @@ function isSameDay(a, b) {
   );
 }
 
-// isNew: true bij een nieuwe observatie (dan staat "Nu" aan), false bij bewerken.
+// bij een nieuwe observatie (isNew) staat Nu standaard aan
 function DateTimeFields({ value, onValueChange, isNew }) {
   const [useNow, setUseNow] = useState(isNew);
   const isToday = isSameDay(value, new Date());
 
-  // Elke keuze verandert maar een deel van value: de datum of de tijd. We maken
-  // eerst een kopie, zodat de oude Date niet wordt aangepast.
+  // een keuze verandert maar een deel (datum of tijd), dus eerst een kopie maken
   function setDatePart(newDate) {
     const changed = new Date(value);
     changed.setFullYear(newDate.getFullYear(), newDate.getMonth(), newDate.getDate());
 
-    // Een observatie kan niet in de toekomst liggen. Kiezen we vandaag terwijl de
-    // tijd nog later is dan nu (bijv. 20:00 terwijl het 10:00 is), dan wordt
-    // het tijdstip "nu".
+    // vandaag kiezen terwijl de tijd nog later is dan nu (20:00 terwijl het 10:00 is)? Dan wordt het nu
     if (changed.getTime() > Date.now()) {
       setUseNow(true);
       onValueChange(new Date());
@@ -52,10 +45,8 @@ function DateTimeFields({ value, onValueChange, isNew }) {
     setDatePart(new Date());
   }
 
-  // De callbacks heten onValueChange (bij kiezen). Bij annuleren hoeft er niets
-  // te gebeuren, dus onDismiss en onNeutralButtonPress gebruiken we niet.
+  // bij annuleren hoeft er niets te gebeuren, dus geen onDismiss
   function otherDateHandler() {
-    // De datum van een observatie kan niet in de toekomst liggen.
     DateTimePickerAndroid.open({
       value: value,
       mode: "date",
@@ -78,13 +69,12 @@ function DateTimeFields({ value, onValueChange, isNew }) {
       mode: "time",
       is24Hour: true,
       onValueChange: (event, selectedTime) => {
-        // De tijdkiezer kan geen maximum afdwingen, dus controleren we het zelf.
-        // Is de datum vandaag, dan mag de tijd niet later zijn dan nu.
+        // de tijdkiezer kent geen maximum, daarom hier zelf checken
         const chosen = new Date(value);
         chosen.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0);
 
         if (chosen.getTime() > Date.now()) {
-          Alert.alert("Tijd in de toekomst", "Kies een tijd die niet later is dan nu.");
+          Alert.alert("Die tijd ligt in de toekomst", "Kies een tijd van nu of eerder.");
           return;
         }
 
@@ -116,7 +106,6 @@ function DateTimeFields({ value, onValueChange, isNew }) {
         </Pressable>
       </View>
 
-      {/* Zo zie je altijd precies welk moment je hebt gekozen. */}
       <Text style={styles.summary}>
         {formatDate(value)} om {formatTime(value)}
       </Text>

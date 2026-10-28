@@ -1,10 +1,6 @@
-// De demo-data: Lara met acht fictieve observaties, zodat de tijdlijn, de filters
-// en het dierenartsoverzicht meteen iets laten zien.
-//
-// seedDemoData draait bij het starten van de app (zie App.js), maar doet zijn
-// werk maar ÉÉN keer. Daarna staat er een vlag in AsyncStorage. Daardoor:
-// - komen de observaties niet bij elke start dubbel terug;
-// - blijft Lara weg als je haar verwijdert.
+// demo-data voor de presentatie: Lara met acht nepobservaties
+// draait maar één keer (vlag in AsyncStorage), anders komen ze elke start dubbel terug
+// en komt Lara terug als je haar verwijdert
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loadCats, saveCats, LARA_CAT } from "./catStorage";
@@ -12,12 +8,11 @@ import { loadObservations, saveObservations } from "./observationStorage";
 
 const SEEDED_KEY = "demoDataSeeded";
 
-// De placeholder-Lara van vroeger had id "4". Er mag maar één Lara bestaan.
+// de placeholder-Lara van vroeger had id "4", er mag maar één Lara zijn
 const OLD_LARA_ID = "4";
 
-// Maakt één observatie van Lara, in dezelfde vorm als een gewone observatie.
-// daysAgo en hour/minute bepalen het moment (gerekend vanaf nu, zodat de
-// observaties altijd binnen de afgelopen drie maanden vallen).
+// zelfde vorm als een gewone observatie. daysAgo en hour/minute rekenen vanaf nu,
+// zo vallen ze altijd in de afgelopen drie maanden
 function makeObservation(number, daysAgo, hour, minute, type, fields) {
   const observedAt = new Date();
   observedAt.setDate(observedAt.getDate() - daysAgo);
@@ -85,8 +80,7 @@ export async function seedDemoData() {
     return;
   }
 
-  // Katten: de oude placeholder-Lara weg, en de nieuwe Lara bovenaan zetten als
-  // ze er nog niet staat. (Bij een verse installatie staat ze er al.)
+  // oude Lara weg, nieuwe bovenaan (bij een verse installatie staat ze er al)
   const savedCats = await loadCats();
   const catsWithoutOldLara = savedCats.filter(
     (cat) => !(cat.id === OLD_LARA_ID && cat.name === LARA_CAT.name)
@@ -97,8 +91,7 @@ export async function seedDemoData() {
   const cats = hasLara ? catsWithoutOldLara : [LARA_CAT, ...catsWithoutOldLara];
   await saveCats(cats);
 
-  // Observaties: wat bij de oude Lara hoorde, hoort nu bij de nieuwe. Daarna de
-  // voorbeeldobservaties erbij, tenzij ze er al staan.
+  // observaties van de oude Lara verhuizen naar de nieuwe, demo-observaties erbij als ze er nog niet zijn
   const savedObservations = await loadObservations();
   const observations = savedObservations.map((observation) => {
     if (removedOldLara && observation.catId === OLD_LARA_ID) {
@@ -115,6 +108,6 @@ export async function seedDemoData() {
   }
   await saveObservations(observations);
 
-  // Pas als alles is opgeslagen zetten we de vlag.
+  // vlag pas zetten als alles is opgeslagen
   await AsyncStorage.setItem(SEEDED_KEY, "true");
 }

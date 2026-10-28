@@ -4,8 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import { OBSERVATION_TYPES } from "../constants/observationTypes";
 
-// De eerste zes typen komen in een raster van twee kolommen. De laatste (de algemene
-// notitie, voor alles wat niet past) staat als brede kaart eronder.
+//eerste zes in twee kolommen, rest als brede kaart 
 const GRID_TYPES = OBSERVATION_TYPES.slice(0, -1);
 const NOTE_TYPE = OBSERVATION_TYPES[OBSERVATION_TYPES.length - 1];
 
@@ -20,7 +19,7 @@ function AddObservationScreen({ route, navigation }) {
   return (
     <View style={styles.screen}>
       <Text style={styles.subtitle}>
-        {cat ? `Voor ${cat.name} — wat is er aan de hand?` : "Wat is er aan de hand?"}
+        {cat ? `Wat is er aan de hand met ${cat.name}?` : "Wat is er aan de hand?"}
       </Text>
 
       <FlatList
@@ -28,8 +27,7 @@ function AddObservationScreen({ route, navigation }) {
         keyExtractor={(type) => type.id}
         numColumns={2}
         columnWrapperStyle={styles.row}
-        // De FlatList scrollt al zelf; deze extra ruimte onderaan zorgt dat het
-        // laatste type boven de Android-navigatiebalk kan komen.
+        // ruimte onderaan, anders zit het laatste blok achter de Android-navigatiebalk
         contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
         renderItem={({ item }) => (
           <Pressable

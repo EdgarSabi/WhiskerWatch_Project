@@ -55,12 +55,9 @@ function VomitObservationScreen({ route, navigation }) {
   const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
   const [vomitKind, setVomitKind] = useState(observationToEdit?.vomitKind ?? null);
 
-  // Optionele velden
   const [note, setNote] = useState(observationToEdit?.note ?? "");
   const [photoUri, setPhotoUri] = useState(observationToEdit?.photoUri ?? null);
 
-  // Een foto maken of uit de galerij kiezen, met bijsnijden erachter. Het adres
-  // is nog tijdelijk: bij het opslaan bewaren we de foto duurzaam.
   async function takePhotoHandler() {
     const newPhotoUri = await takePhoto(OBSERVATION_PHOTO_OPTIONS);
     if (newPhotoUri) {
@@ -77,17 +74,17 @@ function VomitObservationScreen({ route, navigation }) {
 
   async function saveHandler() {
     if (!selectedCat || !vomitKind) {
-      Alert.alert("Niet compleet", "Kies in elk geval een kat en wat voor braken het was.");
+      Alert.alert("Nog niet alles ingevuld", "Kies een kat en wat voor braken het was.");
       return;
     }
 
-    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    // niet twee keer opslaan als je twee keer tikt
     if (isSaving) {
       return;
     }
     setIsSaving(true);
 
-    // Is de foto vervangen of verwijderd, dan ruimt dit ook het oude bestand op.
+    // pas hier gaat de foto naar de vaste map, en een oude foto wordt opgeruimd
     const savedPhotoUri = await savePhotoChange(photoUri, observationToEdit?.photoUri ?? null);
 
     const currentObservations = await loadObservations();
@@ -125,14 +122,13 @@ function VomitObservationScreen({ route, navigation }) {
       await saveObservations([...currentObservations, newObservation]);
     }
 
-    Alert.alert("Observatie opgeslagen", `Braken voor ${selectedCat.name}: ${vomitKind}.`, [
+    Alert.alert("Observatie opgeslagen", `Braken van ${selectedCat.name} is opgeslagen.`, [
       { text: "OK", onPress: () => navigation.goBack() },
     ]);
   }
 
   return (
-    // KeyboardAvoidingView schuift de inhoud omhoog als het toetsenbord opent, zodat
-    // het tekstveld en de Opslaan-knop zichtbaar blijven (zoals in CatFormScreen).
+    // anders komt het toetsenbord over het tekstveld en Opslaan heen
     <KeyboardAvoidingView
       style={[styles.screen, { paddingBottom: insets.bottom }]}
       behavior="padding"
@@ -182,7 +178,7 @@ function VomitObservationScreen({ route, navigation }) {
         <FormLabel text="Notitie" tag="optional" />
         <TextInput
           style={[styles.input, styles.noteInput]}
-          placeholder="Extra opmerking (optioneel)"
+          placeholder="Schrijf een korte notitie"
           value={note}
           onChangeText={setNote}
           multiline
@@ -197,7 +193,7 @@ function VomitObservationScreen({ route, navigation }) {
           </Pressable>
           <Pressable style={styles.pill} onPress={pickPhotoHandler}>
             <MaterialCommunityIcons name="image-outline" size={16} color={Colors.text} />
-            <Text style={styles.pillText}>Uit galerij kiezen</Text>
+            <Text style={styles.pillText}>Kies een foto</Text>
           </Pressable>
           {photoUri ? (
             <Pressable style={styles.pill} onPress={() => setPhotoUri(null)}>

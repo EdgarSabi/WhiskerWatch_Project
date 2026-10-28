@@ -29,8 +29,7 @@ import { getInitialObservedAt } from "../helpers/observationHelpers";
 const CONSISTENCY_OPTIONS = ["Normaal", "Zacht", "Diarree", "Hard", "Onbekend"];
 
 function PoopObservationScreen({ route, navigation }) {
-  // Alleen gevuld als je vanuit de tijdlijn op "Bewerken" tikt. Bij een
-  // nieuwe observatie is dit null.
+  // alleen gevuld bij Bewerken
   const observationToEdit = route.params?.observation ?? null;
 
   const insets = useSafeAreaInsets();
@@ -42,8 +41,6 @@ function PoopObservationScreen({ route, navigation }) {
     preselectedCat = { id: observationToEdit.catId, name: observationToEdit.catName };
   }
 
-  // De katten voor de keuzeknoppen komen uit de opslag. Aan het begin is de
-  // lijst leeg; zodra het laden klaar is, vult useEffect hem.
   const [cats, setCats] = useState([]);
 
   useEffect(() => {
@@ -56,22 +53,17 @@ function PoopObservationScreen({ route, navigation }) {
   }, []);
 
   const [selectedCat, setSelectedCat] = useState(preselectedCat);
-  // Het moment van de observatie: nu bij een nieuwe observatie, anders het
-  // bewaarde moment. De kiezers in DateTimeFields passen dit aan.
   const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
   const [consistency, setConsistency] = useState(observationToEdit?.consistency ?? null);
 
-  // Optionele velden
   const [color, setColor] = useState(observationToEdit?.color ?? "");
-  const [mucusSeen, setMucusSeen] = useState(observationToEdit?.mucusSeen ?? null); // "Nee" | "Ja" | null
+  const [mucusSeen, setMucusSeen] = useState(observationToEdit?.mucusSeen ?? null); // "Nee", "Ja" of nog niet gekozen
   const [bloodSeen, setBloodSeen] = useState(observationToEdit?.bloodSeen ?? null);
   const [outsideLitterBox, setOutsideLitterBox] = useState(observationToEdit?.outsideLitterBox ?? null);
   const [note, setNote] = useState(observationToEdit?.note ?? "");
 
   const [photoUri, setPhotoUri] = useState(observationToEdit?.photoUri ?? null);
 
-  // Een foto maken of uit de galerij kiezen, met bijsnijden erachter. Het adres
-  // is nog tijdelijk: bij het opslaan bewaren we de foto duurzaam.
   async function takePhotoHandler() {
     const newPhotoUri = await takePhoto(OBSERVATION_PHOTO_OPTIONS);
     if (newPhotoUri) {
@@ -88,17 +80,17 @@ function PoopObservationScreen({ route, navigation }) {
 
   async function saveHandler() {
     if (!selectedCat || !consistency) {
-      Alert.alert("Niet compleet", "Kies in elk geval een kat en een consistentie.");
+      Alert.alert("Nog niet alles ingevuld", "Kies een kat en een consistentie.");
       return;
     }
 
-    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    // niet twee keer opslaan als je twee keer tikt
     if (isSaving) {
       return;
     }
     setIsSaving(true);
 
-    // Is de foto vervangen of verwijderd, dan ruimt dit ook het oude bestand op.
+    // pas hier gaat de foto naar de vaste map, en een oude foto wordt opgeruimd
     const savedPhotoUri = await savePhotoChange(photoUri, observationToEdit?.photoUri ?? null);
 
     const currentObservations = await loadObservations();
@@ -148,33 +140,25 @@ function PoopObservationScreen({ route, navigation }) {
 
     Alert.alert(
       "Observatie opgeslagen",
-      `Ontlasting voor ${selectedCat.name}: ${consistency}.`,
+      `Ontlasting van ${selectedCat.name} is opgeslagen.`,
       [{ text: "OK", onPress: () => navigation.goBack() }]
     );
   }
 
   return (
-    // KeyboardAvoidingView schuift de inhoud omhoog als het toetsenbord opent, zodat
-    // het tekstveld en de Opslaan-knop zichtbaar blijven (zoals in CatFormScreen).
+    // anders komt het toetsenbord over het tekstveld en Opslaan heen
     <KeyboardAvoidingView
       style={[styles.screen, { paddingBottom: insets.bottom }]}
       behavior="padding"
       keyboardVerticalOffset={headerHeight}
     >
-      {/* ScrollView zorgt dat je het hele formulier kunt scrollen als het
-          niet allemaal op het scherm past (bijv. bij een klein toestel of
-          als het toetsenbord open staat). */}
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <FormLabel text="Kat" tag="required" />
         <View style={styles.pillRow}>
-          {/* Alle opgeslagen katten, plus "Kat onbekend" als laatste keuze. */}
           {[...cats, UNKNOWN_CAT].map((option) => (
             <Pressable
               key={option.id}
               onPress={() => setSelectedCat(option)}
-              // Dit is het "selected state"-patroon: we vergelijken het id van
-              // deze knop met het id van de gekozen kat (selectedCat).
-              // Zijn ze gelijk, dan tellen we een extra stijl erbij op.
               style={[
                 styles.pill,
                 option.id === UNKNOWN_CAT.id && styles.pillDashed,
@@ -212,7 +196,7 @@ function PoopObservationScreen({ route, navigation }) {
         <FormLabel text="Kleur" tag="optional" />
         <TextInput
           style={styles.input}
-          placeholder="bijv. bruin"
+          placeholder="Bijv. bruin"
           value={color}
           onChangeText={setColor}
         />
@@ -273,15 +257,13 @@ function PoopObservationScreen({ route, navigation }) {
         <FormLabel text="Notitie" tag="optional" />
         <TextInput
           style={[styles.input, styles.noteInput]}
-          placeholder="Extra opmerking (optioneel)"
+          placeholder="Schrijf een korte notitie"
           value={note}
           onChangeText={setNote}
           multiline
         />
 
         <FormLabel text="Foto" tag="optional" />
-        {/* Is er een foto? Dan tonen we een preview. De knoppen om een nieuwe
-            te maken of te kiezen staan er altijd; verwijderen alleen met foto. */}
         {photoUri ? <Image source={{ uri: photoUri }} style={styles.photoPreview} /> : null}
         <View style={styles.pillRow}>
           <Pressable style={styles.pill} onPress={takePhotoHandler}>
@@ -290,7 +272,7 @@ function PoopObservationScreen({ route, navigation }) {
           </Pressable>
           <Pressable style={styles.pill} onPress={pickPhotoHandler}>
             <MaterialCommunityIcons name="image-outline" size={16} color={Colors.text} />
-            <Text style={styles.pillText}>Uit galerij kiezen</Text>
+            <Text style={styles.pillText}>Kies een foto</Text>
           </Pressable>
           {photoUri ? (
             <Pressable style={styles.pill} onPress={() => setPhotoUri(null)}>

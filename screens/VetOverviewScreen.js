@@ -1,7 +1,4 @@
-// VetOverviewScreen toont voor ÉÉN kat en één periode een overzicht van de
-// observaties die je zelf hebt ingevoerd, bedoeld om aan de dierenarts te laten
-// zien. Het scherm geeft alleen weer wat is ingevoerd: geen diagnose, advies
-// of waarschuwingen.
+// alleen wat je zelf hebt ingevoerd, bewust geen diagnose of advies
 
 import { useState, useCallback } from "react";
 import { View, Text, ScrollView, Pressable, Image, StyleSheet } from "react-native";
@@ -20,7 +17,6 @@ import {
   getSortValue,
 } from "../helpers/observationHelpers";
 
-// Voor de dierenarts bieden we maar drie periodes aan, in deze volgorde.
 const VET_PERIODS = ["7days", "30days", "all"].map((id) =>
   PERIOD_OPTIONS.find((option) => option.id === id)
 );
@@ -48,15 +44,12 @@ function VetOverviewScreen({ navigation }) {
   const selectedCat = cats.find((cat) => cat.id === selectedCatId);
   const periodLabel = PERIOD_OPTIONS.find((option) => option.id === selectedPeriod).label;
 
-  // Alleen de observaties van de gekozen kat in de gekozen periode, van oud naar
-  // nieuw (chronologisch). .filter() en [...] maken kopieën, dus de opgeslagen
-  // lijst verandert niet.
+  // van oud naar nieuw, dat leest het prettigst voor de dierenarts
   const overviewObservations = observations
     .filter((observation) => observation.catId === selectedCatId)
     .filter((observation) => isInPeriod(observation, selectedPeriod));
   const chronological = [...overviewObservations].sort((a, b) => getSortValue(a) - getSortValue(b));
 
-  // Hoeveel observaties per type? Voor elk type tellen we de observaties met dat type.
   const typeCounts = OBSERVATION_TYPES.map((type) => ({
     label: type.label,
     count: overviewObservations.filter((observation) => observation.type === type.label).length,
@@ -100,7 +93,7 @@ function VetOverviewScreen({ navigation }) {
         {!selectedCat && (
           <Text style={styles.hint}>
             {cats.length === 0
-              ? "Er zijn nog geen katten."
+              ? "Je hebt nog geen katten toegevoegd."
               : "Kies een kat om het overzicht te zien."}
           </Text>
         )}
@@ -130,7 +123,7 @@ function VetOverviewScreen({ navigation }) {
 
             {total === 0 && (
               <Text style={styles.hint}>
-                Geen observaties voor {selectedCat.name} in deze periode.
+                Geen observaties gevonden voor {selectedCat.name} in deze periode.
               </Text>
             )}
 
@@ -149,7 +142,6 @@ function VetOverviewScreen({ navigation }) {
         )}
       </ScrollView>
 
-      {/* Home, Tijdlijn en Overzicht (het dierenartsoverzicht) */}
       <TabBar active="VetOverview" navigation={navigation} />
     </View>
   );

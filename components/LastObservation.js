@@ -1,9 +1,5 @@
-// LastObservation is de kleine regel "Laatst: Eten & drinken · 2u geleden" onder de
-// naam van een kat op het dashboard. Het type staat in bordeaux, zodat je ziet dat
-// je erop kunt tikken; dan opent die observatie. Verder is het gewone, rustige tekst.
-//
-// Heeft de kat nog geen observaties, dan toont het scherm zelf gewone tekst;
-// dit component krijgt alleen een echte observatie.
+// "Laatst: Eten & drinken · 2u geleden" onder de kattennaam, het type in bordeaux zodat je ziet dat het aantikbaar is
+// krijgt alleen een echte observatie, zonder observaties toont het scherm zelf gewone tekst
 
 import { Text, Pressable, StyleSheet } from "react-native";
 import Colors from "../constants/colors";
@@ -13,7 +9,7 @@ function LastObservation({ observation, onPress }) {
   return (
     <Pressable
       onPress={onPress}
-      // Een ruimer tikgebied dan de kleine tekst, zonder dat de kaart groter wordt.
+      // groter tikgebied dan de kleine tekst
       hitSlop={{ top: 8, bottom: 8, left: 4, right: 8 }}
       style={({ pressed }) => pressed && styles.pressed}
     >

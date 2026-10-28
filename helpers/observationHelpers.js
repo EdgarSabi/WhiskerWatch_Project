@@ -1,8 +1,6 @@
-// Gewone hulpfuncties voor observaties. Ze worden gebruikt door TimelineScreen
-// en VetOverviewScreen, zodat de samenvatting en de periodelogica maar op één
-// plek staan. Er zit geen state of React in: het zijn gewoon functies.
+// hulpfuncties voor observaties (geen state, gewoon functies)
 
-// De keuzes voor de periode. De id gebruiken we in isInPeriod hieronder.
+// de id wordt gebruikt in isInPeriod
 export const PERIOD_OPTIONS = [
   { id: "all", label: "Alles" },
   { id: "today", label: "Vandaag" },
@@ -27,13 +25,8 @@ export const MONTHS = [
   "december",
 ];
 
-// ---------- Datum en tijd ----------
-
-// Nieuwe observaties bewaren het moment waarop het gebeurde als ÉÉN waarde:
-// observedAt, een ISO-tekst zoals "2026-10-27T12:30:00.000Z". Die is betrouwbaar
-// te sorteren en we maken er alleen voor de weergave een leesbare tekst van.
-// Oudere observaties hebben nog losse tekstvelden date en time (en createdAt);
-// daar vallen we op terug.
+// nieuwe observaties hebben observedAt (ISO-tekst), dat sorteert betrouwbaar
+// oude observaties hebben nog losse date/time (en createdAt), daar vallen we op terug
 
 function pad(number) {
   return String(number).padStart(2, "0");
@@ -49,7 +42,6 @@ export function formatTime(date) {
   return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
-// Zet de ISO-tekst om naar een Date. Is de tekst leeg of ongeldig, dan null.
 function parseObservedAt(text) {
   if (!text) {
     return null;
@@ -59,9 +51,7 @@ function parseObservedAt(text) {
   return isNaN(date.getTime()) ? null : date;
 }
 
-// Haalt een datum als 29-09-2026 uit een stuk tekst (dag-maand-jaar). Lukt dat
-// niet, dan geven we null terug. Dit werkt voor de datum die je vroeger zelf
-// typte én voor createdAt, want die begint ook met dag-maand-jaar.
+// haalt dag-maand-jaar uit tekst, werkt ook voor createdAt (begint ook zo)
 function parseDate(text) {
   if (!text) {
     return null;
@@ -83,9 +73,8 @@ function parseDate(text) {
   return new Date(year, month - 1, day);
 }
 
-// Datum + tijd uit twee stukken tekst. Is er geen tijd te lezen, dan blijft het
-// 00:00. We zoeken een tijd met een dubbele punt (14:30), zodat de cijfers van
-// de datum er niet voor worden aangezien.
+// geen tijd te lezen? Dan 00:00. Zoeken met een dubbele punt (14:30), anders
+// worden de cijfers van de datum voor een tijd aangezien
 function parseDateTime(dateText, timeText) {
   const date = parseDate(dateText);
   if (date === null) {
@@ -100,12 +89,7 @@ function parseDateTime(dateText, timeText) {
   return date;
 }
 
-// Het moment waarop de observatie is gebeurd, voor de tijdlijn, het
-// dierenartsoverzicht en de periodefilters. In deze volgorde:
-// 1. observedAt (alle nieuwe observaties)
-// 2. de losse date + time van oudere observaties
-// 3. het moment waarop de observatie is opgeslagen (createdAt)
-// Lukt niets, dan geven we null terug.
+// wanneer het gebeurde: eerst observedAt, dan de oude date + time, dan createdAt, anders null
 function getObservedAt(observation) {
   const observedAt = parseObservedAt(observation.observedAt);
   if (observedAt !== null) {
@@ -120,8 +104,7 @@ function getObservedAt(observation) {
   return parseDateTime(observation.createdAt, observation.createdAt);
 }
 
-// De startwaarde voor de datum- en tijdkiezer in een formulier: het moment van
-// de observatie die je bewerkt, of anders nu.
+// startwaarde voor de kiezers: het moment van de observatie die je bewerkt, anders nu
 export function getInitialObservedAt(observationToEdit) {
   if (!observationToEdit) {
     return new Date();
@@ -130,8 +113,7 @@ export function getInitialObservedAt(observationToEdit) {
   return getObservedAt(observationToEdit) ?? new Date();
 }
 
-// Hoeveel dagen geleden was dit? 0 = vandaag, 1 = gisteren, enzovoort. We
-// vergelijken hele dagen, dus het tijdstip maakt hier niet uit.
+// 0 = vandaag, 1 = gisteren, enzovoort. Hele dagen vergelijken, de tijd maakt niet uit
 function getDaysAgo(date) {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -139,8 +121,7 @@ function getDaysAgo(date) {
   return Math.round((today.getTime() - day.getTime()) / MS_PER_DAY);
 }
 
-// Hoort de observatie bij de gekozen periode? Bij "Alles" altijd. Kunnen we de
-// datum niet bepalen, dan laten we de observatie bij een periode weg.
+// zonder bruikbare datum valt een observatie bij een periode buiten de boot
 export function isInPeriod(observation, periodId) {
   if (periodId === "all") {
     return true;
@@ -166,8 +147,7 @@ export function isInPeriod(observation, periodId) {
   return true;
 }
 
-// "vandaag", "gisteren" of "3 dagen geleden". Kunnen we de datum niet bepalen
-// (of ligt hij in de toekomst), dan tonen we gewoon datum en tijd.
+// vandaag, gisteren of "3 dagen geleden", anders gewoon datum en tijd
 export function getRelativeText(observation) {
   const observedAt = getObservedAt(observation);
   if (observedAt === null) {
@@ -188,8 +168,6 @@ export function getRelativeText(observation) {
   return getWhen(observation);
 }
 
-// De meest recente observatie uit een lijst (van ÉÉN kat), of null als de lijst
-// leeg is.
 export function getLastObservation(catObservations) {
   if (catObservations.length === 0) {
     return null;
@@ -197,7 +175,7 @@ export function getLastObservation(catObservations) {
 
   let lastObservation = catObservations[0];
   for (const observation of catObservations) {
-    // >= zodat bij gelijke datum de laatst opgeslagen observatie wint.
+    // >= zodat bij gelijk moment de laatst opgeslagen wint
     if (getSortValue(observation) >= getSortValue(lastObservation)) {
       lastObservation = observation;
     }
@@ -206,18 +184,13 @@ export function getLastObservation(catObservations) {
   return lastObservation;
 }
 
-
-// Een getal om observaties op volgorde van gebeurtenis te zetten: hoe groter,
-// hoe recenter. Dit gebruiken de tijdlijn, het dierenartsoverzicht en de regel
-// "Laatst: ..." allemaal.
+// hoe groter, hoe recenter. Voor sorteren in de tijdlijn, het overzicht en "Laatst"
 export function getSortValue(observation) {
   const observedAt = getObservedAt(observation);
   return observedAt === null ? 0 : observedAt.getTime();
 }
 
-// De leesbare tekst bij een observatie, zoals "27-10-2026 14:30". Oudere
-// observaties tonen de datum en tijd die erbij stonden, of anders het moment
-// waarop ze zijn opgeslagen.
+// bijv. "27-10-2026 14:30". Oude observaties tonen wat erbij stond, anders createdAt
 export function getWhen(observation) {
   const observedAt = parseObservedAt(observation.observedAt);
   if (observedAt !== null) {
@@ -230,9 +203,7 @@ export function getWhen(observation) {
   return observation.createdAt;
 }
 
-// Alleen de tijd, zoals "14:30", voor op een kaart in de tijdlijn (de datum
-// staat dan in de kop van de dag). Oudere observaties tonen de tijd die erbij
-// stond, of niets als die er niet is.
+// alleen de tijd voor op een tijdlijnkaart (de datum staat al in de kop van de dag)
 export function getTimeText(observation) {
   const observedAt = parseObservedAt(observation.observedAt);
   if (observedAt !== null) {
@@ -242,9 +213,7 @@ export function getTimeText(observation) {
   return observation.time ?? "";
 }
 
-// ---------- Groeperen per dag ----------
-
-// De kop boven een groep: "Vandaag", "Gisteren" of "24 oktober 2026".
+// kop boven een groep: Vandaag, Gisteren of 24 oktober 2026
 function getDayTitle(observation) {
   const observedAt = getObservedAt(observation);
   if (observedAt === null) {
@@ -262,10 +231,8 @@ function getDayTitle(observation) {
   return `${observedAt.getDate()} ${MONTHS[observedAt.getMonth()]} ${observedAt.getFullYear()}`;
 }
 
-// Deelt een al gesorteerde lijst op in groepen per dag, in de vorm die
-// SectionList nodig heeft: [{ title: "Vandaag", data: [...] }, ...]. Doordat de
-// lijst al op moment is gesorteerd, staan observaties van dezelfde dag achter
-// elkaar en hoeven we alleen te kijken of de kop gelijk is aan die van de vorige.
+// groepen per dag voor SectionList: [{ title, data }]. De lijst is al gesorteerd,
+// dus we hoeven alleen te kijken of de kop gelijk is aan die van de vorige
 export function groupByDay(sortedObservations) {
   const sections = [];
 
@@ -283,8 +250,7 @@ export function groupByDay(sortedObservations) {
   return sections;
 }
 
-// De meest recente observaties uit een lijst (van ÉÉN kat), nieuwste eerst. Bij
-// hetzelfde moment staat de laatst opgeslagen bovenaan, net als in de tijdlijn.
+// nieuwste eerst, bij hetzelfde moment staat de laatst opgeslagen bovenaan (zoals in de tijdlijn)
 export function getRecentObservations(catObservations, count) {
   return [...catObservations]
     .reverse()
@@ -292,9 +258,6 @@ export function getRecentObservations(catObservations, count) {
     .slice(0, count);
 }
 
-// ---------- Samenvatting ----------
-
-// Zet de notitie (als die er is) achter de samenvatting.
 function addNote(summary, observation) {
   if (observation.note) {
     return `${summary} · ${observation.note}`;
@@ -302,8 +265,7 @@ function addNote(summary, observation) {
   return summary;
 }
 
-// Korte samenvatting per type. We laten alleen zien wat is ingevuld en trekken
-// geen conclusies.
+// korte samenvatting per type, alleen wat is ingevuld, geen conclusies
 export function getSummary(observation) {
   if (observation.type === "Ontlasting") {
     let summary = observation.consistency;
@@ -343,6 +305,6 @@ export function getSummary(observation) {
     return `${String(observation.weightKg).replace(".", ",")} kg`;
   }
 
-  // Gedrag en Algemene notitie: de tekst zelf is de samenvatting.
+  // Gedrag en Algemene notitie: de tekst zelf
   return observation.note;
 }

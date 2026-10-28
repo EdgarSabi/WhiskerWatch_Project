@@ -47,13 +47,13 @@ function BehaviourObservationScreen({ route, navigation }) {
   const [note, setNote] = useState(observationToEdit?.note ?? "");
 
   async function saveHandler() {
-    // Kat en beschrijving zijn verplicht. Datum en tijd staan altijd ingevuld.
+    // kat en beschrijving verplicht
     if (!selectedCat || note.trim() === "") {
-      Alert.alert("Niet compleet", "Kies in elk geval een kat en beschrijf wat je zag.");
+      Alert.alert("Nog niet alles ingevuld", "Kies een kat en vertel kort wat je hebt opgemerkt.");
       return;
     }
 
-    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    // voorkom twee keer opslaan na twee keer drukken 
     if (isSaving) {
       return;
     }
@@ -90,14 +90,13 @@ function BehaviourObservationScreen({ route, navigation }) {
       await saveObservations([...currentObservations, newObservation]);
     }
 
-    Alert.alert("Observatie opgeslagen", `Gedrag voor ${selectedCat.name} is opgeslagen.`, [
+    Alert.alert("Observatie opgeslagen", `Gedrag van ${selectedCat.name} is opgeslagen.`, [
       { text: "OK", onPress: () => navigation.goBack() },
     ]);
   }
 
   return (
-    // KeyboardAvoidingView schuift de inhoud omhoog als het toetsenbord opent, zodat
-    // het tekstveld en de Opslaan-knop zichtbaar blijven (zoals in CatFormScreen).
+    // anders komt het toetsenbord over het tekstveld en Opslaan heen
     <KeyboardAvoidingView
       style={[styles.screen, { paddingBottom: insets.bottom }]}
       behavior="padding"
@@ -127,10 +126,10 @@ function BehaviourObservationScreen({ route, navigation }) {
 
         <DateTimeFields value={observedAt} onValueChange={setObservedAt} isNew={!observationToEdit} />
 
-        <FormLabel text="Wat zag je?" tag="required" />
+        <FormLabel text="Wat heb je opgemerkt?" tag="required" />
         <TextInput
           style={[styles.input, styles.noteInput]}
-          placeholder="Bijvoorbeeld: verstopt zich meer dan normaal"
+          placeholder="Bijv. verstopt zich meer dan normaal"
           value={note}
           onChangeText={setNote}
           multiline

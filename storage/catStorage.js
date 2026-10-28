@@ -1,8 +1,5 @@
-// Hier staat alles over het lokaal bewaren van katten, op dezelfde manier als
-// bij de observaties (zie observationStorage.js).
-//
-// Elke kat heeft een uniek id. Observaties bewaren dat id (catId), zodat een
-// observatie altijd bij de juiste kat hoort, ook als twee katten dezelfde naam hebben.
+// katten lokaal bewaren, net als de observaties
+// observaties bewaren het catId van hun kat, dus twee katten met dezelfde naam kan gewoon
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LARA_PHOTO } from "../helpers/photoHelpers";
@@ -10,12 +7,10 @@ import { birthInfoToBirthDate } from "../helpers/catHelpers";
 
 const STORAGE_KEY = "cats";
 
-// "Kat onbekend" is geen echte kat in de lijst, maar wel een keuze in het
-// observatieformulier. Observaties daarvoor krijgen dit vaste id.
+// geen echte kat in de lijst, wel een keuze in de formulieren
 export const UNKNOWN_CAT = { id: "unknown", name: "Kat onbekend" };
 
-// Lara is de standaard demo-kat. Ze heeft een vast id en staat bovenaan de lijst.
-// Haar voorbeeldobservaties staan in demoData.js.
+// demo-kat voor de presentatie, haar observaties staan in demoData.js
 export const LARA_CAT = {
   id: "lara-default",
   name: "Lara",
@@ -24,9 +19,8 @@ export const LARA_CAT = {
   birthDate: "2022-04-04",
 };
 
-// Standaardkatten: die gebruiken we zolang er nog niets is opgeslagen.
-// Een kat kan daarnaast deze optionele velden hebben (zie CatFormScreen):
-// photoUri, birthDate (jaar-maand-dag), weightKg en medicalNote.
+// startkatten zolang er nog niets is opgeslagen
+// optionele velden van een kat: photoUri, birthDate (jjjj-mm-dd), weightKg en medicalNote
 const INITIAL_CATS = [
   LARA_CAT,
   { id: "1", name: "Mia", initial: "M" },
@@ -35,9 +29,7 @@ const INITIAL_CATS = [
   { id: "5", name: "Billy", initial: "B" },
 ];
 
-// Katten uit een eerdere versie hebben een vrije tekst als geboortedatum
-// (birthInfo). Is dat een datum die we kunnen lezen, zoals "4 april 2022", dan
-// maken we er een echte birthDate van.
+// oude katten hebben birthInfo als vrije tekst, probeer daar een echte birthDate van te maken
 function migrateCat(cat) {
   if (cat.birthDate || !cat.birthInfo) {
     return cat;

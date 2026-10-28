@@ -1,4 +1,4 @@
-// De titel bovenaan het dashboard: een pootje en "WhiskerWatch" in de serif van de koppen.
+// pootje en titel bovenaan het dashboard
 
 import { View, Text, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";

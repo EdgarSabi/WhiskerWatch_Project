@@ -24,9 +24,7 @@ import { seedDemoData } from "./storage/demoData";
 
 const Stack = createNativeStackNavigator();
 
-// Het korte startscherm met Lara, zolang de app zijn lettertype laadt en de
-// demo-data klaarzet. Het ziet er hetzelfde uit als het splashscherm (zie
-// app.json), dus je merkt geen overgang.
+// ziet er hetzelfde uit als de splash (app.json), dus je merkt geen overgang
 const startStyles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -40,8 +38,7 @@ const startStyles = StyleSheet.create({
   },
 });
 
-// De titel van een formulier hangt af van of je een nieuwe observatie logt of
-// een bestaande bewerkt (dan is route.params.observation gevuld).
+// "loggen" bij een nieuwe observatie, "bewerken" als je een bestaande opent
 function formTitle(typeName) {
   return ({ route }) => ({
     title: route.params?.observation ? `${typeName} bewerken` : `${typeName} loggen`,
@@ -49,9 +46,7 @@ function formTitle(typeName) {
 }
 
 export default function App() {
-  // De demo-data (Lara) moet klaarstaan voordat het eerste scherm zijn katten
-  // laadt, en het lettertype van de koppen moet geladen zijn. Tot die tijd tonen
-  // we het startscherm; dat duurt maar heel even.
+  // demo-data moet er staan voordat het dashboard laadt, anders is het even leeg
   const [isReady, setIsReady] = useState(false);
   const [fontsLoaded, fontError] = useFonts({ Fraunces_700Bold });
 
@@ -68,8 +63,7 @@ export default function App() {
     prepare();
   }, []);
 
-  // Lukt het laden van het lettertype niet (fontError), dan gaan we toch door; de
-  // koppen hebben dan gewoon het standaardlettertype.
+  // lettertype laden mislukt? Dan gewoon doorgaan met het standaardlettertype
   if (!isReady || !(fontsLoaded || fontError)) {
     return (
       <View style={startStyles.screen}>

@@ -9,8 +9,7 @@ export default {
   avatarPink: "#F3D9DE",
   avatarGreen: "#DCEAD7",
   avatarGold: "#F1E0AE",
-  // Donkere tinten die bij de zachte avatarkleuren horen: voor de letter of het
-  // icoon op een roze, groene of gouden achtergrond (roze gebruikt gewoon primary).
+  // donkere tinten voor de letter of het icoon op roze, groen of goud (bij roze gewoon primary)
   inkGreen: "#4F7A48",
   inkGold: "#8A6416",
 };

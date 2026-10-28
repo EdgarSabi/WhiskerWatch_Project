@@ -41,16 +41,16 @@ function WeightObservationScreen({ route, navigation }) {
     const weightKg = Number(weightText.replace(",", "."));
 
     if (!selectedCat) {
-      Alert.alert("Niet compleet", "Kies eerst een kat.");
+      Alert.alert("Nog niet alles ingevuld", "Kies een kat.");
       return;
     }
 
     if (weightText.trim() === "" || isNaN(weightKg) || weightKg <= 0) {
-      Alert.alert("Ongeldig gewicht", "Vul het gewicht in kilo's in, bijvoorbeeld 4,2.");
+      Alert.alert("Vul een geldig gewicht in", "Gebruik cijfers, bijvoorbeeld 4,2.");
       return;
     }
 
-    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    // niet twee keer opslaan als je twee keer tikt
     if (isSaving) {
       return;
     }
@@ -89,7 +89,7 @@ function WeightObservationScreen({ route, navigation }) {
 
     Alert.alert(
       "Observatie opgeslagen",
-      `Gewicht voor ${selectedCat.name}: ${String(weightKg).replace(".", ",")} kg.`,
+      `Gewicht van ${selectedCat.name} (${String(weightKg).replace(".", ",")} kg) is opgeslagen.`,
       [{ text: "OK", onPress: () => navigation.goBack() }]
     );
   }
@@ -123,7 +123,7 @@ function WeightObservationScreen({ route, navigation }) {
         <FormLabel text="Gewicht (kg)" tag="required" />
         <TextInput
           style={styles.input}
-          placeholder="bijv. 4,2"
+          placeholder="Bijv. 4,2"
           value={weightText}
           onChangeText={setWeightText}
           keyboardType="decimal-pad"

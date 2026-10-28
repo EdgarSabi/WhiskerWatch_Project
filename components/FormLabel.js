@@ -1,8 +1,4 @@
-// FormLabel is het kopje boven een veld in een formulier, met (als je dat wilt) een
-// klein labeltje ernaast, zoals in het ontwerp:
-// - tag="required": roze "verplicht"
-// - tag="optional": grijs "optioneel"
-// Zonder tag is het gewoon het kopje.
+// kopje boven een veld, met optioneel een labeltje: tag="required" (verplicht) of tag="optional" (optioneel)
 
 import { View, Text, StyleSheet } from "react-native";
 import Colors from "../constants/colors";

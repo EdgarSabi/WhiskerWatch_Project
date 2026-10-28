@@ -1,9 +1,5 @@
-// TabBar is de balk onderaan met Home, Tijdlijn en Overzicht (het dierenartsoverzicht),
-// zoals in het ontwerp. Het is gewoon een rij knoppen die naar de bestaande
-// schermen gaat. De schermen zelf blijven in dezelfde stapel (stack) als eerst.
-//
-// - active: welke van de drie nu open is ("Home", "Timeline" of "VetOverview")
-// - navigation: de navigation-prop van het scherm waarop de balk staat
+// Home, Tijdlijn en Overzicht (dierenartsoverzicht) onderaan, gewoon knoppen naar de bestaande schermen
+// active = welke van de drie nu open is ("Home", "Timeline" of "VetOverview")
 
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -24,11 +20,8 @@ const TABS = [
 function TabBar({ active, navigation }) {
   const insets = useSafeAreaInsets();
 
-  // Home is het eerste scherm van de stapel, de andere twee komen erbovenop:
-  // - naar Home: terug naar het bestaande Home-scherm (popTo)
-  // - van Home naar een ander scherm: dat scherm erbovenop zetten (navigate)
-  // - tussen Tijdlijn en Overzicht: het huidige scherm vervangen (replace), zodat
-  //   de stapel niet steeds hoger wordt
+  // Home is het eerste scherm in de stapel, de andere twee komen erbovenop
+  // tussen Tijdlijn en Overzicht vervangen we het scherm (replace), anders groeit de stapel
   function tabPressHandler(route) {
     if (route === active) {
       return;

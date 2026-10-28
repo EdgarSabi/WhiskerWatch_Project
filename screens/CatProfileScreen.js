@@ -1,14 +1,3 @@
-// CatProfileScreen toont de gegevens van ÉÉN kat.
-//
-// React Navigation geeft elk scherm twee props automatisch mee:
-// - navigation: om naar een ander scherm te gaan (navigation.navigate, navigation.goBack)
-// - route: bevat route.params, de data die is meegegeven bij het navigeren
-//   hiernaartoe (in dit geval: { cat: ... }, zie HomeScreen.js)
-//
-// Het profiel toont de ingevulde gegevens van de kat (leeg = niet getoond), zijn
-// recente observaties, hoeveel opgeslagen observaties DEZE kat heeft (we tellen
-// alleen die met hetzelfde catId), en knoppen om te bewerken of te verwijderen.
-
 import { useState, useCallback } from "react";
 import { View, Text, Image, Pressable, ScrollView, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -29,24 +18,21 @@ import {
 } from "../helpers/observationHelpers";
 import { formatBirthDate, getAgeText, getLatestWeight } from "../helpers/catHelpers";
 
-// Hoeveel recente observaties we onder het profiel tonen.
+// max drie observaties terugzien in het scherm
 const RECENT_COUNT = 3;
 
 function CatProfileScreen({ route, navigation }) {
   const insets = useSafeAreaInsets();
 
-  // De kat die is meegegeven via navigation.navigate("CatProfile", { cat: item }).
-  // We bewaren hem in state, zodat we hem opnieuw kunnen laden na het bewerken.
+  // in state zodat we de kat opnieuw kunnen laden na bewerken
   const [cat, setCat] = useState(route.params.cat);
   const [observationCount, setObservationCount] = useState(0);
   const [recentObservations, setRecentObservations] = useState([]);
   const [latestWeight, setLatestWeight] = useState(null);
 
-  // Staat de bevestigingsvraag voor het verwijderen open?
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  // Draait elke keer dat dit scherm in beeld komt, dus alles klopt ook nadat je
-  // de kat hebt bewerkt of een observatie hebt toegevoegd en weer terug bent.
+  // elke keer opnieuw laden, anders klopt het profiel niet na bewerken of een nieuwe observatie
   useFocusEffect(
     useCallback(() => {
       async function loadProfile() {
@@ -61,9 +47,6 @@ function CatProfileScreen({ route, navigation }) {
         );
         setObservationCount(catObservations.length);
         setRecentObservations(getRecentObservations(catObservations, RECENT_COUNT));
-
-        // Het gewicht komt uit de nieuwste Gewicht-observatie. Zijn die er niet,
-        // dan het gewicht dat bij de kat zelf is ingevuld.
         setLatestWeight(getLatestWeight(savedCat, catObservations));
       }
 
@@ -71,17 +54,11 @@ function CatProfileScreen({ route, navigation }) {
     }, [route.params.cat])
   );
 
-  // Een recente observatie openen in het bewerkscherm dat daarbij hoort (hetzelfde
-  // als "Bewerken" in de tijdlijn).
   function openObservationHandler(observation) {
     const observationType = OBSERVATION_TYPES.find((type) => type.label === observation.type);
     navigation.navigate(observationType.screen, { observation: observation });
   }
 
-  // "Kat verwijderen" opent eerst de bevestigingsvraag (ConfirmModal onderaan).
-  // Pas bij "Verwijderen" verdwijnt de kat uit de lijst met katten. Zijn
-  // observaties blijven bewaard (met de naam van toen) in de tijdlijn. Het
-  // fotobestand van de kat ruimen we wel op.
   async function confirmDeleteHandler() {
     setIsDeleteModalOpen(false);
 
@@ -90,7 +67,6 @@ function CatProfileScreen({ route, navigation }) {
     await saveCats(remainingCats);
     deletePhotoFile(cat.photoUri);
 
-    // Terug naar het dashboard (het eerste scherm van de stapel).
     navigation.popToTop();
   }
 
@@ -109,9 +85,7 @@ function CatProfileScreen({ route, navigation }) {
 
       <Text style={styles.name}>{cat.name}</Text>
 
-      {/* Kleine pillen voor leeftijd en gewicht. De leeftijd wordt niet opgeslagen,
-          maar steeds uit de geboortedatum berekend. Een pil zonder waarde tonen
-          we niet. */}
+      {/* leeftijd wordt niet opgeslagen maar uit de geboortedatum berekend */}
       <View style={styles.pillRow}>
         {cat.birthDate ? (
           <View style={styles.pill}>
@@ -130,7 +104,6 @@ function CatProfileScreen({ route, navigation }) {
         <Text style={styles.birthText}>Geboren {formatBirthDate(cat.birthDate)}</Text>
       ) : null}
 
-      {/* De medische notitie in een zachte kaart (alleen als die is ingevuld). */}
       {cat.medicalNote ? (
         <View style={styles.noteCard}>
           <MaterialCommunityIcons
@@ -155,7 +128,7 @@ function CatProfileScreen({ route, navigation }) {
       </Pressable>
 
       <View style={styles.secondaryRow}>
-        {/* De tijdlijn opent al gefilterd op deze kat (via het catId). */}
+        {/* tijdlijn opent al gefilterd op deze kat */}
         <Pressable
           style={({ pressed }) => [styles.secondaryButton, pressed && styles.buttonPressed]}
           onPress={() => navigation.navigate("Timeline", { catId: cat.id })}
@@ -171,11 +144,9 @@ function CatProfileScreen({ route, navigation }) {
         </Pressable>
       </View>
 
-      {/* Recente observaties: tik op een observatie om hem te openen. Zonder
-          observaties staat er gewone tekst. */}
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Recente observaties</Text>
-        <Text style={styles.sectionCount}>Opgeslagen: {observationCount}</Text>
+        <Text style={styles.sectionCount}>Totaal: {observationCount}</Text>
       </View>
 
       {recentObservations.length === 0 ? (
@@ -202,7 +173,7 @@ function CatProfileScreen({ route, navigation }) {
         ))
       )}
 
-      {/* Bewust klein en rustig: geen grote rode knop. */}
+      {/* bewust klein, geen grote rode knop */}
       <Pressable
         style={({ pressed }) => [styles.deleteButton, pressed && styles.buttonPressed]}
         onPress={() => setIsDeleteModalOpen(true)}

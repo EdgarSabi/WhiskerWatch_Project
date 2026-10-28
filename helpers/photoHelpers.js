@@ -1,12 +1,8 @@
-// Alles rond foto's op één plek: kiezen of maken, bijsnijden, duurzaam bewaren
-// en opruimen.
+// alles rond foto's: kiezen, maken, bijsnijden, bewaren en opruimen
 //
-// Een kat of observatie heeft een photoUri. Dat is meestal het adres van een
-// foto die WhiskerWatch zelf heeft opgeslagen (een tekst zoals
-// "file:///.../whiskerwatch/photos/photo-123.jpg"). Een standaardkat zoals Lara
-// heeft een foto die in de app zelf zit (assets/lara.jpeg). Die kan niet als
-// adres worden bewaard, dus bewaren we een vaste naam, en vertaalt
-// getPhotoSource die naam naar het bestand in de app.
+// photoUri is meestal het adres van een foto in onze eigen fotomap. Lara (demo) heeft
+// een foto die in de app zelf zit, daarom bewaren we daar een vaste naam voor
+// ("default:lara") en zoekt getPhotoSource het bestand erbij
 
 import { Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -18,7 +14,6 @@ const DEFAULT_PHOTOS = {
   [LARA_PHOTO]: require("../assets/lara.jpeg"),
 };
 
-// Geeft de source terug die <Image source={...}> nodig heeft, voor beide soorten.
 export function getPhotoSource(photoUri) {
   if (DEFAULT_PHOTOS[photoUri]) {
     return DEFAULT_PHOTOS[photoUri];
@@ -27,17 +22,13 @@ export function getPhotoSource(photoUri) {
   return { uri: photoUri };
 }
 
-// ---------- Kiezen of maken ----------
-
-// Na het kiezen of maken van een foto kun je hem bijsnijden (allowsEditing).
-// Voor een kat een vierkante, ronde crop, zodat het gezicht precies in het ronde
-// profielplaatje past. Voor een observatie een gewone rechthoek van 4 bij 3.
+// bijsnijden na kiezen of maken: een kat vierkant en rond (past in het profielplaatje),
+// een observatie 4 bij 3
 export const CAT_PHOTO_OPTIONS = { allowsEditing: true, aspect: [1, 1], shape: "oval" };
 export const OBSERVATION_PHOTO_OPTIONS = { allowsEditing: true, aspect: [4, 3] };
 
-// Open de galerij. Je krijgt het adres van de (bijgesneden) foto terug, of null
-// als je annuleert. Dit adres wijst nog naar een tijdelijke plek: de foto wordt
-// pas duurzaam bewaard als je het formulier opslaat (zie savePhotoChange).
+// geeft het adres van de bijgesneden foto, of null als je annuleert
+// dat adres is nog tijdelijk, pas bij opslaan gaat de foto naar de vaste map (savePhotoChange)
 export async function pickPhotoFromGallery(options) {
   const result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ["images"],
@@ -47,7 +38,7 @@ export async function pickPhotoFromGallery(options) {
   return result.canceled ? null : result.assets[0].uri;
 }
 
-// Open de camera. De toestemming vragen we alleen als we die nog niet hebben.
+// toestemming alleen vragen als we die nog niet hebben
 export async function takePhoto(options) {
   let permission = await ImagePicker.getCameraPermissionsAsync();
   if (!permission.granted) {
@@ -57,7 +48,7 @@ export async function takePhoto(options) {
   if (!permission.granted) {
     Alert.alert(
       "Geen toegang tot de camera",
-      "Sta de camera toe in de instellingen van je telefoon om een foto te maken."
+      "Geef WhiskerWatch toegang tot de camera in de instellingen van je telefoon."
     );
     return null;
   }
@@ -70,21 +61,15 @@ export async function takePhoto(options) {
 
     return result.canceled ? null : result.assets[0].uri;
   } catch {
-    Alert.alert("Camera niet beschikbaar", "De camera kon niet worden geopend.");
+    Alert.alert("Camera niet beschikbaar", "De camera kon niet worden geopend. Probeer het nog een keer.");
     return null;
   }
 }
 
-// ---------- Duurzaam bewaren en opruimen ----------
-
-// De foto's die WhiskerWatch zelf opslaat staan in de documentmap van de app, in
-// de submap whiskerwatch/photos. Die map wordt niet door Android leeggemaakt,
-// anders dan de cache-map waar de picker zijn foto's neerzet.
+// eigen foto's staan in de documentmap (die ruimt Android niet op, de cache wel)
 const PHOTOS_FOLDER_NAME = "/whiskerwatch/photos/";
 
-// Kopieert een foto naar de vaste map, onder een unieke bestandsnaam, en geeft
-// het nieuwe adres terug. Lukt het kopiëren niet, dan geven we het oude adres
-// terug: de foto blijft dan werken zolang de cache hem bewaart.
+// lukt kopiëren niet? Dan het oude adres teruggeven, werkt zolang de cache de foto bewaart
 async function copyToPhotosFolder(sourceUri) {
   try {
     const folder = new Directory(Paths.document, "whiskerwatch", "photos");
@@ -103,10 +88,8 @@ async function copyToPhotosFolder(sourceUri) {
   }
 }
 
-// Verwijdert het bestand van een foto, maar ALLEEN als WhiskerWatch het zelf in
-// zijn eigen fotomap heeft gezet. De standaardfoto's (assets/lara.jpeg), een lege
-// waarde of een adres ergens anders laten we met rust. Faalt het verwijderen,
-// dan loggen we dat alleen: de app crasht er niet door.
+// alleen onze eigen fotobestanden verwijderen, nooit de standaardfoto
+// mislukt het verwijderen? Dan alleen loggen, de app mag niet crashen
 export function deletePhotoFile(photoUri) {
   if (!photoUri || !photoUri.includes(PHOTOS_FOLDER_NAME)) {
     return;
@@ -122,14 +105,9 @@ export function deletePhotoFile(photoUri) {
   }
 }
 
-// Wordt aangeroepen als je een formulier opslaat. newUri is wat er nu in het
-// formulier staat, oldUri wat er eerder was opgeslagen. Dit geeft het adres
-// terug dat in de kat of observatie moet komen:
-// - niets veranderd: hetzelfde adres, er gebeurt niets;
-// - nieuwe foto: die wordt gekopieerd naar de vaste map, en de oude wordt opgeruimd;
-// - foto verwijderd: null, en de oude wordt opgeruimd.
-// Doordat we pas bij het opslaan kopiëren, blijven er geen losse bestanden
-// achter als je het formulier verlaat zonder op te slaan.
+// newUri = wat nu in het formulier staat, oldUri = wat eerder was opgeslagen
+// geeft het adres voor in de kat of observatie. Pas bij opslaan kopiëren, anders
+// blijven er losse bestanden achter als je het formulier annuleert
 export async function savePhotoChange(newUri, oldUri) {
   if (newUri === oldUri) {
     return newUri;

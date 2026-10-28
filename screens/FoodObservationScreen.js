@@ -1,7 +1,3 @@
-// FoodObservationScreen is het formulier voor een eten & drinken-observatie.
-// Zelfde opbouw als PoopObservationScreen: kat kiezen, datum en tijd, een keuze,
-// optionele notitie en opslaan (nieuw of bewerken).
-
 import { useState, useEffect } from "react";
 import {
   View,
@@ -25,7 +21,7 @@ import { getInitialObservedAt } from "../helpers/observationHelpers";
 const INTAKE_OPTIONS = ["Normaal", "Minder", "Meer", "Niet gegeten", "Niet gedronken"];
 
 function FoodObservationScreen({ route, navigation }) {
-  // Alleen gevuld als je vanuit de tijdlijn op "Bewerken" tikt.
+  // alleen gevuld bij Bewerken
   const observationToEdit = route.params?.observation ?? null;
 
   const insets = useSafeAreaInsets();
@@ -52,17 +48,15 @@ function FoodObservationScreen({ route, navigation }) {
   const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
   const [intake, setIntake] = useState(observationToEdit?.intake ?? null);
 
-  // Optioneel veld
   const [note, setNote] = useState(observationToEdit?.note ?? "");
 
   async function saveHandler() {
-    // Kat en keuze zijn verplicht, de rest is optioneel.
     if (!selectedCat || !intake) {
-      Alert.alert("Niet compleet", "Kies in elk geval een kat en hoe het eten en drinken ging.");
+      Alert.alert("Nog niet alles ingevuld", "Kies een kat en hoe het eten en drinken ging.");
       return;
     }
 
-    // Twee keer tikken op Opslaan mag niet twee keer opslaan.
+    // niet twee keer opslaan als je twee keer tikt
     if (isSaving) {
       return;
     }
@@ -103,14 +97,13 @@ function FoodObservationScreen({ route, navigation }) {
 
     Alert.alert(
       "Observatie opgeslagen",
-      `Eten & drinken voor ${selectedCat.name}: ${intake}.`,
+      `Eten & drinken van ${selectedCat.name} is opgeslagen.`,
       [{ text: "OK", onPress: () => navigation.goBack() }]
     );
   }
 
   return (
-    // KeyboardAvoidingView schuift de inhoud omhoog als het toetsenbord opent, zodat
-    // het tekstveld en de Opslaan-knop zichtbaar blijven (zoals in CatFormScreen).
+    // anders komt het toetsenbord over het tekstveld en Opslaan heen
     <KeyboardAvoidingView
       style={[styles.screen, { paddingBottom: insets.bottom }]}
       behavior="padding"
@@ -160,7 +153,7 @@ function FoodObservationScreen({ route, navigation }) {
         <FormLabel text="Notitie" tag="optional" />
         <TextInput
           style={[styles.input, styles.noteInput]}
-          placeholder="Extra opmerking (optioneel)"
+          placeholder="Schrijf een korte notitie"
           value={note}
           onChangeText={setNote}
           multiline

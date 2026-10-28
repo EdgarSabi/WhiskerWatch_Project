@@ -5,16 +5,14 @@ import Fonts from "../constants/fonts";
 import { getPhotoSource } from "../helpers/photoHelpers";
 import LastObservation from "./LastObservation";
 
-// Elke kat krijgt om de beurt een zachte kleur voor de avatar, met een bijpassende
-// donkere kleur voor de beginletter.
+// katten krijgen om de beurt een kleur, met een donkere kleur voor de beginletter
 const avatarStyles = [
   { background: Colors.avatarPink, ink: Colors.primary },
   { background: Colors.avatarGreen, ink: Colors.inkGreen },
   { background: Colors.avatarGold, ink: Colors.inkGold },
 ];
 
-// lastObservation is de laatste observatie van de kat, of null. Met een
-// observatie tonen we de aantikbare regel (LastObservation), anders gewone tekst.
+// lastObservation is null of de laatste observatie (aantikbaar), anders gewone tekst
 function CatCard({
   name,
   lastObservation,
@@ -33,7 +31,6 @@ function CatCard({
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
       <View style={[styles.avatar, { backgroundColor: avatarStyle.background }]}>
-        {/* Heeft de kat een foto? Dan tonen we die, anders de beginletter. */}
         {photoUri ? (
           <Image source={getPhotoSource(photoUri)} style={styles.avatarImage} />
         ) : (
@@ -68,7 +65,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 12,
     borderRadius: 20,
-    // Een heel zachte schaduw, zoals in het ontwerp.
     shadowColor: Colors.text,
     shadowOpacity: 0.06,
     shadowRadius: 8,
