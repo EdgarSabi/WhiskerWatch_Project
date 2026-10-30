@@ -1,5 +1,4 @@
 // datum en tijd kiezen zonder typen, de "Andere ..." knoppen openen de Android-kiezer
-// value is één Date, we geven een aangepaste Date terug via onValueChange
 
 import { useState } from "react";
 import { View, Text, Pressable, StyleSheet, Alert } from "react-native";

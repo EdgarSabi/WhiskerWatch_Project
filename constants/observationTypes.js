@@ -1,8 +1,5 @@
 import Colors from "./colors";
 
-// alle observatietypen op één plek
-// label wordt ook als type bij de observatie bewaard, dus niet zomaar aanpassen
-// screen = naam van het formulier in App.js, icon/tint/ink = icoon en kleuren
 export const OBSERVATION_TYPES = [
   {
     id: "1",

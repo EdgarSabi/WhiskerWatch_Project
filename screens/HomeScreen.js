@@ -32,11 +32,11 @@ function HomeScreen({ navigation }) {
     navigation.navigate("CatProfile", { cat: cat });
   }
 
-  // zelfde als Bewerken in de tijdlijn
-  function lastObservationPressHandler(observation) {
-    const observationType = OBSERVATION_TYPES.find((type) => type.label === observation.type);
-    navigation.navigate(observationType.screen, { observation: observation });
-  }
+  // // zelfde als Bewerken in de tijdlijn
+  // function lastObservationPressHandler(observation) {
+  //   const observationType = OBSERVATION_TYPES.find((type) => type.label === observation.type);
+  //   navigation.navigate(observationType.screen, { observation: observation });
+  // }
 
   return (
     <View style={styles.screen}>
@@ -55,7 +55,7 @@ function HomeScreen({ navigation }) {
               initial={item.initial}
               photoUri={item.photoUri}
               lastObservation={lastObservation}
-              onLastObservationPress={() => lastObservationPressHandler(lastObservation)}
+              // onLastObservationPress={() => lastObservationPressHandler(lastObservation)}
               index={index}
               onPress={() => catPressHandler(item)}
             />
