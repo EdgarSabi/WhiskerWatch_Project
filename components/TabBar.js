@@ -1,6 +1,3 @@
-// Home, Tijdlijn en Overzicht (dierenartsoverzicht) onderaan, gewoon knoppen naar de bestaande schermen
-// active = welke van de drie nu open is ("Home", "Timeline" of "VetOverview")
-
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -8,7 +5,7 @@ import Colors from "../constants/colors";
 
 const TABS = [
   { route: "Home", label: "Home", icon: "home-outline", activeIcon: "home" },
-  { route: "Timeline", label: "Tijdlijn", icon: "format-list-bulleted", activeIcon: "format-list-bulleted" },
+  { route: "Timeline", label: "Alle Observaties", icon: "format-list-bulleted", activeIcon: "format-list-bulleted" },
   {
     route: "VetOverview",
     label: "Overzicht",

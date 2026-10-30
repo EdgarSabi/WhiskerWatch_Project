@@ -144,7 +144,7 @@ export default function App() {
             component={NoteObservationScreen}
             options={formTitle("Algemene notitie")}
           />
-          <Stack.Screen name="Timeline" component={TimelineScreen} options={{ title: "Tijdlijn" }} />
+          <Stack.Screen name="Timeline" component={TimelineScreen} options={{ title: "Alle Observaties" }} />
           <Stack.Screen
             name="VetOverview"
             component={VetOverviewScreen}
