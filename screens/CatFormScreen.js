@@ -218,7 +218,7 @@ function CatFormScreen({ route, navigation }) {
         />
       </ScrollView>
 
-      <View style={{ paddingBottom: insets.bottom }}>
+      <View style={{ paddingBottom: insets.bottom + 8 }}>
         <Pressable
           style={({ pressed }) => [styles.saveButton, pressed && styles.saveButtonPressed]}
           onPress={saveHandler}

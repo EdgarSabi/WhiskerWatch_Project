@@ -95,7 +95,7 @@ function WeightObservationScreen({ route, navigation }) {
   }
 
   return (
-    <View style={[styles.screen, { paddingBottom: insets.bottom }]}>
+    <View style={[styles.screen, { paddingBottom: insets.bottom + 8 }]}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <FormLabel text="Kat" tag="required" />
         <View style={styles.pillRow}>

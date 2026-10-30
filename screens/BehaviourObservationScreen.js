@@ -98,7 +98,7 @@ function BehaviourObservationScreen({ route, navigation }) {
   return (
     // anders komt het toetsenbord over het tekstveld en Opslaan heen
     <KeyboardAvoidingView
-      style={[styles.screen, { paddingBottom: insets.bottom }]}
+      style={styles.screen}
       behavior="padding"
       keyboardVerticalOffset={headerHeight}
     >
@@ -136,12 +136,15 @@ function BehaviourObservationScreen({ route, navigation }) {
         />
       </ScrollView>
 
-      <Pressable
-        style={({ pressed }) => [styles.saveButton, pressed && styles.saveButtonPressed]}
-        onPress={saveHandler}
-      >
-        <Text style={styles.saveButtonText}>Opslaan</Text>
-      </Pressable>
+      {/* padding hier en niet op de KeyboardAvoidingView, die overschrijft zijn eigen paddingBottom */}
+      <View style={{ paddingBottom: insets.bottom + 8 }}>
+        <Pressable
+          style={({ pressed }) => [styles.saveButton, pressed && styles.saveButtonPressed]}
+          onPress={saveHandler}
+        >
+          <Text style={styles.saveButtonText}>Opslaan</Text>
+        </Pressable>
+      </View>
     </KeyboardAvoidingView>
   );
 }
