@@ -1,5 +1,3 @@
-// naam van katten is verplicht. rest niet 
-
 import { useState } from "react";
 import {
   View,
@@ -60,6 +58,14 @@ function CatFormScreen({ route, navigation }) {
     if (newPhotoUri) {
       setPhotoUri(newPhotoUri);
     }
+  }
+
+  function photoCirclePressHandler() {
+    Alert.alert("Foto", "Hoe wil je een foto toevoegen?", [
+      { text: "Annuleren", style: "cancel" },
+      { text: "Kies een foto", onPress: pickPhotoHandler },
+      { text: "Foto maken", onPress: takePhotoHandler },
+    ]);
   }
 
   // geboortedatum kan niet in de toekomst 
@@ -145,26 +151,26 @@ function CatFormScreen({ route, navigation }) {
     >
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <View style={styles.photoArea}>
-          {photoUri ? (
-            <Image source={getPhotoSource(photoUri)} style={styles.photoCircle} />
-          ) : (
-            <View style={[styles.photoCircle, styles.photoEmpty]}>
-              <MaterialCommunityIcons name="camera-outline" size={32} color={Colors.textLight} />
-            </View>
-          )}
+          {/* testers tikten op de cirkel, dus die opent ook de fotokeuze */}
+          <Pressable
+            onPress={photoCirclePressHandler}
+            accessibilityLabel="Foto toevoegen"
+            style={({ pressed }) => pressed && styles.photoCirclePressed}
+          >
+            {photoUri ? (
+              <Image source={getPhotoSource(photoUri)} style={styles.photoCircle} />
+            ) : (
+              <View style={[styles.photoCircle, styles.photoEmpty]}>
+                <MaterialCommunityIcons name="camera-outline" size={32} color={Colors.textLight} />
+              </View>
+            )}
+          </Pressable>
           <Text style={styles.photoCaption}>
-            Foto toevoegen <Text style={styles.photoCaptionLight}>(optioneel)</Text>
+            {photoUri ? "Foto wijzigen" : "Foto toevoegen"}{" "}
+            <Text style={styles.photoCaptionLight}>(optioneel)</Text>
           </Text>
 
           <View style={styles.photoButtons}>
-            <Pressable style={styles.pill} onPress={takePhotoHandler}>
-              <MaterialCommunityIcons name="camera-outline" size={16} color={Colors.text} />
-              <Text style={styles.pillText}>Foto maken</Text>
-            </Pressable>
-            <Pressable style={styles.pill} onPress={pickPhotoHandler}>
-              <MaterialCommunityIcons name="image-outline" size={16} color={Colors.text} />
-              <Text style={styles.pillText}>Kies een foto</Text>
-            </Pressable>
             {photoUri ? (
               <Pressable style={styles.pill} onPress={() => setPhotoUri(null)}>
                 <MaterialCommunityIcons name="trash-can-outline" size={16} color={Colors.text} />
@@ -191,7 +197,7 @@ function CatFormScreen({ route, navigation }) {
           </Pressable>
           {birthDate ? (
             <Pressable style={styles.pill} onPress={() => setBirthDate(null)}>
-              <Text style={styles.pillText}>Wissen</Text>
+              <Text style={styles.pillText}>Verwijderen</Text>
             </Pressable>
           ) : null}
         </View>
@@ -250,6 +256,9 @@ const styles = StyleSheet.create({
     height: 104,
     borderRadius: 52,
     backgroundColor: Colors.border,
+  },
+  photoCirclePressed: {
+    opacity: 0.7,
   },
   photoEmpty: {
     alignItems: "center",

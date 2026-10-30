@@ -1,7 +1,7 @@
 Dingen die uit de tests kwamen die echt moeten worden verbeterd: 
 
 Kattenprofielen makkelijker openen: ze tikten regelmatig per ongeluk op de laatste observatie DONE
-Opslaanknop goed bereikbaar maken: de Android-navigatiebalk zat in de weg.
+Opslaanknop goed bereikbaar maken: de Android-navigatiebalk zat in de weg. (als het goed is) DONE nog testen op mobiel 
 Duidelijker aangeven welke velden optioneel zijn: beide testers vulden die in alsof ze verplicht waren.
 De ronde fotoplek aanklikbaar maken: beide testers verwachtten daar een foto te kunnen toevoegen.
 Terugzoeken duidelijker maken: beide testers hadden hierbij hulp nodig.

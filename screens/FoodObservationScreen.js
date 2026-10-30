@@ -13,8 +13,9 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import FormLabel from "../components/FormLabel";
+import CatPicker from "../components/CatPicker";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
-import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
+import { loadCats } from "../storage/catStorage";
 import DateTimeFields from "../components/DateTimeFields";
 import { getInitialObservedAt } from "../helpers/observationHelpers";
 
@@ -110,26 +111,7 @@ function FoodObservationScreen({ route, navigation }) {
       keyboardVerticalOffset={headerHeight}
     >
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <FormLabel text="Kat" tag="required" />
-        <View style={styles.pillRow}>
-          {[...cats, UNKNOWN_CAT].map((option) => (
-            <Pressable
-              key={option.id}
-              onPress={() => setSelectedCat(option)}
-              style={[
-                styles.pill,
-                option.id === UNKNOWN_CAT.id && styles.pillDashed,
-                selectedCat?.id === option.id && styles.pillSelected,
-              ]}
-            >
-              <Text
-                style={[styles.pillText, selectedCat?.id === option.id && styles.pillTextSelected]}
-              >
-                {option.name}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
+        <CatPicker cats={cats} selectedCat={selectedCat} onSelect={setSelectedCat} />
 
         <DateTimeFields value={observedAt} onValueChange={setObservedAt} isNew={!observationToEdit} />
 
@@ -208,9 +190,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
     borderWidth: 1,
     borderColor: Colors.border,
-  },
-  pillDashed: {
-    borderStyle: "dashed",
   },
   pillSelected: {
     backgroundColor: Colors.primary,
