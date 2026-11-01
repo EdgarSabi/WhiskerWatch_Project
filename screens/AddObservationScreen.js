@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import { OBSERVATION_TYPES } from "../constants/observationTypes";
 
-//eerste zes in twee kolommen, rest als brede kaart 
+// eerste zes in twee kolommen, rest als brede kaart
 const GRID_TYPES = OBSERVATION_TYPES.slice(0, -1);
 const NOTE_TYPE = OBSERVATION_TYPES[OBSERVATION_TYPES.length - 1];
 

@@ -50,7 +50,6 @@ function WeightObservationScreen({ route, navigation }) {
       return;
     }
 
-    // niet twee keer opslaan als je twee keer tikt
     if (isSaving) {
       return;
     }

@@ -1,5 +1,3 @@
-// hulpfuncties voor katten: geboortedatum, leeftijd en gewicht
-
 import { getSortValue, MONTHS } from "./observationHelpers";
 
 // geboortedatum bewaren we als tekst "2022-04-04", dan kan een tijdzone er niets aan veranderen

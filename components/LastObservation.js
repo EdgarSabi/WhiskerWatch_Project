@@ -1,4 +1,4 @@
-// "Laatst: Eten & drinken · 2u geleden" onder de kattennaam, het type in bordeaux zodat je ziet dat het aantikbaar is
+// "Laatst: Eten & drinken · gisteren" onder de kattennaam, het type is bordeaux omdat het aantikbaar is
 // krijgt alleen een echte observatie, zonder observaties toont het scherm zelf gewone tekst
 
 import { Text, Pressable, StyleSheet } from "react-native";

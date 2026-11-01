@@ -1,4 +1,4 @@
-// naam van katten is verplicht. rest niet 
+// naam van katten is verplicht. rest niet
 
 import { useState } from "react";
 import {
@@ -47,7 +47,7 @@ function CatFormScreen({ route, navigation }) {
   );
   const [medicalNote, setMedicalNote] = useState(catToEdit?.medicalNote ?? "");
 
-  //foto kan worden gemaakt of gekozen 
+  // foto kan worden gemaakt of gekozen
   async function takePhotoHandler() {
     const newPhotoUri = await takePhoto(CAT_PHOTO_OPTIONS);
     if (newPhotoUri) {
@@ -62,7 +62,7 @@ function CatFormScreen({ route, navigation }) {
     }
   }
 
-  // geboortedatum kan niet in de toekomst 
+  // geboortedatum kan niet in de toekomst
   function pickBirthDateHandler() {
     DateTimePickerAndroid.open({
       value: parseBirthDate(birthDate) ?? new Date(),
@@ -92,13 +92,12 @@ function CatFormScreen({ route, navigation }) {
       }
     }
 
-    // niet twee keer opslaan als je twee keer tikt
+    // dubbel tikken op Opslaan = dubbel opslaan, vandaar deze check
     if (isSaving) {
       return;
     }
     setIsSaving(true);
 
-    // pas hier gaat de foto naar de vaste map, en een oude foto wordt opgeruimd
     const savedPhotoUri = await savePhotoChange(photoUri, catToEdit?.photoUri ?? null);
 
     const catData = {

@@ -1,5 +1,3 @@
-// icoon van het type op een zachte kleur, met een foto toont het die foto
-
 import { View, Image, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/colors";

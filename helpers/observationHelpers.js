@@ -1,6 +1,3 @@
-// hulpfuncties voor observaties (geen state, gewoon functies)
-
-// de id wordt gebruikt in isInPeriod
 export const PERIOD_OPTIONS = [
   { id: "all", label: "Alles" },
   { id: "today", label: "Vandaag" },
@@ -305,6 +302,5 @@ export function getSummary(observation) {
     return `${String(observation.weightKg).replace(".", ",")} kg`;
   }
 
-  // Gedrag en Algemene notitie: de tekst zelf
   return observation.note;
 }

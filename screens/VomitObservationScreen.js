@@ -78,13 +78,11 @@ function VomitObservationScreen({ route, navigation }) {
       return;
     }
 
-    // niet twee keer opslaan als je twee keer tikt
     if (isSaving) {
       return;
     }
     setIsSaving(true);
 
-    // pas hier gaat de foto naar de vaste map, en een oude foto wordt opgeruimd
     const savedPhotoUri = await savePhotoChange(photoUri, observationToEdit?.photoUri ?? null);
 
     const currentObservations = await loadObservations();
@@ -128,7 +126,6 @@ function VomitObservationScreen({ route, navigation }) {
   }
 
   return (
-    // anders komt het toetsenbord over het tekstveld en Opslaan heen
     <KeyboardAvoidingView
       style={[styles.screen, { paddingBottom: insets.bottom }]}
       behavior="padding"

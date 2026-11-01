@@ -24,7 +24,6 @@ const RECENT_COUNT = 3;
 function CatProfileScreen({ route, navigation }) {
   const insets = useSafeAreaInsets();
 
-  // in state zodat we de kat opnieuw kunnen laden na bewerken
   const [cat, setCat] = useState(route.params.cat);
   const [observationCount, setObservationCount] = useState(0);
   const [recentObservations, setRecentObservations] = useState([]);

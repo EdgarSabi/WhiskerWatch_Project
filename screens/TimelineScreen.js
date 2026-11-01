@@ -26,7 +26,7 @@ function TimelineScreen({ route, navigation }) {
   const [cats, setCats] = useState([]);
 
   // "all" / "Alle types" = filter staat uit. Vanuit een kattenprofiel staat de kat al ingesteld
-  const [selectedCat, setSelectedCat] = useState(route.params?.catId ?? "all"); // het id van een kat, of "all"
+  const [selectedCat, setSelectedCat] = useState(route.params?.catId ?? "all");
   const [selectedType, setSelectedType] = useState(ALL_TYPES);
   const [selectedPeriod, setSelectedPeriod] = useState("all");
 

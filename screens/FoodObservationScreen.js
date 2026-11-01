@@ -21,7 +21,6 @@ import { getInitialObservedAt } from "../helpers/observationHelpers";
 const INTAKE_OPTIONS = ["Normaal", "Minder", "Meer", "Niet gegeten", "Niet gedronken"];
 
 function FoodObservationScreen({ route, navigation }) {
-  // alleen gevuld bij Bewerken
   const observationToEdit = route.params?.observation ?? null;
 
   const insets = useSafeAreaInsets();
@@ -56,7 +55,6 @@ function FoodObservationScreen({ route, navigation }) {
       return;
     }
 
-    // niet twee keer opslaan als je twee keer tikt
     if (isSaving) {
       return;
     }
@@ -103,7 +101,6 @@ function FoodObservationScreen({ route, navigation }) {
   }
 
   return (
-    // anders komt het toetsenbord over het tekstveld en Opslaan heen
     <KeyboardAvoidingView
       style={[styles.screen, { paddingBottom: insets.bottom }]}
       behavior="padding"

@@ -21,7 +21,6 @@ import DateTimeFields from "../components/DateTimeFields";
 import { getInitialObservedAt } from "../helpers/observationHelpers";
 
 function MedicationObservationScreen({ route, navigation }) {
-  // alleen gevuld bij Bewerken
   const observationToEdit = route.params?.observation ?? null;
 
   const insets = useSafeAreaInsets();
@@ -57,7 +56,6 @@ function MedicationObservationScreen({ route, navigation }) {
       return;
     }
 
-    // niet twee keer opslaan als je twee keer tikt
     if (isSaving) {
       return;
     }
@@ -106,7 +104,6 @@ function MedicationObservationScreen({ route, navigation }) {
   }
 
   return (
-    // anders komt het toetsenbord over het tekstveld en Opslaan heen
     <KeyboardAvoidingView
       style={[styles.screen, { paddingBottom: insets.bottom }]}
       behavior="padding"

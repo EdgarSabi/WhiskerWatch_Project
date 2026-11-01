@@ -1,4 +1,3 @@
-//wellicht hier nog wat opties toevoegen voor soorten gedrag dat vreemd is? 
 import { useState, useEffect } from "react";
 import {
   View,
@@ -53,7 +52,7 @@ function BehaviourObservationScreen({ route, navigation }) {
       return;
     }
 
-    // voorkom twee keer opslaan na twee keer drukken 
+    // voorkom twee keer opslaan na twee keer drukken
     if (isSaving) {
       return;
     }
@@ -96,7 +95,6 @@ function BehaviourObservationScreen({ route, navigation }) {
   }
 
   return (
-    // anders komt het toetsenbord over het tekstveld en Opslaan heen
     <KeyboardAvoidingView
       style={[styles.screen, { paddingBottom: insets.bottom }]}
       behavior="padding"

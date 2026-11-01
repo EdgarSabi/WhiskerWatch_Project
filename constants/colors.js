@@ -1,4 +1,4 @@
-//Even alle kleuren in een bestand zodat ik niet hoef te strugglen hiermee
+// Even alle kleuren in een bestand zodat ik niet hoef te strugglen hiermee
 export default {
   background: "#FBF6F1",
   card: "#FFFFFF",
