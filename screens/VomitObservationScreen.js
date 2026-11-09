@@ -5,23 +5,17 @@ import {
   TextInput,
   Pressable,
   ScrollView,
-  Image,
   KeyboardAvoidingView,
   StyleSheet,
   Alert,
 } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import {
-  OBSERVATION_PHOTO_OPTIONS,
-  pickPhotoFromGallery,
-  takePhoto,
-  savePhotoChange,
-} from "../helpers/photoHelpers";
+import { OBSERVATION_PHOTO_OPTIONS, savePhotoChange } from "../helpers/photoHelpers";
 import Colors from "../constants/colors";
 import FormLabel from "../components/FormLabel";
 import CatPicker from "../components/CatPicker";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import PhotoField from "../components/PhotoField";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats } from "../storage/catStorage";
 import DateTimeFields from "../components/DateTimeFields";
@@ -58,20 +52,6 @@ function VomitObservationScreen({ route, navigation }) {
 
   const [note, setNote] = useState(observationToEdit?.note ?? "");
   const [photoUri, setPhotoUri] = useState(observationToEdit?.photoUri ?? null);
-
-  async function takePhotoHandler() {
-    const newPhotoUri = await takePhoto(OBSERVATION_PHOTO_OPTIONS);
-    if (newPhotoUri) {
-      setPhotoUri(newPhotoUri);
-    }
-  }
-
-  async function pickPhotoHandler() {
-    const newPhotoUri = await pickPhotoFromGallery(OBSERVATION_PHOTO_OPTIONS);
-    if (newPhotoUri) {
-      setPhotoUri(newPhotoUri);
-    }
-  }
 
   async function saveHandler() {
     if (!selectedCat || !vomitKind) {
@@ -167,24 +147,11 @@ function VomitObservationScreen({ route, navigation }) {
           multiline
         />
 
-        <FormLabel text="Foto" tag="optional" />
-        {photoUri ? <Image source={{ uri: photoUri }} style={styles.photoPreview} /> : null}
-        <View style={styles.pillRow}>
-          <Pressable style={styles.pill} onPress={takePhotoHandler}>
-            <MaterialCommunityIcons name="camera-outline" size={16} color={Colors.text} />
-            <Text style={styles.pillText}>Foto maken</Text>
-          </Pressable>
-          <Pressable style={styles.pill} onPress={pickPhotoHandler}>
-            <MaterialCommunityIcons name="image-outline" size={16} color={Colors.text} />
-            <Text style={styles.pillText}>Kies een foto</Text>
-          </Pressable>
-          {photoUri ? (
-            <Pressable style={styles.pill} onPress={() => setPhotoUri(null)}>
-              <MaterialCommunityIcons name="trash-can-outline" size={16} color={Colors.text} />
-              <Text style={styles.pillText}>Foto verwijderen</Text>
-            </Pressable>
-          ) : null}
-        </View>
+        <PhotoField
+          photoUri={photoUri}
+          onChange={setPhotoUri}
+          photoOptions={OBSERVATION_PHOTO_OPTIONS}
+        />
       </ScrollView>
 
       {/* padding hier en niet op de KeyboardAvoidingView, die overschrijft zijn eigen paddingBottom */}
@@ -269,13 +236,6 @@ const styles = StyleSheet.create({
   noteInput: {
     minHeight: 80,
     textAlignVertical: "top",
-  },
-  photoPreview: {
-    width: "100%",
-    height: 220,
-    borderRadius: 10,
-    marginBottom: 12,
-    backgroundColor: Colors.border,
   },
   saveButton: {
     backgroundColor: Colors.primary,
