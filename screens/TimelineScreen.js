@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { View, Text, SectionList, Pressable, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
@@ -6,6 +6,7 @@ import Colors from "../constants/colors";
 import ConfirmModal from "../components/ConfirmModal";
 import TabBar from "../components/TabBar";
 import TypeBadge from "../components/TypeBadge";
+import HintBanner from "../components/HintBanner";
 import { deletePhotoFile } from "../helpers/photoHelpers";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats, UNKNOWN_CAT } from "../storage/catStorage";
@@ -18,8 +19,10 @@ import {
   getSortValue,
   groupByDay,
 } from "../helpers/observationHelpers";
+import { isHintDismissed, dismissHint } from "../storage/hintStorage";
 
 const ALL_TYPES = "Alle types";
+const EDIT_DELETE_HINT_ID = "timeline-edit-delete-tip";
 
 function TimelineScreen({ route, navigation }) {
   const [observations, setObservations] = useState([]);
@@ -33,6 +36,23 @@ function TimelineScreen({ route, navigation }) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const [observationToDelete, setObservationToDelete] = useState(null);
+
+  const [showEditDeleteHint, setShowEditDeleteHint] = useState(false);
+
+  // maar één keer tonen: na de eerste keer wegklikken onthouden we dat
+  useEffect(() => {
+    async function checkHint() {
+      const dismissed = await isHintDismissed(EDIT_DELETE_HINT_ID);
+      setShowEditDeleteHint(!dismissed);
+    }
+
+    checkHint();
+  }, []);
+
+  function dismissEditDeleteHintHandler() {
+    setShowEditDeleteHint(false);
+    dismissHint(EDIT_DELETE_HINT_ID);
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -126,6 +146,13 @@ function TimelineScreen({ route, navigation }) {
 
   const filterHeader = (
     <View style={styles.filterArea}>
+      {showEditDeleteHint && (
+        <HintBanner
+          text="Tik op het potlood om een observatie te bewerken, of op het prullenbakje om 'm te verwijderen. Gebruik Filters om snel iets terug te vinden."
+          onDismiss={dismissEditDeleteHintHandler}
+        />
+      )}
+
       <View style={styles.filterBar}>
         <Pressable
           style={[styles.filterButton, activeFilterCount > 0 && styles.filterButtonActive]}

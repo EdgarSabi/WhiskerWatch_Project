@@ -1,18 +1,38 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import CatCard from "../components/CatCard";
 import TabBar from "../components/TabBar";
+import HintBanner from "../components/HintBanner";
 import Colors from "../constants/colors";
 import { loadCats } from "../storage/catStorage";
 import { loadObservations } from "../storage/observationStorage";
 import { OBSERVATION_TYPES } from "../constants/observationTypes";
 import { getLastObservation } from "../helpers/observationHelpers";
+import { isHintDismissed, dismissHint } from "../storage/hintStorage";
+
+const SEARCH_HINT_ID = "home-search-tip";
 
 function HomeScreen({ navigation }) {
   const [cats, setCats] = useState([]);
   const [observations, setObservations] = useState([]);
+  const [showSearchHint, setShowSearchHint] = useState(false);
+
+  // maar één keer tonen: na de eerste keer wegklikken onthouden we dat
+  useEffect(() => {
+    async function checkHint() {
+      const dismissed = await isHintDismissed(SEARCH_HINT_ID);
+      setShowSearchHint(!dismissed);
+    }
+
+    checkHint();
+  }, []);
+
+  function dismissSearchHintHandler() {
+    setShowSearchHint(false);
+    dismissHint(SEARCH_HINT_ID);
+  }
 
   // elke keer opnieuw laden als je terugkomt, anders klopt de lijst niet na toevoegen of bewerken
   useFocusEffect(
@@ -61,6 +81,14 @@ function HomeScreen({ navigation }) {
             />
           );
         }}
+        ListHeaderComponent={
+          showSearchHint ? (
+            <HintBanner
+              text="Tip: tik onderaan op 'Alle Observaties' om iets terug te zoeken, te bewerken of te verwijderen."
+              onDismiss={dismissSearchHintHandler}
+            />
+          ) : null
+        }
         ListEmptyComponent={
           <Text style={styles.emptyText}>Je hebt nog geen katten toegevoegd.</Text>
         }
