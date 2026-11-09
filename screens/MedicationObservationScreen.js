@@ -127,6 +127,7 @@ function MedicationObservationScreen({ route, navigation }) {
         />
 
         <Text style={styles.sectionTitle}>Optionele details</Text>
+        <Text style={styles.sectionHint}>Vul alleen in wat je weet — de rest mag je overslaan.</Text>
 
         <FormLabel text="Dosering" tag="optional" />
         <TextInput
@@ -179,6 +180,11 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.border,
     paddingTop: 16,
     marginTop: 4,
+    marginBottom: 4,
+  },
+  sectionHint: {
+    fontSize: 13,
+    color: Colors.textLight,
     marginBottom: 14,
   },
   input: {

@@ -43,18 +43,23 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 8,
   },
+  // verplicht: een volle, opvallende badge
   tagRequired: {
-    backgroundColor: Colors.avatarPink,
+    backgroundColor: Colors.primary,
   },
+  // optioneel: bewust rustig en met een rand in plaats van een vulling,
+  // zodat het contrast met "verplicht" meteen duidelijk is
   tagOptional: {
-    backgroundColor: Colors.border,
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   tagText: {
     fontSize: 11,
     fontWeight: "700",
   },
   tagRequiredText: {
-    color: Colors.primary,
+    color: "#FFFFFF",
   },
   tagOptionalText: {
     color: Colors.textLight,

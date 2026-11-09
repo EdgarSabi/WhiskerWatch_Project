@@ -21,6 +21,7 @@ import {
 import Colors from "../constants/colors";
 import FormLabel from "../components/FormLabel";
 import CatPicker from "../components/CatPicker";
+import YesNoSwitch from "../components/YesNoSwitch";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats } from "../storage/catStorage";
@@ -58,9 +59,10 @@ function PoopObservationScreen({ route, navigation }) {
   const [consistency, setConsistency] = useState(observationToEdit?.consistency ?? null);
 
   const [color, setColor] = useState(observationToEdit?.color ?? "");
-  const [mucusSeen, setMucusSeen] = useState(observationToEdit?.mucusSeen ?? null); // "Nee", "Ja" of nog niet gekozen
-  const [bloodSeen, setBloodSeen] = useState(observationToEdit?.bloodSeen ?? null);
-  const [outsideLitterBox, setOutsideLitterBox] = useState(observationToEdit?.outsideLitterBox ?? null);
+  // schuifjes staan standaard uit ("Nee"), dan hoef je voor het gewone geval niets aan te raken
+  const [mucusSeen, setMucusSeen] = useState(observationToEdit?.mucusSeen ?? "Nee");
+  const [bloodSeen, setBloodSeen] = useState(observationToEdit?.bloodSeen ?? "Nee");
+  const [outsideLitterBox, setOutsideLitterBox] = useState(observationToEdit?.outsideLitterBox ?? "Nee");
   const [note, setNote] = useState(observationToEdit?.note ?? "");
 
   const [photoUri, setPhotoUri] = useState(observationToEdit?.photoUri ?? null);
@@ -174,6 +176,7 @@ function PoopObservationScreen({ route, navigation }) {
         </View>
 
         <Text style={styles.sectionTitle}>Optionele details</Text>
+        <Text style={styles.sectionHint}>Vul alleen in wat je weet — de rest mag je overslaan.</Text>
 
         <FormLabel text="Kleur" tag="optional" />
         <TextInput
@@ -183,57 +186,14 @@ function PoopObservationScreen({ route, navigation }) {
           onChangeText={setColor}
         />
 
-        <View style={styles.yesNoRow}>
-          <Text style={styles.label}>Slijm gezien</Text>
-          <View style={styles.pillRow}>
-            {["Nee", "Ja"].map((option) => (
-              <Pressable
-                key={option}
-                onPress={() => setMucusSeen(option)}
-                style={[styles.pill, mucusSeen === option && styles.pillSelected]}
-              >
-                <Text style={[styles.pillText, mucusSeen === option && styles.pillTextSelected]}>
-                  {option}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
-
-        <View style={styles.yesNoRow}>
-          <Text style={styles.label}>Bloed gezien</Text>
-          <View style={styles.pillRow}>
-            {["Nee", "Ja"].map((option) => (
-              <Pressable
-                key={option}
-                onPress={() => setBloodSeen(option)}
-                style={[styles.pill, bloodSeen === option && styles.pillSelected]}
-              >
-                <Text style={[styles.pillText, bloodSeen === option && styles.pillTextSelected]}>
-                  {option}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
-
-        <View style={styles.yesNoRow}>
-          <Text style={styles.label}>Buiten kattenbak</Text>
-          <View style={styles.pillRow}>
-            {["Nee", "Ja"].map((option) => (
-              <Pressable
-                key={option}
-                onPress={() => setOutsideLitterBox(option)}
-                style={[styles.pill, outsideLitterBox === option && styles.pillSelected]}
-              >
-                <Text
-                  style={[styles.pillText, outsideLitterBox === option && styles.pillTextSelected]}
-                >
-                  {option}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
+        <View style={styles.switchGroup}>
+          <YesNoSwitch label="Slijm gezien" value={mucusSeen} onValueChange={setMucusSeen} />
+          <YesNoSwitch label="Bloed gezien" value={bloodSeen} onValueChange={setBloodSeen} />
+          <YesNoSwitch
+            label="Buiten kattenbak"
+            value={outsideLitterBox}
+            onValueChange={setOutsideLitterBox}
+          />
         </View>
 
         <FormLabel text="Notitie" tag="optional" />
@@ -289,13 +249,6 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 24,
   },
-  label: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: Colors.textLight,
-    marginBottom: 8,
-    textTransform: "uppercase",
-  },
   sectionTitle: {
     fontSize: 13,
     fontWeight: "700",
@@ -305,6 +258,11 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.border,
     paddingTop: 16,
     marginTop: 4,
+    marginBottom: 4,
+  },
+  sectionHint: {
+    fontSize: 13,
+    color: Colors.textLight,
     marginBottom: 14,
   },
   pillRow: {
@@ -357,8 +315,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     backgroundColor: Colors.border,
   },
-  yesNoRow: {
-    marginBottom: 4,
+  switchGroup: {
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    marginBottom: 20,
   },
   saveButton: {
     backgroundColor: Colors.primary,
