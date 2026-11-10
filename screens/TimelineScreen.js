@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { View, Text, SectionList, Pressable, StyleSheet } from "react-native";
+import { View, Text, SectionList, Pressable, ActivityIndicator, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import Colors from "../constants/colors";
@@ -37,6 +37,10 @@ function TimelineScreen({ route, navigation }) {
 
   const [observationToDelete, setObservationToDelete] = useState(null);
 
+  // alleen voor de allereerste keer laden, zodat er niet steeds een flits
+  // "nog geen observaties" te zien is zodra je terugkomt op dit scherm
+  const [isLoading, setIsLoading] = useState(true);
+
   const [showEditDeleteHint, setShowEditDeleteHint] = useState(false);
 
   // maar één keer tonen: na de eerste keer wegklikken onthouden we dat
@@ -61,6 +65,7 @@ function TimelineScreen({ route, navigation }) {
         const savedCats = await loadCats();
         setObservations(savedObservations);
         setCats(savedCats);
+        setIsLoading(false);
       }
 
       loadSavedData();
@@ -259,11 +264,15 @@ function TimelineScreen({ route, navigation }) {
         )}
         ListHeaderComponent={filterHeader}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>
-            {observations.length === 0
-              ? "Nog geen observaties."
-              : "Geen observaties gevonden."}
-          </Text>
+          isLoading ? (
+            <ActivityIndicator color={Colors.primary} style={styles.loading} />
+          ) : (
+            <Text style={styles.emptyText}>
+              {observations.length === 0
+                ? "Nog geen observaties."
+                : "Geen observaties gevonden."}
+            </Text>
+          )
         }
         contentContainerStyle={styles.list}
         renderItem={({ item }) => {
@@ -354,6 +363,9 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
     marginTop: 8,
     marginBottom: 12,
+  },
+  loading: {
+    marginTop: 24,
   },
   filterArea: {
     marginBottom: 12,

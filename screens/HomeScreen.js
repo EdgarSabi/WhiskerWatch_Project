@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { View, Text, FlatList, Pressable, StyleSheet } from "react-native";
+import { View, Text, FlatList, Pressable, ActivityIndicator, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import CatCard from "../components/CatCard";
@@ -18,6 +18,9 @@ function HomeScreen({ navigation }) {
   const [cats, setCats] = useState([]);
   const [observations, setObservations] = useState([]);
   const [showSearchHint, setShowSearchHint] = useState(false);
+  // alleen voor de allereerste keer laden, zodat er niet steeds een flits
+  // "nog geen katten" te zien is zodra je terugkomt op dit scherm
+  const [isLoading, setIsLoading] = useState(true);
 
   // maar één keer tonen: na de eerste keer wegklikken onthouden we dat
   useEffect(() => {
@@ -42,6 +45,7 @@ function HomeScreen({ navigation }) {
         const savedObservations = await loadObservations();
         setCats(savedCats);
         setObservations(savedObservations);
+        setIsLoading(false);
       }
 
       loadSavedData();
@@ -90,7 +94,11 @@ function HomeScreen({ navigation }) {
           ) : null
         }
         ListEmptyComponent={
-          <Text style={styles.emptyText}>Je hebt nog geen katten toegevoegd.</Text>
+          isLoading ? (
+            <ActivityIndicator color={Colors.primary} style={styles.loading} />
+          ) : (
+            <Text style={styles.emptyText}>Je hebt nog geen katten toegevoegd.</Text>
+          )
         }
         ListFooterComponent={
           <Pressable
@@ -135,6 +143,9 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
     marginTop: 8,
     marginBottom: 12,
+  },
+  loading: {
+    marginTop: 24,
   },
   addCatButton: {
     flexDirection: "row",
