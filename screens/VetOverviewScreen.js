@@ -1,8 +1,9 @@
 // alleen wat je zelf hebt ingevoerd, bewust geen diagnose of advies
 
 import { useState, useCallback } from "react";
-import { View, Text, ScrollView, Pressable, Image, StyleSheet } from "react-native";
+import { View, Text, ScrollView, Pressable, Image, Share, StyleSheet } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Colors from "../constants/colors";
 import Fonts from "../constants/fonts";
 import TabBar from "../components/TabBar";
@@ -56,6 +57,31 @@ function VetOverviewScreen({ navigation }) {
   }));
 
   const total = overviewObservations.length;
+
+  // bouwt een platte-tekst versie van het overzicht, te delen via de app-kiezer
+  // van het toestel (mail, WhatsApp, printen, ...) — geen eigen bestand of indeling nodig
+  async function shareHandler() {
+    const lines = [
+      `WhiskerWatch — overzicht voor ${selectedCat.name}`,
+      `Periode: ${periodLabel}`,
+      `Totaal: ${total} ${total === 1 ? "observatie" : "observaties"}`,
+      "",
+      ...typeCounts.map((item) => `${item.label}: ${item.count}`),
+    ];
+
+    if (chronological.length > 0) {
+      lines.push("", "Observaties:");
+      for (const observation of chronological) {
+        lines.push("", `${getWhen(observation)} — ${observation.type}`, getSummary(observation));
+      }
+    }
+
+    try {
+      await Share.share({ message: lines.join("\n") });
+    } catch (error) {
+      console.warn("Delen is mislukt", error);
+    }
+  }
 
   return (
     <View style={styles.screen}>
@@ -120,6 +146,14 @@ function VetOverviewScreen({ navigation }) {
                 ))}
               </View>
             </View>
+
+            <Pressable
+              style={({ pressed }) => [styles.shareButton, pressed && styles.shareButtonPressed]}
+              onPress={shareHandler}
+            >
+              <MaterialCommunityIcons name="share-variant-outline" size={18} color={Colors.text} />
+              <Text style={styles.shareButtonText}>Rapport delen</Text>
+            </Pressable>
 
             {total === 0 && (
               <Text style={styles.hint}>
@@ -239,6 +273,26 @@ const styles = StyleSheet.create({
   countZero: {
     color: Colors.textLight,
     fontWeight: "normal",
+  },
+  shareButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: 14,
+    paddingVertical: 14,
+    marginBottom: 16,
+  },
+  shareButtonPressed: {
+    opacity: 0.7,
+  },
+  shareButtonText: {
+    color: Colors.text,
+    fontWeight: "bold",
+    fontSize: 15,
   },
   card: {
     backgroundColor: Colors.card,
