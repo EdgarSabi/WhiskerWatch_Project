@@ -1,4 +1,3 @@
-//wellicht hier nog wat opties toevoegen voor soorten gedrag dat vreemd is? 
 import { useState, useEffect } from "react";
 import {
   View,
@@ -21,6 +20,18 @@ import { loadObservations, saveObservations } from "../storage/observationStorag
 import { loadCats } from "../storage/catStorage";
 import DateTimeFields from "../components/DateTimeFields";
 import { getInitialObservedAt } from "../helpers/observationHelpers";
+
+// snelkeuze-chips: tikken voegt het toe aan de notitie, nog een keer tikken
+// haalt het er weer uit. Gewoon een hulpje bovenop het vrije tekstveld,
+// dat blijft gewoon beschikbaar voor alles wat hier niet tussen staat.
+const BEHAVIOUR_SUGGESTIONS = [
+  "Verstopt zich",
+  "Lusteloos",
+  "Onrustig",
+  "Miauwt veel",
+  "Agressief",
+  "Krabt veel",
+];
 
 function BehaviourObservationScreen({ route, navigation }) {
   const observationToEdit = route.params?.observation ?? null;
@@ -49,6 +60,22 @@ function BehaviourObservationScreen({ route, navigation }) {
   const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
   const [note, setNote] = useState(observationToEdit?.note ?? "");
   const [photoUri, setPhotoUri] = useState(observationToEdit?.photoUri ?? null);
+
+  // de notitie als los te herkennen stukjes, zodat we kunnen zien welke
+  // snelkeuzes er al in staan (en ze er ook weer uit kunnen halen)
+  const noteParts = note
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  function toggleSuggestionHandler(suggestion) {
+    const isSelected = noteParts.includes(suggestion);
+    const newParts = isSelected
+      ? noteParts.filter((part) => part !== suggestion)
+      : [...noteParts, suggestion];
+
+    setNote(newParts.join(", "));
+  }
 
   async function saveHandler() {
     // kat en beschrijving verplicht
@@ -116,6 +143,25 @@ function BehaviourObservationScreen({ route, navigation }) {
 
         <DateTimeFields value={observedAt} onValueChange={setObservedAt} isNew={!observationToEdit} />
 
+        <FormLabel text="Snelkeuze" tag="optional" />
+        <View style={styles.pillRow}>
+          {BEHAVIOUR_SUGGESTIONS.map((suggestion) => {
+            const isSelected = noteParts.includes(suggestion);
+
+            return (
+              <Pressable
+                key={suggestion}
+                onPress={() => toggleSuggestionHandler(suggestion)}
+                style={[styles.pill, isSelected && styles.pillSelected]}
+              >
+                <Text style={[styles.pillText, isSelected && styles.pillTextSelected]}>
+                  {suggestion}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+
         <FormLabel text="Wat heb je opgemerkt?" tag="required" />
         <TextInput
           style={[styles.input, styles.noteInput]}
@@ -174,6 +220,31 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: Colors.textLight,
     marginBottom: 14,
+  },
+  pillRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: 20,
+  },
+  pill: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  pillSelected: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
+  pillText: {
+    color: Colors.text,
+    fontWeight: "600",
+  },
+  pillTextSelected: {
+    color: "#FFFFFF",
   },
   input: {
     borderWidth: 1,
