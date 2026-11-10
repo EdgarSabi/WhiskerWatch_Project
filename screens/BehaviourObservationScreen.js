@@ -12,9 +12,11 @@ import {
 } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { OBSERVATION_PHOTO_OPTIONS, savePhotoChange } from "../helpers/photoHelpers";
 import Colors from "../constants/colors";
 import FormLabel from "../components/FormLabel";
 import CatPicker from "../components/CatPicker";
+import PhotoField from "../components/PhotoField";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats } from "../storage/catStorage";
 import DateTimeFields from "../components/DateTimeFields";
@@ -46,6 +48,7 @@ function BehaviourObservationScreen({ route, navigation }) {
   const [selectedCat, setSelectedCat] = useState(preselectedCat);
   const [observedAt, setObservedAt] = useState(getInitialObservedAt(observationToEdit));
   const [note, setNote] = useState(observationToEdit?.note ?? "");
+  const [photoUri, setPhotoUri] = useState(observationToEdit?.photoUri ?? null);
 
   async function saveHandler() {
     // kat en beschrijving verplicht
@@ -54,11 +57,14 @@ function BehaviourObservationScreen({ route, navigation }) {
       return;
     }
 
-    // voorkom twee keer opslaan na twee keer drukken 
+    // voorkom twee keer opslaan na twee keer drukken
     if (isSaving) {
       return;
     }
     setIsSaving(true);
+
+    // pas hier gaat de foto naar de vaste map, en een oude foto wordt opgeruimd
+    const savedPhotoUri = await savePhotoChange(photoUri, observationToEdit?.photoUri ?? null);
 
     const currentObservations = await loadObservations();
 
@@ -71,6 +77,7 @@ function BehaviourObservationScreen({ route, navigation }) {
             catName: selectedCat.name,
             observedAt: observedAt.toISOString(),
             note: note.trim(),
+            photoUri: savedPhotoUri,
           };
         }
         return observation;
@@ -85,6 +92,7 @@ function BehaviourObservationScreen({ route, navigation }) {
         type: "Gedrag",
         observedAt: observedAt.toISOString(),
         note: note.trim(),
+        photoUri: savedPhotoUri,
         createdAt: new Date().toLocaleString("nl-NL"),
       };
 
@@ -116,6 +124,15 @@ function BehaviourObservationScreen({ route, navigation }) {
           onChangeText={setNote}
           multiline
         />
+
+        <Text style={styles.sectionTitle}>Optionele details</Text>
+        <Text style={styles.sectionHint}>Vul alleen in wat je weet — de rest mag je overslaan.</Text>
+
+        <PhotoField
+          photoUri={photoUri}
+          onChange={setPhotoUri}
+          photoOptions={OBSERVATION_PHOTO_OPTIONS}
+        />
       </ScrollView>
 
       {/* padding hier en niet op de KeyboardAvoidingView, die overschrijft zijn eigen paddingBottom */}
@@ -141,6 +158,22 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
     paddingBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: Colors.textLight,
+    textTransform: "uppercase",
+    borderTopWidth: 1,
+    borderTopColor: Colors.border,
+    paddingTop: 16,
+    marginTop: 4,
+    marginBottom: 4,
+  },
+  sectionHint: {
+    fontSize: 13,
+    color: Colors.textLight,
+    marginBottom: 14,
   },
   input: {
     borderWidth: 1,

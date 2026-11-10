@@ -11,9 +11,11 @@ import {
 } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { OBSERVATION_PHOTO_OPTIONS, savePhotoChange } from "../helpers/photoHelpers";
 import Colors from "../constants/colors";
 import FormLabel from "../components/FormLabel";
 import CatPicker from "../components/CatPicker";
+import PhotoField from "../components/PhotoField";
 import { loadObservations, saveObservations } from "../storage/observationStorage";
 import { loadCats } from "../storage/catStorage";
 import DateTimeFields from "../components/DateTimeFields";
@@ -50,6 +52,7 @@ function FoodObservationScreen({ route, navigation }) {
   const [intake, setIntake] = useState(observationToEdit?.intake ?? null);
 
   const [note, setNote] = useState(observationToEdit?.note ?? "");
+  const [photoUri, setPhotoUri] = useState(observationToEdit?.photoUri ?? null);
 
   async function saveHandler() {
     if (!selectedCat || !intake) {
@@ -63,6 +66,9 @@ function FoodObservationScreen({ route, navigation }) {
     }
     setIsSaving(true);
 
+    // pas hier gaat de foto naar de vaste map, en een oude foto wordt opgeruimd
+    const savedPhotoUri = await savePhotoChange(photoUri, observationToEdit?.photoUri ?? null);
+
     const currentObservations = await loadObservations();
 
     if (observationToEdit) {
@@ -75,6 +81,7 @@ function FoodObservationScreen({ route, navigation }) {
             intake: intake,
             observedAt: observedAt.toISOString(),
             note: note,
+            photoUri: savedPhotoUri,
           };
         }
         return observation;
@@ -90,6 +97,7 @@ function FoodObservationScreen({ route, navigation }) {
         intake: intake,
         observedAt: observedAt.toISOString(),
         note: note,
+        photoUri: savedPhotoUri,
         createdAt: new Date().toLocaleString("nl-NL"),
       };
 
@@ -140,6 +148,12 @@ function FoodObservationScreen({ route, navigation }) {
           value={note}
           onChangeText={setNote}
           multiline
+        />
+
+        <PhotoField
+          photoUri={photoUri}
+          onChange={setPhotoUri}
+          photoOptions={OBSERVATION_PHOTO_OPTIONS}
         />
       </ScrollView>
 
