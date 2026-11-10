@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "../constants/colors";
 import FormLabel from "../components/FormLabel";
@@ -14,6 +24,7 @@ function WeightObservationScreen({ route, navigation }) {
 
   const insets = useSafeAreaInsets();
   const [isSaving, setIsSaving] = useState(false);
+  const headerHeight = useHeaderHeight();
 
   let preselectedCat = route.params?.cat ?? null;
   if (observationToEdit) {
@@ -96,7 +107,12 @@ function WeightObservationScreen({ route, navigation }) {
   }
 
   return (
-    <View style={[styles.screen, { paddingBottom: insets.bottom + 8 }]}>
+    // anders komt het toetsenbord over het tekstveld en Opslaan heen
+    <KeyboardAvoidingView
+      style={styles.screen}
+      behavior="padding"
+      keyboardVerticalOffset={headerHeight}
+    >
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <CatPicker cats={cats} selectedCat={selectedCat} onSelect={setSelectedCat} />
 
@@ -112,13 +128,16 @@ function WeightObservationScreen({ route, navigation }) {
         />
       </ScrollView>
 
-      <Pressable
-        style={({ pressed }) => [styles.saveButton, pressed && styles.saveButtonPressed]}
-        onPress={saveHandler}
-      >
-        <Text style={styles.saveButtonText}>Opslaan</Text>
-      </Pressable>
-    </View>
+      {/* padding hier en niet op de KeyboardAvoidingView, die overschrijft zijn eigen paddingBottom */}
+      <View style={{ paddingBottom: insets.bottom + 8 }}>
+        <Pressable
+          style={({ pressed }) => [styles.saveButton, pressed && styles.saveButtonPressed]}
+          onPress={saveHandler}
+        >
+          <Text style={styles.saveButtonText}>Opslaan</Text>
+        </Pressable>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
