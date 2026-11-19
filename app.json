@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "whiskerWatch",
+    "name": "WhiskerWatch",
     "slug": "whiskerWatch",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -14,7 +14,7 @@
         "backgroundColor": "#FDECE0",
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
-      "package": "com.anonymous.whiskerWatch"
+      "package": "com.celestriastudio.whiskerwatch"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -28,6 +28,11 @@
           "imageWidth": 320
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "11800d00-a6df-40a8-928b-86a32ef47653"
+      }
+    }
   }
 }
