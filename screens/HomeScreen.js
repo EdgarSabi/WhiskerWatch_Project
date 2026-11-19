@@ -8,7 +8,6 @@ import HintBanner from "../components/HintBanner";
 import Colors from "../constants/colors";
 import { loadCats } from "../storage/catStorage";
 import { loadObservations } from "../storage/observationStorage";
-import { OBSERVATION_TYPES } from "../constants/observationTypes";
 import { getLastObservation } from "../helpers/observationHelpers";
 import { isHintDismissed, dismissHint } from "../storage/hintStorage";
 
