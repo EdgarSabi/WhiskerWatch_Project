@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { Fraunces_700Bold } from "@expo-google-fonts/fraunces/700Bold";
@@ -21,7 +20,6 @@ import VetOverviewScreen from "./screens/VetOverviewScreen";
 import AppTitle from "./components/AppTitle";
 import Colors from "./constants/colors";
 import Fonts from "./constants/fonts";
-import { seedDemoData } from "./storage/demoData";
 
 const Stack = createNativeStackNavigator();
 const startStyles = StyleSheet.create({
@@ -45,25 +43,10 @@ function formTitle(typeName) {
 }
 
 export default function App() {
-  // demo-data moet er staan voordat het dashboard laadt, anders is het even leeg
-  const [isReady, setIsReady] = useState(false);
   const [fontsLoaded, fontError] = useFonts({ Fraunces_700Bold });
 
-  useEffect(() => {
-    async function prepare() {
-      try {
-        await seedDemoData();
-      } catch (error) {
-        console.warn("Demo-data kon niet worden klaargezet", error);
-      }
-      setIsReady(true);
-    }
-
-    prepare();
-  }, []);
-
   // lettertype laden mislukt? Dan gewoon doorgaan met het standaardlettertype
-  if (!isReady || !(fontsLoaded || fontError)) {
+  if (!(fontsLoaded || fontError)) {
     return (
       <View style={startStyles.screen}>
         <Image

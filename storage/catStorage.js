@@ -2,7 +2,6 @@
 // observaties bewaren het catId van hun kat, dus twee katten met dezelfde naam kan gewoon
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { LARA_PHOTO } from "../helpers/photoHelpers";
 import { birthInfoToBirthDate } from "../helpers/catHelpers";
 
 const STORAGE_KEY = "cats";
@@ -10,24 +9,9 @@ const STORAGE_KEY = "cats";
 // geen echte kat in de lijst, wel een keuze in de formulieren
 export const UNKNOWN_CAT = { id: "unknown", name: "Kat onbekend" };
 
-// demo-kat voor de presentatie, haar observaties staan in demoData.js
-export const LARA_CAT = {
-  id: "lara-default",
-  name: "Lara",
-  initial: "L",
-  photoUri: LARA_PHOTO,
-  birthDate: "2022-04-04",
-};
-
-// startkatten zolang er nog niets is opgeslagen
+// een verse installatie begint zonder katten, je voegt ze zelf toe
 // optionele velden van een kat: photoUri, birthDate (jjjj-mm-dd), weightKg en medicalNote
-const INITIAL_CATS = [
-  LARA_CAT,
-  { id: "1", name: "Mia", initial: "M" },
-  { id: "2", name: "Elsa", initial: "E" },
-  { id: "3", name: "Hoop", initial: "H" },
-  { id: "5", name: "Billy", initial: "B" },
-];
+const INITIAL_CATS = [];
 
 // oude katten hebben birthInfo als vrije tekst, probeer daar een echte birthDate van te maken
 function migrateCat(cat) {
